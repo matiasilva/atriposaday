@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+  web:
+    build:
+      context: ${PWD}
+      dockerfile: Dockerfile
+    environment:
+      APPLICATION_DB: atriposaday
+      POSTGRES_USER: postgres
+      POSTGRES_HOSTNAME: db
+      POSTGRES_PASSWORD: password
+    command: node app/index.js
+    volumes:
+      - ${PWD}:/opt/code
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
