@@ -2,7 +2,7 @@
 
 > A Tripos A Day keeps the doctor away...!
 
-A Tripos A Day become a better engineer by randomly setting you Tripos questions at a frequency of your choice. You can subscribe to different lists, such as the general list of all questions, questions recommended on examples papers, or specific topics that you need practice at. You can also compile custom Tripos tests that mix and match questions.
+*A Tripos A Day* helps you become a better engineer by randomly setting you Tripos questions at a frequency of your choice. You can subscribe to different lists, such as the general list of all questions, questions recommended on examples papers, or specific topics that you need practice at. You can also compile custom Tripos tests that mix and match questions.
 
 ## Development
 

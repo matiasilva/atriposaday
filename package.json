@@ -1,0 +1,26 @@
+{
+  "name": "atriposaday",
+  "version": "1.0.0",
+  "description": "> A Tripos A Day keeps the doctor away...!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matiasilva/atriposaday.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matiasilva/atriposaday/issues"
+  },
+  "homepage": "https://github.com/matiasilva/atriposaday#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.5.0"
+  }
+}
