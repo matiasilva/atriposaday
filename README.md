@@ -4,13 +4,13 @@
 
 *A Tripos A Day* helps you become a better engineer. How?
 
-* it randomly sets you Tripos questions at a frequency of your choic
+* it randomly sets you Tripos questions at a frequency of your choice
 * you can subscribe to different lists, such as all questions, just those recommended on examples papers, or specific topics that you need practice with
 * you can also compile custom Tripos tests that mix and match questions.
 
 ## Production
 
-ATAD should be able to run on any modern web server, like *nginx* or *Apache*.
+ATAD should be able to run on any modern web server, like nginx or Apache.
 
 Requirements:
 
@@ -19,11 +19,11 @@ Requirements:
 
 ## Development
 
-ATAD uses express and `node.js`. Development uses Docker to create two containers, one for the database and the other for the web app. To avoid headaches, develop on a UNIX-like OS.
+ATAD uses express and `node.js`. Development is done with Docker to create two containers, one for the database and the other for the web app. To avoid headaches, develop on a UNIX-like OS.
 
-Build the Docker image:
+Added a new package or dependency? Rebuild the web container.
 
-`docker build -t atriposaday .`
+`docker-compose build`
 
 
 ## Credits

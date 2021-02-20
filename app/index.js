@@ -1,6 +1,6 @@
-// const { Sequelize } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
-// const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname')
+const sequelize = new Sequelize('postgres://postgres:password@db:5432/atriposaday')
 
 const express = require('express');
 const app = express();
@@ -10,4 +10,14 @@ app.get('/', (req, res) => {
     res.status(200).send("Hello!");
 })
 
-app.listen(PORT, ()=>console.log(`We're live on ${PORT}!`));
+async function main() {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+    app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
+}
+
+main();
