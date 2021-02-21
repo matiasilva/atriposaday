@@ -15,10 +15,11 @@ services:
       context: ${PWD}
       dockerfile: Dockerfile
     environment:
-      APPLICATION_DB: atriposaday
-      POSTGRES_USER: postgres
-      POSTGRES_HOSTNAME: db
-      POSTGRES_PASSWORD: password
+      DEV_DB_NAME: atriposaday
+      DEV_DB_USERNAME: postgres
+      DEV_DB_HOSTNAME: db
+      DEV_DB_PASSWORD: password
+      NODE_ENV: development
     command: npx nodemon app/index.js
     volumes:
       - ${PWD}:/opt/code
