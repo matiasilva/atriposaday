@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     lastActioned: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.NOW
+      defaultValue: DataTypes.NOW
     },
     // how many questions?
     count: {
