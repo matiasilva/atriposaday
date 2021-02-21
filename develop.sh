@@ -2,13 +2,13 @@
 
 scrap() {
   docker volume rm development_pgdata
-  rm -rf migrations
 }
 
 build() {(
   set -e
   docker-compose -p development -f docker-compose.yml up -d
-  npx sequelize-cli db:migrate
+  docker exec -i development_web_1 npx sequelize-cli db:migrate
+  docker exec -i development_web_1 npx sequelize-cli db:seed:all
   docker-compose -p development -f docker-compose.yml stop
 )}
 
@@ -29,7 +29,7 @@ tail() {
 }
 
 db() {
-    docker exec -i development_db_1 bash
+    docker exec -i development_db_1 psql atriposaday postgres
 }
 
 help() {
