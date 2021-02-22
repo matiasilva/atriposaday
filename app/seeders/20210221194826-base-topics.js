@@ -1,6 +1,7 @@
 'use strict';
 
 const { PAPERS } = require('../enums');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -9,10 +10,20 @@ module.exports = {
         name: paper,
         description: `All questions in ${paper}`,
         subLevel: 0,
+        uuid: uuidv4(),
         createdAt: new Date(),
         updatedAt: new Date()
       }
     }));
+
+    await queryInterface.bulkInsert('Topics', [{
+      name: "NO_TOPIC",
+      description: "For any question that has no base topic",
+      subLevel: 0,
+      uuid: uuidv4(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }]);
   },
 
   down: async (queryInterface, Sequelize) => {
