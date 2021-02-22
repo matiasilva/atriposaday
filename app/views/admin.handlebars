@@ -1,0 +1,46 @@
+<h1>{{title}}</h1>
+<p>Make changes to the overall functioning of this <em>A Tripos a Day</em> deployment.</p>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Upload a new question
+            </div>
+            <div class="card-body">
+                <form action="/admin/create/question" class="dropzone mb-0" id="question-create">
+                    {{#each root_topics}}
+                    {{> admin/checkbox description=topic.name uuid=topic.uuid}}.
+                    {{/each}}
+                    <button id="question-create-submit" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Create a new topic
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
