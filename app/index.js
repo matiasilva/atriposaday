@@ -29,9 +29,9 @@ app.get('/', (req, res) => {
     });
 })
 
-app.get('/admin', (req, res) => {
+app.get('/admin', async (req, res) => {
     const { Topic } = db;
-    let rootTopics = Topic.findAll({
+    let rootTopics = await Topic.findAll({
         where: {
             subLevel: 0
         }
@@ -43,7 +43,7 @@ app.get('/admin', (req, res) => {
 })
 
 app.post('/admin/create/question', (req, res) => {
-
+    console.log(req);
 });
 
 async function main() {

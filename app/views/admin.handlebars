@@ -8,9 +8,9 @@
                 Upload a new question
             </div>
             <div class="card-body">
-                <form action="/admin/create/question" class="dropzone mb-0" id="question-create">
+                <form class="dropzone mb-0" id="question-create">
                     {{#each root_topics}}
-                    {{> admin/checkbox description=topic.name uuid=topic.uuid}}.
+                    {{> admin/checkbox description=this.dataValues.name uuid=this.dataValues.uuid}}
                     {{/each}}
                     <button id="question-create-submit" type="submit" class="btn btn-primary">Submit</button>
                 </form>
