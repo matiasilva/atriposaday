@@ -8,6 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      // unique id
+      uuid: {
+        type: Sequelize.DataTypes.UUID,
+        allowNull: false,
+      },
       // every how many days?
       repeatDayFrequency: {
         type: Sequelize.DataTypes.INTEGER,
