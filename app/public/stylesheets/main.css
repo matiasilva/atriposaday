@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@500;700&display=swap');
+
+.btn-raven {
+  background-color: rgb(16, 100, 112);
+  color: #fff;
+  border-color: rgb(16, 100, 112);
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    font-weight: 600;
+}
+
+.dropzone {
+	border: 2px dashed #0087F7;
+	border-radius: 5px;
+	background: white;
+}
