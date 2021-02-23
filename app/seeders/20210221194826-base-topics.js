@@ -9,8 +9,8 @@ module.exports = {
       return {
         name: paper,
         description: `All questions in ${paper}`,
-        subLevel: 0,
         uuid: uuidv4(),
+        isRootLevel: true,
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -19,8 +19,8 @@ module.exports = {
     await queryInterface.bulkInsert('Topics', [{
       name: "NO_TOPIC",
       description: "For any question that has no base topic",
-      subLevel: 0,
       uuid: uuidv4(),
+      isRootLevel: true,
       createdAt: new Date(),
       updatedAt: new Date()
     }]);
