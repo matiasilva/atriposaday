@@ -8,21 +8,25 @@
                 Upload a new question
             </div>
             <div class="card-body">
-                <form method="POST" action="/admin/create/question">
+                <form method="POST" action="/admin/create/question" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Description</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">Optional description. Batch uploads will all have the same
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description">
+                        <div class="form-text">Optional description. Batch uploads will all have the same
                             description.</div>
                     </div>
                     <div class="mb-3">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Tripos part</option>
-                            <option value="1">IA</option>
-                            <option value="2">IB</option>
-                            <option value="3">IIA</option>
-                            <option value="4">IIB</option>
+                        <select class="form-select" name="tripos-part">
+                            <option value="" selected>Tripos part</option>
+                            {{#each tripos_parts}}
+                            <option value="{{lookup this 0}}">
+                                {{lookup this 1}}
+                            </option>
+                            {{/each}}
                         </select>
+                        {{#if errors.[tripos-part]}}
+                        {{> admin/invalid_feedback msg= errors.[tripos-part]
+                        {{/invalid_feedback}}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Base topic</label>
@@ -33,8 +37,9 @@
                             applies, choose the <em>no topic</em> option.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="formFileMultiple" class="form-label">Upload one or more photos</label>
-                        <input class="form-control form-control-lg" type="file" id="formFileMultiple" multiple>
+                        <label for="question-upload" class="form-label">Upload one or more photos</label>
+                        <input class="form-control form-control-lg" type="file" id="question-upload"
+                            name="question-upload" multiple>
                     </div>
                     <button id="question-create-submit" type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -50,8 +55,8 @@
             <div class="card-body">
                 <form>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <label for="description" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="description" aria-describedby="emailHelp">
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div class="mb-3">
