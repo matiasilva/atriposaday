@@ -5,10 +5,10 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Topics', PAPERS.map(paper => {
+    await queryInterface.bulkInsert('Topics', Object.entries(PAPERS).map(paper_obj => {
       return {
-        name: paper,
-        description: `All questions in ${paper}`,
+        name: paper_obj[1],
+        description: `All questions in ${paper_obj[1]}`,
         uuid: uuidv4(),
         isRootLevel: true,
         createdAt: new Date(),
