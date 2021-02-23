@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model, Sequelize
+  Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Subscription extends Model {
@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
   Subscription.init({
     // unique id
     uuid: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     // every how many days?
     repeatDayFrequency: {

@@ -11,7 +11,7 @@ module.exports = {
       // unique id
       uuid: {
         type: Sequelize.DataTypes.UUID,
-        allowNull: false,
+        defaultValue: Sequelize.UUIDV4
       },
       // every how many days?
       repeatDayFrequency: {
