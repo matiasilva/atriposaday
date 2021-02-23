@@ -25,8 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4
     },
-    subLevel: {
-      type: DataTypes.INTEGER,
+    isRootLevel: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
       allowNull: false
     },
   }, {

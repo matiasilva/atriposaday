@@ -20,8 +20,9 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         allowNull: true
       },
-      subLevel: {
-        type: Sequelize.DataTypes.INTEGER,
+      isRootLevel: {
+        type: Sequelize.DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false
       },
       createdAt: {

@@ -33,7 +33,7 @@ app.get('/admin', async (req, res) => {
     const { Topic } = db;
     let rootTopics = await Topic.findAll({
         where: {
-            subLevel: 0
+            isRootLevel: true
         },
         raw: true
     });
