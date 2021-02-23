@@ -34,7 +34,8 @@ app.get('/admin', async (req, res) => {
     let rootTopics = await Topic.findAll({
         where: {
             subLevel: 0
-        }
+        },
+        raw: true
     });
     res.render("admin", {
         title: "Administrator panel",
