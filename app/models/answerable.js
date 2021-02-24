@@ -7,6 +7,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Many-to-many topic <-> question
       Answerable.belongsToMany(models["Topic"], { through: models["AnswerablesTopics"] });
+
+      // One-to-Many paper -> questions
+      Answerable.belongsTo(models["Paper"], {
+        foreignKey: {
+          name: 'paperId',
+          allowNull: false
+        }
+      });
     }
   }
   Answerable.init({
@@ -27,20 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     image: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    examYear: {
-      // 1999, 2001, etc
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    cohortYear: {
-      // 1A, 1B, 2A, 2B
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    paper: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   }, {
     sequelize,

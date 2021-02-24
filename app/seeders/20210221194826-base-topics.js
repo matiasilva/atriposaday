@@ -1,20 +1,25 @@
 'use strict';
 
-const { PAPERS } = require('../enums');
+const { SUBJECTS, TRIPOS_PARTS } = require('../enums');
 const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Topics', Object.entries(PAPERS).map(paper_obj => {
-      return {
-        name: paper_obj[1],
-        description: `All questions in ${paper_obj[1]}`,
-        uuid: uuidv4(),
-        isRootLevel: true,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    }));
+    for(const part of Object.keys(TRIPOS_PARTS)){
+      let subj_enums = Object.keys(SUBJECTS[part]);
+      if (!subj_enums) continue;
+      subj_enums.map(subj_key => {
+        return {
+          name: subj_key,
+          description: `All questions in ${SUBJECTS[part][subj_key]}`,
+          uuid: uuidv4(),
+          isRootLevel: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      })
+      await queryInterface.bulkInsert('Topics', subj_enums);
+    }
 
     await queryInterface.bulkInsert('Topics', [{
       name: "NO_TOPIC",
