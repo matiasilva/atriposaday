@@ -25,6 +25,13 @@ Added a new package or dependency? Rebuild the web container.
 
 `docker-compose build`
 
+Creating a new model:
+
+`npx sequelize-cli model:generate --name User --attributes firstName:string`
+
+Generate a seed file:
+
+`npx sequelize-cli seed:generate --name demo-user`
 
 ## Credits
 
