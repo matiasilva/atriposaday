@@ -27,19 +27,9 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
       },
-      examYear: {
-        // 1999, 2001, etc
-        type: Sequelize.DataTypes.DATE,
-        allowNull: true
-      },
-      cohortYear: {
-        // 1A, 1B, 2A, 2B
-        type: Sequelize.DataTypes.DATE,
+      paperId: {
+        type: Sequelize.DataTypes.INTEGER,
         allowNull: false
-      },
-      paper: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
