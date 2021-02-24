@@ -12,13 +12,23 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control {{#if errors.[description]}}is-invalid{{/if}}"
-                            id="description" name="description">
+                            id="description" name="description" value="{{#if form_vals.[description]}}{{form_vals.description}}{{/if}}">
                         {{#if errors.[description]}}
                         {{> admin/invalid_feedback msg= "Your description is greater than 120 characters."
                         }}
                         {{/if}}
                         <div class="form-text">Optional description. Batch uploads will all have the same
                             description.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <input type="text" class="form-control {{#if errors.[year]}}is-invalid{{/if}}"
+                            id="year" name="year" value="{{#if form_vals.[year]}}{{form_vals.year}}{{/if}}">
+                        {{#if errors.[year]}}
+                        {{> admin/invalid_feedback msg= "Please enter a valid year."
+                        }}
+                        {{/if}}
+                        <div class="form-text">The calendar year of the exam or question</div>
                     </div>
                     <div class="mb-3">
                         <select class="form-select {{#if errors.[tripos-part]}}is-invalid{{/if}}" name="tripos-part"
@@ -56,7 +66,7 @@
                         <p class="text-danger">Select a Tripos part.</p>
                         {{/unless}}
                         {{#if errors.[subject]}}
-                        {{> admin/invalid_feedback msg= "You must select a base topic."
+                        {{> admin/invalid_feedback msg= "You must select a tripos part."
                         }}
                         {{/if}}
                         <div id="topicHelp" class="form-text">All questions must belong to a subject. If none
