@@ -72,36 +72,46 @@ app.get('/admin', async (req, res) => {
 
 app.post('/admin/create/question', upload.array('question-upload'), async (req, res) => {
 
-    const formKeys = ["tripos-part", "description", "subject"];
+    const formKeys = ["tripos-part", "description", "subject", "year"];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
-    if (req.files && req.files.length < 1) errors["question-upload"] = true;
+    if (req.files.length < 1) errors["question-upload"] = true;
 
-    console.log(values["subject"]);
     if (!values["subject"]) errors["subject"] = true;
 
     if (values["tripos-part"] === "") errors["tripos-part"] = true;
 
     if (values["description"].length >= 120) errors["description"] = true;
 
-    if (!errors) {
-        // add question
-        const { Answerable } = db;
+    if (isNaN(Date.parse(values["year"]))) errors["year"] = true;
 
-        for(const file of req.files){
-            Answerable.create(
+    const hasNoErrors = Object.keys(errors).length === 0;
+    if (hasNoErrors) {
+        // add question
+        const { Answerable, Paper } = db;
+
+        const paper = await Paper.findOne({where: {
+            year: parseInt(values["year"]),
+            subject: values["subject"],
+            triposPart: values["tripos-part"]
+        }});
+
+        for (const file of req.files) {
+            await Answerable.create(
                 {
                     description: values["description"],
                     image: file.path,
-                    
+                    paperId: paper.id,
                 }
             )
         }
+
+        req.flash("success", "All questions created successfully!");
+
+        res.redirect('/admin');
     }
     else {
-        const { Topic } = db;
-
         // include sent back responses that failed
         req.flash("danger", "There are problems with the information you submitted.")
 
