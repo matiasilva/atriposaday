@@ -6,19 +6,20 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     for(const part of Object.keys(TRIPOS_PARTS)){
-      let subj_enums = Object.keys(SUBJECTS[part]);
-      if (!subj_enums) continue;
-      subj_enums.map(subj_key => {
+      let subjectsForPart = SUBJECTS[part];
+      if (!subjectsForPart ) continue;
+      let subjectKeys = Object.keys(subjectsForPart);
+      let topicsToInsert = subjectKeys.map(key => {
         return {
-          name: subj_key,
-          description: `All questions in ${SUBJECTS[part][subj_key]}`,
+          name: key,
+          description: `All questions in ${SUBJECTS[part][key]}`,
           uuid: uuidv4(),
           isRootLevel: true,
           createdAt: new Date(),
           updatedAt: new Date()
         }
       })
-      await queryInterface.bulkInsert('Topics', subj_enums);
+      await queryInterface.bulkInsert('Topics', topicsToInsert);
     }
 
     await queryInterface.bulkInsert('Topics', [{

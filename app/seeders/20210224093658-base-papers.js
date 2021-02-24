@@ -10,12 +10,14 @@ module.exports = {
     for (let i = 0; i < yearCount; i++) {
       const year = years[i];
       for (const part of Object.keys(TRIPOS_PARTS)) {
-        let subj_enums = Object.keys(SUBJECTS[part]);
-        if (!subj_enums) continue;
-        subj_enums.map(subject => {
+        let keysForPart = SUBJECTS[part];
+        if (!keysForPart ) continue;
+        let subjectKeys = Object.keys(keysForPart);
+        if (!subjectKeys) continue;
+        let papersToInsert = subjectKeys.map(key => {
           return {
             type: "EXAM",
-            subject,
+            subject: key,
             triposPart: part,
             year, 
             uuid: uuidv4(),
@@ -23,7 +25,7 @@ module.exports = {
             updatedAt: new Date()
           }
         })
-        await queryInterface.bulkInsert('Papers', subj_enums);
+        await queryInterface.bulkInsert('Papers', papersToInsert);
       }
     }
   },
