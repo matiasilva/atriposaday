@@ -1,17 +1,7 @@
-// window.Dropzone.options.questionCreate = {
-//     maxFilesize: 4,
-//     acceptedFiles: "image/*",
-//     maxFiles: 1,
-//     url: "/admin/create/question",
-//     autoProcessQueue: false,
-//     init: function () {
-//         const myDropzone = this;
-//         this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
-//           // Make sure that the form isn't actually being sent.
-//           e.preventDefault();
-//           e.stopPropagation();
-//           myDropzone.processQueue();
-//         });
-
-//     }
-// };
+$("#tripos-part-select").on("change", function () {
+    let selectedValue = $(this).val();
+    $('#subjects > article > div').each(function () {
+        $(this).data('part') === selectedValue ? $(this).removeClass('d-none') : $(this).addClass('d-none');
+    });
+    selectedValue === "" ? $('#subjects > p').removeClass('d-none') : $('#subjects > p').addClass('d-none');
+});

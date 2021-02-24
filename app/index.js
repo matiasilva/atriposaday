@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const exphbs = require('express-handlebars');
 const db = require('./models')
-const { TRIPOS_PARTS } = require("./enums");
+const { TRIPOS_PARTS, SUBJECTS } = require("./enums");
 const session = require('express-session');
 const flash = require('flash');
 const upload = require('./middleware/upload');
@@ -30,7 +30,7 @@ const hbs = exphbs.create({
             return opts.inverse(this);
         },
         "unlesseq": function (a, b, opts) {
-            if (!a || !a === b) return opts.fn(this);
+            if (!a || !(a === b)) return opts.fn(this);
         }
     }
 });
@@ -56,53 +56,58 @@ app.get('/', (req, res) => {
     });
 })
 
+
+app.get('/api/parts', (req, res) => {
+    res.json(Object.keys(TRIPOS_PARTS));
+});
+
 app.get('/admin', async (req, res) => {
     const { Topic } = db;
-    let rootTopics = await Topic.findAll({
-        where: {
-            isRootLevel: true
-        },
-        raw: true
-    });
     res.render("admin", {
         title: "Administrator panel",
-        "root_topics": rootTopics,
-        "tripos_parts": Object.entries(TRIPOS_PARTS)
+        "tripos_parts": Object.entries(TRIPOS_PARTS),
+        "subjects": SUBJECTS
     });
 })
 
 app.post('/admin/create/question', upload.array('question-upload'), async (req, res) => {
 
-    const formKeys = ["tripos-part", "description", "base-topic"];
+    const formKeys = ["tripos-part", "description", "subject"];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
     if (req.files && req.files.length < 1) errors["question-upload"] = true;
 
-    if (!values["base-topic"]) errors["base-topic"] = true;
+    console.log(values["subject"]);
+    if (!values["subject"]) errors["subject"] = true;
 
     if (values["tripos-part"] === "") errors["tripos-part"] = true;
 
     if (values["description"].length >= 120) errors["description"] = true;
 
     if (!errors) {
-        
+        // add question
+        const { Answerable } = db;
+
+        for(const file of req.files){
+            Answerable.create(
+                {
+                    description: values["description"],
+                    image: file.path,
+                    
+                }
+            )
+        }
     }
     else {
         const { Topic } = db;
-        let rootTopics = await Topic.findAll({
-            where: {
-                isRootLevel: true
-            },
-            raw: true
-        });
 
         // include sent back responses that failed
         req.flash("danger", "There are problems with the information you submitted.")
 
         res.render("admin", {
             title: "Administrator panel",
-            "root_topics": rootTopics,
+            "subjects": SUBJECTS,
             "tripos_parts": Object.entries(TRIPOS_PARTS),
             "form_vals": values,
             errors

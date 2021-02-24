@@ -21,7 +21,8 @@
                             description.</div>
                     </div>
                     <div class="mb-3">
-                        <select class="form-select {{#if errors.[tripos-part]}}is-invalid{{/if}}" name="tripos-part">
+                        <select class="form-select {{#if errors.[tripos-part]}}is-invalid{{/if}}" name="tripos-part"
+                            id="tripos-part-select">
                             <option value="" {{#unless form_vals.[tripos-part]}}selected{{/unless}}>Tripos part
                             </option>
                             {{#each tripos_parts}}
@@ -36,16 +37,29 @@
                         belongs."}}
                         {{/if}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label {{#if errors.[base-topic]}}is-invalid{{/if}}">Base topic</label>
-                        {{#each root_topics}}
-                        {{> admin/checkbox description=this.name uuid=this.uuid}}
-                        {{/each}}
-                        {{#if errors.[base-topic]}}
+                    <div class="mb-3" id="subjects">
+                        <label class="form-label {{#if errors.[subject]}}is-invalid{{/if}}">Subject</label>
+
+                        <article>
+                            {{#each tripos_parts}}
+                            <div class="{{#unlesseq ../form_vals.[tripos-part] (lookup this 0)}} d-none {{/unlesseq}}"
+                                data-part="{{lookup this 0}}">
+                                {{#each (lookup ../subjects (lookup this 0)) }}
+                                {{> admin/checkbox description=this value=@key checked_val=../../form_vals.[subject]}}
+                                {{else}}
+                                <p class="text-warning">No subjects available for this Tripos part.</p>
+                                {{/each}}
+                            </div>
+                            {{/each}}
+                        </article>
+                        {{#unless form_vals.[tripos-part]}}
+                        <p class="text-danger">Select a Tripos part.</p>
+                        {{/unless}}
+                        {{#if errors.[subject]}}
                         {{> admin/invalid_feedback msg= "You must select a base topic."
                         }}
                         {{/if}}
-                        <div id="topicHelp" class="form-text">All questions must belong to a base topic. If none
+                        <div id="topicHelp" class="form-text">All questions must belong to a subject. If none
                             applies, choose the <em>no topic</em> option.</div>
                     </div>
                     <div class="mb-3">
