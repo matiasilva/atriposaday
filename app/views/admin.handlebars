@@ -1,7 +1,28 @@
 <h1>{{title}}</h1>
 <p>Make changes to the overall functioning of this <em>A Tripos a Day</em> deployment.</p>
 
-<div class="row">
+<section class="row mb-3">
+    <article class="col">
+        <div class="card text-white bg-secondary">
+            <div class="card-header">
+                Deployment status
+            </div>
+            <div class="card-body">
+                <ul class="card-text">
+                    {{#with status}}
+                    <li>There are {{questions}} question(s)</li>
+                    <li>There are {{topics}} topic(s)</li>
+                    <li>There are {{papers}} paper(s)</li>
+                    <li>There are {{users}} user(s)</li>
+                    <li>There are {{subscriptions}} subscription(s)</li>
+                    {{/with}}
+                </ul>
+            </div>
+        </div>
+    </article>
+</section>
+
+<section class="row">
     <div class="col">
         <div class="card">
             <div class="card-header">
@@ -12,7 +33,8 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control {{#if errors.[description]}}is-invalid{{/if}}"
-                            id="description" name="description" value="{{#if form_vals.[description]}}{{form_vals.description}}{{/if}}">
+                            id="description" name="description"
+                            value="{{#if form_vals.[description]}}{{form_vals.description}}{{/if}}">
                         {{#if errors.[description]}}
                         {{> admin/invalid_feedback msg= "Your description is greater than 120 characters."
                         }}
@@ -22,8 +44,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Year</label>
-                        <input type="text" class="form-control {{#if errors.[year]}}is-invalid{{/if}}"
-                            id="year" name="year" value="{{#if form_vals.[year]}}{{form_vals.year}}{{/if}}">
+                        <input type="text" class="form-control {{#if errors.[year]}}is-invalid{{/if}}" id="year"
+                            name="year" value="{{#if form_vals.[year]}}{{form_vals.year}}{{/if}}">
                         {{#if errors.[year]}}
                         {{> admin/invalid_feedback msg= "Please enter a valid year."
                         }}
@@ -112,4 +134,4 @@
             </div>
         </div>
     </div>
-</div>
+</section>

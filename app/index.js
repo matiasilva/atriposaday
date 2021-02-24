@@ -62,11 +62,19 @@ app.get('/api/parts', (req, res) => {
 });
 
 app.get('/admin', async (req, res) => {
-    const { Topic } = db;
+    const { Answerable, Topic, User, Subscription, Paper } = db;
+    const status = {
+        "questions": await Answerable.count(),
+        "users": await User.count(),
+        "topics": await Topic.count(),
+        "subscriptions": await Subscription.count(),
+        "papers": await Paper.count(),
+    }
     res.render("admin", {
         title: "Administrator panel",
         "tripos_parts": Object.entries(TRIPOS_PARTS),
-        "subjects": SUBJECTS
+        "subjects": SUBJECTS,
+        status
     });
 })
 
