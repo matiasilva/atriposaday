@@ -1,5 +1,5 @@
 const multer = require("multer");
-const nanoid = require("nanoid");
+const {nanoid} = require("nanoid");
 const mime = require("mime-types");
 
 const imageFilter = (req, file, cb) => {
