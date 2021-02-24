@@ -4,12 +4,17 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Subscription extends Model {
-    static associate(models) {
+    static associate({User, Topic}) {
       // One-to-Many user -> subs
-      Subscription.belongsTo(models["User"]);
+      this.belongsTo(User, {
+        foreignKey: {
+          name: 'userId',
+          allowNull: true
+        }
+      });
 
       // One-to-Many topic -> subs
-      Subscription.belongsTo(models["Topic"], {
+      this.belongsTo(Topic, {
         foreignKey: {
           name: 'topicId',
           allowNull: false
@@ -43,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'Subscription',

@@ -4,12 +4,12 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Topic extends Model {
-    static associate(models) {
+    static associate({ AnswerablesTopics, Answerable, Subscription }) {
       // Many-to-many topic <-> question
-      Topic.belongsToMany(models["Answerable"], { through: models["AnswerablesTopics"] });
+      this.belongsToMany(Answerable, { through: AnswerablesTopics });
 
       // One-to-Many topic -> subs
-      Topic.hasMany(models["Subscription"]);
+      this.hasMany(Subscription, { foreignKey: 'topicId' });
     }
   }
   Topic.init({

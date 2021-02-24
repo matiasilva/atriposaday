@@ -4,12 +4,12 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Answerable extends Model {
-    static associate(models) {
+    static associate({Topic, Paper, AnswerablesTopics}) {
       // Many-to-many topic <-> question
-      Answerable.belongsToMany(models["Topic"], { through: models["AnswerablesTopics"] });
+      this.belongsToMany(Topic, { through: AnswerablesTopics });
 
       // One-to-Many paper -> questions
-      Answerable.belongsTo(models["Paper"], {
+      this.belongsTo(Paper, {
         foreignKey: {
           name: 'paperId',
           allowNull: false
