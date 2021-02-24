@@ -11,35 +11,51 @@
                 <form method="POST" action="/admin/create/question" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description">
+                        <input type="text" class="form-control {{#if errors.[description]}}is-invalid{{/if}}"
+                            id="description" name="description">
+                        {{#if errors.[description]}}
+                        {{> admin/invalid_feedback msg= "Your description is greater than 120 characters."
+                        }}
+                        {{/if}}
                         <div class="form-text">Optional description. Batch uploads will all have the same
                             description.</div>
                     </div>
                     <div class="mb-3">
-                        <select class="form-select" name="tripos-part">
-                            <option value="" selected>Tripos part</option>
+                        <select class="form-select {{#if errors.[tripos-part]}}is-invalid{{/if}}" name="tripos-part">
+                            <option value="" {{#unless form_vals.[tripos-part]}}selected{{/unless}}>Tripos part
+                            </option>
                             {{#each tripos_parts}}
-                            <option value="{{lookup this 0}}">
+                            <option value="{{lookup this 0}}" {{#ifeq ../form_vals.[tripos-part] (lookup this
+                                0)}}selected{{/ifeq}}>
                                 {{lookup this 1}}
                             </option>
                             {{/each}}
                         </select>
                         {{#if errors.[tripos-part]}}
-                        {{> admin/invalid_feedback msg= errors.[tripos-part]
-                        {{/invalid_feedback}}
+                        {{> admin/invalid_feedback msg="You must specify a part of the Tripos to which your upload
+                        belongs."}}
+                        {{/if}}
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Base topic</label>
+                        <label class="form-label {{#if errors.[base-topic]}}is-invalid{{/if}}">Base topic</label>
                         {{#each root_topics}}
                         {{> admin/checkbox description=this.name uuid=this.uuid}}
                         {{/each}}
+                        {{#if errors.[base-topic]}}
+                        {{> admin/invalid_feedback msg= "You must select a base topic."
+                        }}
+                        {{/if}}
                         <div id="topicHelp" class="form-text">All questions must belong to a base topic. If none
                             applies, choose the <em>no topic</em> option.</div>
                     </div>
                     <div class="mb-3">
                         <label for="question-upload" class="form-label">Upload one or more photos</label>
-                        <input class="form-control form-control-lg" type="file" id="question-upload"
-                            name="question-upload" multiple>
+                        <input class="form-control form-control-lg {{#if errors.[question-upload]}}is-invalid{{/if}}"
+                            type="file" id="question-upload" name="question-upload" multiple>
+                        {{#if errors.[question-upload]}}
+                        {{> admin/invalid_feedback msg= "You must upload at least one file."
+                        }}
+                        {{/if}}
                     </div>
                     <button id="question-create-submit" type="submit" class="btn btn-primary">Submit</button>
                 </form>
