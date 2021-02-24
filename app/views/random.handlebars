@@ -1,0 +1,14 @@
+<section class="row">
+    <article class="col">
+        <div class="card mb-3">
+            <img src="{{image}}" class="card-img-top" alt="{{description}}">
+            <div class="card-body">
+                <h5 class="card-title">Randomizer output</h5>
+                {{#with paper}}
+                <p class="card-text">This question is from {{(lookup subjects subject)}}</p>
+                {{/with}}
+                <p class="card-text"><small class="text-muted">Difficulty: {{difficulty}}/5</small></p>
+            </div>
+        </div>
+    </article>
+</section>
