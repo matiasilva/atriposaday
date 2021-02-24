@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Answerables_Topics', {
+    await queryInterface.createTable('answerables_topics', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,14 +11,14 @@ module.exports = {
       AnswerableId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
-          model: "Answerables",
+          model: "answerables",
           key: 'id'
         }
       },
       TopicId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
-          model: "Topics",
+          model: "topics",
           key: 'id'
         }
       },
@@ -33,6 +33,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Answerables_Topics');
+    await queryInterface.dropTable('answerables_topics');
   }
 };

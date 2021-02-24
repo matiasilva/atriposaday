@@ -25,12 +25,12 @@ module.exports = {
             updatedAt: new Date()
           }
         })
-        await queryInterface.bulkInsert('Papers', papersToInsert);
+        await queryInterface.bulkInsert('papers', papersToInsert);
       }
     }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Papers', null, {});
+    await queryInterface.bulkDelete('papers', null, {});
   }
 };

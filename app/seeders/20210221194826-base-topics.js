@@ -19,10 +19,10 @@ module.exports = {
           updatedAt: new Date()
         }
       })
-      await queryInterface.bulkInsert('Topics', topicsToInsert);
+      await queryInterface.bulkInsert('topics', topicsToInsert);
     }
 
-    await queryInterface.bulkInsert('Topics', [{
+    await queryInterface.bulkInsert('topics', [{
       name: "NO_TOPIC",
       description: "For any question that has no base topic",
       uuid: uuidv4(),
@@ -33,6 +33,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Topics', null, {});
+    await queryInterface.bulkDelete('topics', null, {});
   }
 };
