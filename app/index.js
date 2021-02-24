@@ -4,8 +4,9 @@ const exphbs = require('express-handlebars');
 const db = require('./models')
 const { TRIPOS_PARTS } = require("./enums");
 const session = require('express-session');
-const flash = require('connect-flash');
+const flash = require('flash');
 const upload = require('./middleware/upload');
+const utils = require('./utils');
 
 const PORT = 8080;
 
@@ -16,6 +17,21 @@ const hbs = exphbs.create({
                 return opts.fn(this);
             }
         },
+        "display_flashes": function (flashes, options) {
+            let ret = "";
+            let flash;
+            while ((flash = flashes.shift()) != undefined) {
+                ret = ret + options.fn(flash);
+            }
+            return ret;
+        },
+        "ifeq": function (a, b, opts) {
+            if (a === b) return opts.fn(this);
+            return opts.inverse(this);
+        },
+        "unlesseq": function (a, b, opts) {
+            if (!a || !a === b) return opts.fn(this);
+        }
     }
 });
 
@@ -26,11 +42,12 @@ app.set('views', 'app/views')
 // ideally only for dev
 app.use(express.static("app/public/"));
 app.use(session({
-	secret:'some secret',
-	saveUninitialized: true,
-	resave: true
-}));app.use(flash());
-    
+    secret: 'some secret',
+    saveUninitialized: true,
+    resave: true
+}));
+app.use(flash());
+
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 app.get('/', (req, res) => {
@@ -55,13 +72,18 @@ app.get('/admin', async (req, res) => {
 })
 
 app.post('/admin/create/question', upload.array('question-upload'), async (req, res) => {
+
+    const formKeys = ["tripos-part", "description", "base-topic"];
+    const values = utils.pick(formKeys, req.body);
     let errors = {};
 
-    if (!req.files && req.files.length < 1) errors["question-upload"] = "You must upload at least one file."
+    if (req.files && req.files.length < 1) errors["question-upload"] = true;
 
-    if (req.body["tripos-part"] === "") errors["tripos-part"] = "You must specify a part of the Tripos to which your upload belongs."
+    if (!values["base-topic"]) errors["base-topic"] = true;
 
-    if (req.body["description"].length >= 120) errors["description"] = "Your description is greater than 120 characters."
+    if (values["tripos-part"] === "") errors["tripos-part"] = true;
+
+    if (values["description"].length >= 120) errors["description"] = true;
 
     if (!errors) {
         
@@ -74,11 +96,16 @@ app.post('/admin/create/question', upload.array('question-upload'), async (req, 
             },
             raw: true
         });
+
         // include sent back responses that failed
+        req.flash("danger", "There are problems with the information you submitted.")
+
         res.render("admin", {
             title: "Administrator panel",
             "root_topics": rootTopics,
-            "tripos_parts": Object.entries(TRIPOS_PARTS)
+            "tripos_parts": Object.entries(TRIPOS_PARTS),
+            "form_vals": values,
+            errors
         });
 
     }
