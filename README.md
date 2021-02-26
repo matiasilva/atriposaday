@@ -42,3 +42,7 @@ Thanks to the [Student-Run Computing Facility](https://www.srcf.net/) for the ho
 ## Resources
 
 * https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+
+## Technical notes
+
+There is no if/else for topics (as there is with user subs) as there will always be root-level topics that are added in seeders.
