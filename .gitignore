@@ -10,5 +10,8 @@ yarn-error.log*
 lerna-debug.log*
 
 # images
-
 static/uploads/*
+
+# python
+__pycache__
+.idea/*
