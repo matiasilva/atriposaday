@@ -40,7 +40,7 @@ const hbs = exphbs.create({
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
-app.set('views', 'app/views')
+app.set('views', 'app/views');
 
 // init middleware
 app.use(express.static("app/public/"));
