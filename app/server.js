@@ -56,9 +56,10 @@ app.use(auth.initialize());
 app.use(auth.session());
 
 // init all routes
-const { admin, topics, home } = routes;
+const { admin, topics, home, users } = routes;
 app.use('/topics', topics);
 app.use('/admin', admin);
+app.use('/user', users);
 app.use('/', home);
 
 // 404s
