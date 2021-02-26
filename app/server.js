@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const routes = require('./routes');
 const db = require('./models');
 const auth = require('./middleware/auth');
+const {errorHandler, notFoundHandler} = require('./middleware/errors');
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 const PORT = process.env.PORT || 8080;
@@ -55,10 +56,15 @@ app.use(auth.initialize());
 app.use(auth.session());
 
 // init all routes
-const { admin, topics, home} = routes;
-app.use('/topics', topics );
-app.use('/admin', admin );
-app.use('/', home );
+const { admin, topics, home } = routes;
+app.use('/topics', topics);
+app.use('/admin', admin);
+app.use('/', home);
+
+// 404s
+app.use(notFoundHandler);
+// error handlers
+app.use(errorHandler);
 
 async function main() {
     try {
