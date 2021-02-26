@@ -5,5 +5,9 @@ module.exports = {
             values[key] = obj[key];
         }
         return values;
+    },
+    "matchEmail" : function(email){
+        const emailRe = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        return emailRe.test(email);
     }
-}
+};
