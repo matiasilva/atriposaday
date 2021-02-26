@@ -4,31 +4,32 @@ const auth = require('../middleware/auth');
 const fetch = require('node-fetch');
 const upload = require('../middleware/upload');
 const utils = require('../utils');
+const { exposeUserInView } = require('../middleware/custom');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render("index");
+// make user available in view
+router.use(exposeUserInView);
+
+
+router.get('/', async (req, res) => {
+    const { User } = db;
+
+    return res.render("index", {
+        userCount: await User.count()
+    });
 });
 
 router.get('/login',
     auth.authenticate('raven', {
-        successRedirect: '/home',
+        successRedirect: '/user/home',
         failureRedirect: '/',
         failureFlash: true
     })
 );
 
 router.get('/home', async (req, res) => {
-    const { User } = db;
-    if (!(req.user instanceof User)) {
-        return res.redirect('/signup');
-    }
-    const subscriptions = await req.user.getSubscriptions();
-    console.log(subscriptions);
-    res.render("home", {
-        title: "Home"
-    });
+    return res.redirect('/user/home');
 });
 
 router.get('/signup', async (req, res) => {

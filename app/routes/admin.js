@@ -1,10 +1,14 @@
-const express = require('express')
+const express = require('express');
 const { TRIPOS_PARTS, SUBJECTS } = require("../enums");
 const upload = require('../middleware/upload');
 const utils = require('../utils');
-const db = require('../models')
+const db = require('../models');
+const {exposeUserInView} = require('../middleware/custom');
 
-const router = express.Router()
+const router = express.Router();
+
+// make user available in view
+router.use(exposeUserInView);
 
 router.get('/', async (req, res) => {
     const { Answerable, Topic, User, Subscription, Paper } = db;
@@ -14,14 +18,14 @@ router.get('/', async (req, res) => {
         "topics": await Topic.count(),
         "subscriptions": await Subscription.count(),
         "papers": await Paper.count(),
-    }
+    };
     res.render("admin", {
         title: "Administrator panel",
         "tripos_parts": Object.entries(TRIPOS_PARTS),
         "subjects": SUBJECTS,
         status
     });
-})
+});
 
 router.post('/create/question', upload.array('question-upload'), async (req, res) => {
 
@@ -59,6 +63,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
                     image: file.path,
                     paperId: paper.id,
                 }
+            // eslint-disable-next-line semi
             )
         }
 
@@ -68,7 +73,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
     }
     else {
         // include sent back responses that failed
-        req.flash("danger", "There are problems with the information you submitted.")
+        req.flash("danger", "There are problems with the information you submitted.");
 
         res.render("admin", {
             title: "Administrator panel",
