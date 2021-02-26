@@ -33,6 +33,14 @@ module.exports = {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false
       },
+      userId: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false
+      },
+      topicId: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
