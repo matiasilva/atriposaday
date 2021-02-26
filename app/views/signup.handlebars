@@ -1,16 +1,19 @@
 <form method="POST" action="/signup" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="userName" class="form-label">Name</label>
-        <input type="text" name="userName" class="form-control {{#if errors.[userName]}}is-invalid{{/if}}" id="userName">
+        <input type="text" name="userName" class="form-control {{#if errors.[userName]}}is-invalid{{/if}}" id="userName"
+            value="{{name}}">
         {{> forms/invalid_feedback msg= "Your name must be less than 120 characters."
         }}
         <div class="form-text">This is the name used to refer to you in emails.</div>
     </div>
     <div class="mb-3">
         <label for="userEmail" class="form-label">Email address</label>
-        <input type="text" class="form-control {{#if errors.[userEmail]}}is-invalid{{/if}}" name="userEmail" id="userEmail">
+        <input type="text" class="form-control {{#if errors.[userEmail]}}is-invalid{{/if}}" name="userEmail"
+            id="userEmail" value="{{email}}">
         {{> forms/invalid_feedback msg= "Please enter a valid email address."
         }}
+        <div class="form-text">All communication will be sent to this email, including any of your topic subscriptions.</div>
     </div>
     <button type="submit" class="btn btn-primary">Confirm</button>
 </form>
