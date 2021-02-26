@@ -22,3 +22,7 @@ splicer/.idea/misc.xml
 splicer/.idea/modules.xml
 
 splicer/.idea/
+
+# VScode
+
+.vscode/*
