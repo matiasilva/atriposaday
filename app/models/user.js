@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     crsid: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false
     },
   }, {
     sequelize,

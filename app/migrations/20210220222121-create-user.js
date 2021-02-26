@@ -18,7 +18,7 @@ module.exports = {
       },
       crsid: {
         type: Sequelize.DataTypes.STRING,
-        allowNull: true
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
