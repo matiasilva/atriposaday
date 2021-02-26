@@ -12,18 +12,21 @@ def rescale(im, basewidth=1500):
 
     return im1
 
-
-def initial_crop(im, t=20, h=20, l=10, r=10, buffer=5):
+# crop out the header and footer, and any errant pixels from left to right
+def initial_crop(im, t=20, b=20, l=10, r=10, buffer=10):
 
     na = np.array(im)
 
     # grab dimenisions of image
     width, height = im.size
 
-    # detects the y coordinate of any black blocks
+    # detects the y and x coordinates of any black/grey blocks
     y, x = np.where(np.all(na <= [80, 80, 80], axis = 2))
-    x, y = np.sort(x), np.sort(y)
 
+    x = np.sort(x)
+    y = np.sort(y)
+
+    #order and make unique set from list
     horizontal_black = np.unique(x)
     horizontal_black = list(horizontal_black)
 
@@ -40,48 +43,52 @@ def initial_crop(im, t=20, h=20, l=10, r=10, buffer=5):
         elif vertical_black[i] - base < t:
             base = vertical_black[i]
 
+    vertical_black.reverse()
+
     # find location of footer coordinate
-    for j in range(len(vertical_black), 0, -1):
-        if j == len(vertical_black):
-            base = vertical_black[j - 1]
-        elif abs(vertical_black[j] - base) > h:
+    for j in range(len(vertical_black)):
+        if j == 0:
+            base = vertical_black[j]
+        elif vertical_black[j] - base > b:
             bottom_margin = base
             break
-        elif abs(vertical_black[j] - base) < h:
+        elif vertical_black[j] - base < b:
             base = vertical_black[j]
 
+
     # Remove LHS Noise
-    for i in range(len(horizontal_black)):
-        if i == 0:
-            base = horizontal_black[i]
-        elif horizontal_black[i] - base > l:
+    for k in range(len(horizontal_black)):
+        p = horizontal_black[k]
+        if k == 0:
+            base = horizontal_black[k]
+        elif horizontal_black[k] - base > l:
             left_margin = base
             break
-        elif horizontal_black[i] - base < l:
-            base = horizontal_black[i]
+        elif horizontal_black[k] - base < l:
+            base = horizontal_black[k]
+
 
     # find Remove RHS Noise
-    for j in range(len(horizontal_black), 0, -1):
-        if j == len(horizontal_black):
-            base = horizontal_black[j - 1]
-        elif abs(horizontal_black[j] - base) > r:
+
+    horizontal_black.reverse()
+
+    for k in range(len(horizontal_black)):
+        q = horizontal_black[k]
+        if k == 0:
+            base = horizontal_black[k]
+        elif horizontal_black[k] - base > r:
             right_margin = base
             break
-        elif abs(horizontal_black[j] - base) < r:
-            base = horizontal_black[j]
-
-    print(top_margin)
-    print(bottom_margin)
-    print(left_margin)
-    print(right_margin)
+        elif horizontal_black[k] - base < r:
+            base = horizontal_black[k]
 
     cropped = im.crop((left_margin+buffer, top_margin+buffer, right_margin-buffer, bottom_margin-buffer))
     return cropped
 
+
 # im = Image.open('resized.png').convert('RGB')
 # im1 = rescale(im)
-# im2 = initial_crop(im1, 20, 20).show()
-
+# im2 = initial_crop(im1, 20, 20)
 
 def main_crop(im):
     na = np.array(im)
