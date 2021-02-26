@@ -36,7 +36,7 @@
                             id="description" name="description"
                             value="{{#if form_vals.[description]}}{{form_vals.description}}{{/if}}">
                         {{#if errors.[description]}}
-                        {{> admin/invalid_feedback msg= "Your description is greater than 120 characters."
+                        {{> forms/invalid_feedback msg= "Your description is greater than 120 characters."
                         }}
                         {{/if}}
                         <div class="form-text">Optional description. Batch uploads will all have the same
@@ -47,7 +47,7 @@
                         <input type="text" class="form-control {{#if errors.[year]}}is-invalid{{/if}}" id="year"
                             name="year" value="{{#if form_vals.[year]}}{{form_vals.year}}{{/if}}">
                         {{#if errors.[year]}}
-                        {{> admin/invalid_feedback msg= "Please enter a valid year."
+                        {{> forms/invalid_feedback msg= "Please enter a valid year."
                         }}
                         {{/if}}
                         <div class="form-text">The calendar year of the exam or question</div>
@@ -65,7 +65,7 @@
                             {{/each}}
                         </select>
                         {{#if errors.[tripos-part]}}
-                        {{> admin/invalid_feedback msg="You must specify a part of the Tripos to which your upload
+                        {{> forms/invalid_feedback msg="You must specify a part of the Tripos to which your upload
                         belongs."}}
                         {{/if}}
                     </div>
@@ -88,7 +88,7 @@
                         <p class="text-danger">Select a Tripos part.</p>
                         {{/unless}}
                         {{#if errors.[subject]}}
-                        {{> admin/invalid_feedback msg= "You must select a tripos part."
+                        {{> forms/invalid_feedback msg= "You must select a tripos part."
                         }}
                         {{/if}}
                         <div id="topicHelp" class="form-text">All questions must belong to a subject. If none
@@ -99,7 +99,7 @@
                         <input class="form-control form-control-lg {{#if errors.[question-upload]}}is-invalid{{/if}}"
                             type="file" id="question-upload" name="question-upload" multiple>
                         {{#if errors.[question-upload]}}
-                        {{> admin/invalid_feedback msg= "You must upload at least one file."
+                        {{> forms/invalid_feedback msg= "You must upload at least one file."
                         }}
                         {{/if}}
                     </div>
