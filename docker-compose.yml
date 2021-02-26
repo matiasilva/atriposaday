@@ -20,7 +20,8 @@ services:
       DEV_DB_HOSTNAME: db
       DEV_DB_PASSWORD: password
       NODE_ENV: development
-    command: npx nodemon app/index.js
+      PORT: 8080
+    command: npx nodemon app/server.js
     volumes:
       - ${PWD}:/opt/code
     ports:
