@@ -65,7 +65,7 @@ async function main() {
         await db.sequelize.authenticate();
         console.log('Connection has been established successfully.');
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error('Unable to connect to the database:', error.name);
     }
     app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
 }
