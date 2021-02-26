@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4
       },
+      name: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
+      },
       // every how many days?
       repeatDayFrequency: {
         type: Sequelize.DataTypes.INTEGER,

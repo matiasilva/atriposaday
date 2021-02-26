@@ -4,7 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Subscription extends Model {
-    static associate({User, Topic}) {
+    static associate({ User, Topic }) {
       // One-to-Many user -> subs
       this.belongsTo(User, {
         foreignKey: {
@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     uuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     // every how many days?
     repeatDayFrequency: {
