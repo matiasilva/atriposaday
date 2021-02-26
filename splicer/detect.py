@@ -1,19 +1,8 @@
-from PIL import Image
 import numpy as np
-
-#testing whether this pushes or not
-
-#CONSTANTS
-basewidth = 1500
-white = []
-footer = []
-footer2 = []
-
-#DEFINITIONS
+from PIL import Image
 
 # rescale image first and save rescaled image for debugging
-def rescale(image):
-    im = Image.open(image).convert('RGB')
+def rescale(im, basewidth=1500):
 
     wpercent = (basewidth / float(im.size[0]))
     hsize = int((float(im.size[1]) * float(wpercent)))
@@ -23,81 +12,85 @@ def rescale(image):
 
     return im1
 
-# allows mutliple variable iteration over a list (think of a siding window
-def chunker(seq, size):
-    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
-# # detects whether a list has continous variables
-# def cont(my_list):
-#     return not any(a+1!=b for a, b in zip(my_list, my_list[1:]))
+def initial_crop(im, t=20, h=20, l=10, r=10, buffer=5):
 
-#MAIN
-image = r'test.png'
+    na = np.array(im)
 
-# apply rescaling, make a copy of image
-im1 = rescale(image)
-na = np.array(im1)
-orig = na.copy()
+    # grab dimenisions of image
+    width, height = im.size
 
-# grab dimenisions of image
-width, height = im1.size
+    # detects the y coordinate of any black blocks
+    y, x = np.where(np.all(na <= [80, 80, 80], axis = 2))
+    x, y = np.sort(x), np.sort(y)
 
-# detects the y coordinate of any black blocks
-y = np.where(np.all(na <= [250, 250, 250], axis=2))[0]
-y = np.sort(y)
-black = np.unique(y)
+    horizontal_black = np.unique(x)
+    horizontal_black = list(horizontal_black)
 
-# for i in range(height):
-#     if i not in black:
-#         white.append(i)
+    vertical_black = np.unique(y)
+    vertical_black = list(vertical_black)
 
-for values in chunker(black, 5):
-    footer.append(values)
+    # find location of header coordinate
+    for i in range(len(vertical_black)):
+        if i == 0:
+            base = vertical_black[i]
+        elif vertical_black[i] - base > t:
+            top_margin = base
+            break
+        elif vertical_black[i] - base < t:
+            base = vertical_black[i]
 
-footer = list(footer)
+    # find location of footer coordinate
+    for j in range(len(vertical_black), 0, -1):
+        if j == len(vertical_black):
+            base = vertical_black[j - 1]
+        elif abs(vertical_black[j] - base) > h:
+            bottom_margin = base
+            break
+        elif abs(vertical_black[j] - base) < h:
+            base = vertical_black[j]
 
-for i in range(len(footer)):
-    new = footer[i]
+    # Remove LHS Noise
+    for i in range(len(horizontal_black)):
+        if i == 0:
+            base = horizontal_black[i]
+        elif horizontal_black[i] - base > l:
+            left_margin = base
+            break
+        elif horizontal_black[i] - base < l:
+            base = horizontal_black[i]
 
-    for j in range(len(new)):
-        if j == 0:
-            base = new[j]
-        if new[j] - base > 20:
-            print(base)
+    # find Remove RHS Noise
+    for j in range(len(horizontal_black), 0, -1):
+        if j == len(horizontal_black):
+            base = horizontal_black[j - 1]
+        elif abs(horizontal_black[j] - base) > r:
+            right_margin = base
+            break
+        elif abs(horizontal_black[j] - base) < r:
+            base = horizontal_black[j]
 
-    # for j in footer[i]:
-    #     if j == 1:
-    #         break
-    #     elif footer[i][j] not in range(footer[i][j-1], 20):
-    #         print('help')
+    print(top_margin)
+    print(bottom_margin)
+    print(left_margin)
+    print(right_margin)
 
-    # elif footer[i][0] - footer[i-1][-1] > 5:
-    #     print(footer[i][0])
-    #     # print(footer[i-1][-1])
-    #
-    #     # print((footer[i-1][-1]))
-    #     # break
+    cropped = im.crop((left_margin+buffer, top_margin+buffer, right_margin-buffer, bottom_margin-buffer))
+    return cropped
 
-
-
-    # if i not in y_unique:
-    #     whitelines.append(i)
-    #
-    #     if len(whitelines) > blankspace:
+# im = Image.open('resized.png').convert('RGB')
+# im1 = rescale(im)
+# im2 = initial_crop(im1, 20, 20).show()
 
 
-        # # Find X,Y coordinates of all black/greyish pixels
-        # blackY, blackX = np.where(np.all(na<=[250,250,250],axis=2))
-        # blackY = np.sort(blackY)
-        # blackX = np.sort(blackX)
-        # top, bottom = blackY[0], blackY[-1]
-        # left, right = blackX[0], blackX[-1]
-        #
-        # print(left,top,right,bottom)
-        #
-        # im.crop((left-buffer,top-buffer,right+buffer,bottom+buffer)).save('{}'.format(image))
-        #
-        # # Extract Region of Interest and apply buffer as margin
-        # # ROI = orig[(top-buffer):(bottom+buffer), (left-buffer):(right+buffer)]
-        # #
-        # # im2 = Image.fromarray(ROI).save('{}'.format(image))
+def main_crop(im):
+    na = np.array(im)
+
+    # Find X,Y coordinates of all black/greyish pixels
+    blackY, blackX = np.where(np.all(na <= [250, 250, 250], axis=2))
+    blackY = np.sort(blackY)
+    blackX = np.sort(blackX)
+    top, bottom = blackY[0], blackY[-1]
+    left, right = blackX[0], blackX[-1]
+
+    return left, top, right, bottom

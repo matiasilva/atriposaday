@@ -5,13 +5,13 @@ from detect import rescale
 from detect import initial_crop
 from detect import main_crop
 
-buffer = 100
+buffer = 0
 
-path = r"C:\Users\swan11jf\Documents\Python Projects\tripos\test"
+script_dir = os.path.dirname(__file__)
+abspath = os.path.join(script_dir, 'testimages')
 
-filelist = os.listdir(path)
-for image in filelist:
-    location = os.path.join(path,image)
+for file in os.listdir(abspath):
+    location = os.path.join(abspath, file)
 
     with open(location, 'r') as f:
         im = Image.open(location).convert('RGB')
@@ -19,7 +19,7 @@ for image in filelist:
         # im7 = im.filter(ImageFilter.MinFilter(3)).show()
 
         im1 = rescale(im,basewidth=1500)
-        im2 = initial_crop(im1, 60, 50)
+        im2 = initial_crop(im1).show()
 
         left, top, right, bottom = main_crop(im2)
 
