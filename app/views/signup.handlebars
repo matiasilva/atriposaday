@@ -4,7 +4,6 @@
         <input type="text" name="userName" class="form-control {{#if errors.[userName]}}is-invalid{{/if}}" id="userName">
         {{> forms/invalid_feedback msg= "Your name must be less than 120 characters."
         }}
-        {{/if}}
         <div class="form-text">This is the name used to refer to you in emails.</div>
     </div>
     <div class="mb-3">
@@ -12,7 +11,6 @@
         <input type="text" class="form-control {{#if errors.[userEmail]}}is-invalid{{/if}}" name="userEmail" id="userEmail">
         {{> forms/invalid_feedback msg= "Please enter a valid email address."
         }}
-        {{/if}}
     </div>
     <button type="submit" class="btn btn-primary">Confirm</button>
 </form>

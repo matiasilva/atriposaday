@@ -26,7 +26,7 @@ router.get('/home', (req, res) => {
     if (!(req.user instanceof User)) {
         res.redirect('/signup');
     }
-    res.send(`Success`);
+    res.send(`Your name is ${req.user.name}`);
 });
 
 router.get('/signup', async (req, res) => {
