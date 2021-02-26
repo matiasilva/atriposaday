@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     res.render("home", {
         title: "Home"
     });
-})
+});
 
 router.get('/login',
     auth.authenticate('raven', {
@@ -26,11 +26,16 @@ router.get('/home', (req, res) => {
     if (!(req.user instanceof User)) {
         res.redirect('/signup');
     }
-    res.send(`Success`)
-})
+    res.send(`Success`);
+});
 
 router.get('/signup', async (req, res) => {
+    const { User } = db;
+
+    // hasn't gone through raven
     if (!req.user) res.redirect('/login');
+    // is already a valid user
+    if (req.user instanceof User) res.redirect('/home');
 
     const url = `https://www.lookup.cam.ac.uk/api/v1/person/crsid/${req.user}`;
     const options = {
@@ -49,17 +54,36 @@ router.get('/signup', async (req, res) => {
         name: result.person.visibleName,
         email: `${req.user}@cam.ac.uk`
     });
-})
+});
 
 router.post('/signup', upload.none(), async (req, res) => {
-    const formKeys = ["tripos-part", "description", "subject", "year"];
+    const formKeys = ["userName", "userEmail"];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
-    const { User } = db;
-    await User.create({
-        {}
-    })
-})
+
+    if (!utils.matchEmail(values["userEmail"])) errors["userEmail"] = true;
+    if (values["userName"] > 120) errors["userName"] = true;
+
+    const hasNoErrors = Object.keys(errors).length === 0;
+
+    if (hasNoErrors) {
+        const { User } = db;
+        await User.create({
+            name: values["userName"],
+            crsid: req.user,
+            email: values["userEmail"]
+        });
+        req.flash("success", "You were successfully registered as a new user.");
+        res.redirect('/home');
+    } else {
+        req.flash("danger", "There are problems with the information you submitted.");
+
+        res.render("signup", {
+            title: "Confirm your details",
+            errors
+        });
+    }
+});
 
 router.get('/random', async (req, res) => {
     const { part, subject } = req.query;
@@ -69,13 +93,13 @@ router.get('/random', async (req, res) => {
     if (!part && !subject) {
         result = await Answerable.findOne(
             { order: db.sequelize.random(), include: 'paper' }
-        )
+        );
         result = result.toJSON();
     } else {
         const whereObj = { ...part && { triposPart: part }, ...subject && { subject } };
         const matchingPapers = await Paper.findAll({
             where: whereObj
-        })
+        });
         let questions = [];
         for (const paper of matchingPapers) {
             questions.concat(await Answerable.findAll({
@@ -85,10 +109,10 @@ router.get('/random', async (req, res) => {
             }));
         }
         if (questions.length > 0) {
-            result = questions[Math.floor(Math.random() * questions.length)].toJSON()
+            result = questions[Math.floor(Math.random() * questions.length)].toJSON();
         }
         else {
-            result = "No matching questions found."
+            result = "No matching questions found.";
         }
     }
     res.json(result);
