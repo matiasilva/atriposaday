@@ -46,7 +46,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
     const hasNoErrors = Object.keys(errors).length === 0;
     if (hasNoErrors) {
         // add question
-        const { Answerable, Paper } = db;
+        const { Answerable, Paper, Topic } = db;
 
         const paper = await Paper.findOne({
             where: {
@@ -56,15 +56,22 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
             }
         });
 
+        const topic = await Topic.findOne({
+            where: {
+                isRootLevel: true,
+                name: values["subject"]
+            }
+        });
+
         for (const file of req.files) {
-            await Answerable.create(
+            const question = await Answerable.create(
                 {
                     description: values["description"],
                     image: file.path,
                     paperId: paper.id,
                 }
-            // eslint-disable-next-line semi
-            )
+            );
+            await topic.addAnswerable(question);
         }
 
         req.flash("success", "All questions created successfully!");

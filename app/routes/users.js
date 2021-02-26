@@ -13,8 +13,13 @@ router.get('/home', async (req, res)=> {
     }
     const subscriptions = await req.user.getSubscriptions();
     res.render("home", {
-        title: "Home"
+        title: "Home",
+        subscriptions
     });
+});
+
+router.get('/subscriptions', async (req, res)=> {
+    // if user doesn't give name, set it to the topic name
 });
 
 module.exports = router;

@@ -1,0 +1,16 @@
+{{#if subscriptions}}
+<h2>Your subscriptions</h2>
+<div class="alert alert-info mt-3" role="alert">
+    You are subscribed to a total of {{subscriptions.length}} topic(s).
+</div>
+<ul>
+    {{#each subscriptions as |sub|}}
+    <li>Subscribed to {{sub.name}}, send {{sub.count}} question(s)every {{sub.repeatDayFrequency}} at {{sub.repeatTime}}</li>
+    {{/each}}
+</ul>
+<p>Modify or delete your subscriptions <a href="/user/subscriptions">here</a>.</p>
+{{else}}
+<div class="alert alert-secondary mt-3" role="alert">
+    You are not subscribed to any topics. You can view and subscribe to topics <a href="/topics">here</a>.
+</div>
+{{/if}}
