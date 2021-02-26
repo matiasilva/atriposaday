@@ -8,12 +8,39 @@ def rescale(im, basewidth=1500):
     hsize = int((float(im.size[1]) * float(wpercent)))
 
     im1 = im.resize((basewidth, hsize))
-    im2 = im1.save('resized.png')
+    # im2 = im1.save('resized.png')
 
     return im1
 
+def difference(t, margin, reverse):
+
+    extreme = []
+    difference = [j-i for i, j in zip(t[:-1], t[1:])]
+
+    if reverse == 0:
+
+        for k in difference:
+            if k > margin:
+                extreme.append(difference.index(k))
+
+        if len(extreme) == 0:
+            return t[0]
+        else:
+            a = extreme[0]
+            return t[a+1]
+    else:
+        for k in reversed(difference):
+            if k > margin:
+                extreme.append(difference.index(k))
+
+        if len(extreme) == 0:
+            return t[-1]
+        else:
+            a = extreme[0]
+            return t[a]
+
 # crop out the header and footer, and any errant pixels from left to right
-def initial_crop(im, t=20, b=20, l=10, r=10, buffer=10):
+def initial_crop(im, t=20, b=20, l=10, r=10, bf=50):
 
     na = np.array(im)
 
@@ -34,61 +61,15 @@ def initial_crop(im, t=20, b=20, l=10, r=10, buffer=10):
     vertical_black = list(vertical_black)
 
     # find location of header coordinate
-    for i in range(len(vertical_black)):
-        if i == 0:
-            base = vertical_black[i]
-        elif vertical_black[i] - base > t:
-            top_margin = base
-            break
-        elif vertical_black[i] - base < t:
-            base = vertical_black[i]
+    top = difference(vertical_black, 65, 0)
+    bottom = difference(vertical_black, 90, 1)
+    left = difference(horizontal_black, 20, 0)
+    right = difference(horizontal_black, 20, 1)
 
-    vertical_black.reverse()
+    cropped = im.crop((left-bf, top-bf, right+bf, bottom+bf))
+    # cropped2 = cropped.save('cropped.png')
 
-    # find location of footer coordinate
-    for j in range(len(vertical_black)):
-        if j == 0:
-            base = vertical_black[j]
-        elif vertical_black[j] - base > b:
-            bottom_margin = base
-            break
-        elif vertical_black[j] - base < b:
-            base = vertical_black[j]
-
-
-    # Remove LHS Noise
-    for k in range(len(horizontal_black)):
-        p = horizontal_black[k]
-        if k == 0:
-            base = horizontal_black[k]
-        elif horizontal_black[k] - base > l:
-            left_margin = base
-            break
-        elif horizontal_black[k] - base < l:
-            base = horizontal_black[k]
-
-
-    # find Remove RHS Noise
-
-    horizontal_black.reverse()
-
-    for k in range(len(horizontal_black)):
-        q = horizontal_black[k]
-        if k == 0:
-            base = horizontal_black[k]
-        elif horizontal_black[k] - base > r:
-            right_margin = base
-            break
-        elif horizontal_black[k] - base < r:
-            base = horizontal_black[k]
-
-    cropped = im.crop((left_margin+buffer, top_margin+buffer, right_margin-buffer, bottom_margin-buffer))
     return cropped
-
-
-# im = Image.open('resized.png').convert('RGB')
-# im1 = rescale(im)
-# im2 = initial_crop(im1, 20, 20)
 
 def main_crop(im):
     na = np.array(im)
