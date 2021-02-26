@@ -5,7 +5,8 @@ const flash = require('flash');
 const morgan = require('morgan');
 
 const routes = require('./routes');
-const db = require('./models')
+const db = require('./models');
+const auth = require('./middleware/auth');
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 const PORT = process.env.PORT || 8080;
@@ -50,6 +51,8 @@ app.use(session({
 }));
 app.use(flash());
 app.use(morgan('dev'));
+app.use(auth.initialize());
+app.use(auth.session());
 
 // init all routes
 const { admin, topics, home} = routes;
