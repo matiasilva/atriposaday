@@ -6,7 +6,11 @@ module.exports = (sequelize, DataTypes) => {
   class Answerable extends Model {
     static associate({ Topic, Paper, AnswerablesTopics }) {
       // Many-to-many topic <-> question
-      this.belongsToMany(Topic, { through: AnswerablesTopics });
+      this.belongsToMany(Topic, {
+        through: AnswerablesTopics,
+        as: "topics",
+        foreignKey: "answerableId"
+      });
 
       // One-to-Many paper -> questions
       this.belongsTo(Paper, {
@@ -19,9 +23,6 @@ module.exports = (sequelize, DataTypes) => {
 
     }
 
-    toJSON() {
-      return { ...this.get(), isHidden: undefined, paperId: undefined, id: undefined }
-    }
   }
   Answerable.init({
     description: {

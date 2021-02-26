@@ -6,7 +6,11 @@ module.exports = (sequelize, DataTypes) => {
   class Topic extends Model {
     static associate({ AnswerablesTopics, Answerable, Subscription }) {
       // Many-to-many topic <-> question
-      this.belongsToMany(Answerable, { through: AnswerablesTopics });
+      this.belongsToMany(Answerable, {
+        through: AnswerablesTopics,
+        as: "answerables",
+        foreignKey: "topicId"
+      });
 
       // One-to-Many topic -> subs
       this.hasMany(Subscription, { foreignKey: 'topicId' });

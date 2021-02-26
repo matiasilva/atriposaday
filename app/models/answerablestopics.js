@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   // junction table
   AnswerablesTopics.init({
-    AnswerableId: {
+    answerableId: {
       type: DataTypes.INTEGER,
       references: {
         model: "answerables",
         key: 'id'
       }
     },
-    TopicId: {
+    topicId: {
       type: DataTypes.INTEGER,
       references: {
         model: "topics",
