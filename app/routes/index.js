@@ -11,7 +11,7 @@ fs
     })
     .forEach(file => {
         const route = require(path.join(__dirname, file));
-        routes[file] = route;
+        routes[path.parse(file).name] = route;
     });
 
 module.exports = routes;

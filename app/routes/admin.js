@@ -1,8 +1,8 @@
 const express = require('express')
-const { TRIPOS_PARTS, SUBJECTS } = require("./enums");
-const upload = require('./middleware/upload');
-const utils = require('./utils');
-const db = require('./models')
+const { TRIPOS_PARTS, SUBJECTS } = require("../enums");
+const upload = require('../middleware/upload');
+const utils = require('../utils');
+const db = require('../models')
 
 const router = express.Router()
 
