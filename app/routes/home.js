@@ -8,9 +8,7 @@ const utils = require('../utils');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render("home", {
-        title: "Home"
-    });
+    res.render("index");
 });
 
 router.get('/login',
@@ -21,21 +19,25 @@ router.get('/login',
     })
 );
 
-router.get('/home', (req, res) => {
+router.get('/home', async (req, res) => {
     const { User } = db;
     if (!(req.user instanceof User)) {
-        res.redirect('/signup');
+        return res.redirect('/signup');
     }
-    res.send(`Your name is ${req.user.name}`);
+    const subscriptions = await req.user.getSubscriptions();
+    console.log(subscriptions);
+    res.render("home", {
+        title: "Home"
+    });
 });
 
 router.get('/signup', async (req, res) => {
     const { User } = db;
 
     // hasn't gone through raven
-    if (!req.user) res.redirect('/login');
+    if (!req.user) return res.redirect('/login');
     // is already a valid user
-    if (req.user instanceof User) res.redirect('/home');
+    if (req.user instanceof User) return res.redirect('/home');
 
     const url = `https://www.lookup.cam.ac.uk/api/v1/person/crsid/${req.user}`;
     const options = {
