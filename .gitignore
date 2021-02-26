@@ -15,3 +15,10 @@ static/uploads/*
 # python
 __pycache__
 .idea/*
+splicer/.idea/inspectionProfiles/profiles_settings.xml
+
+splicer/.idea/misc.xml
+
+splicer/.idea/modules.xml
+
+splicer/.idea/

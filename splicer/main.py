@@ -7,6 +7,7 @@ from detect import main_crop
 
 buffer = 0
 
+# open everything in testimages
 script_dir = os.path.dirname(__file__)
 abspath = os.path.join(script_dir, 'testimages')
 
@@ -18,18 +19,24 @@ for file in os.listdir(abspath):
 
         # im7 = im.filter(ImageFilter.MinFilter(3)).show()
 
+        # apply rescaling
+
         im1 = rescale(im,basewidth=1500)
+
+        # apply initial crop
         im2 = initial_crop(im1).save('help.png')
 
-        # left, top, right, bottom = main_crop(im2)
-        #
-        # im3 = im2.crop((left,top,right,bottom))
-        #
-        # im3_size = im3.size
-        # im4_size = (im3_size[0] + buffer, im3_size[1] + buffer)
-        # im4 = Image.new('RGB', im4_size, (255, 255, 255))
-        # im4.paste(im3, ((im4_size[0] - im3_size[0]) // 2, (im4_size[1] - im3_size[1]) // 2))
-        # im4.save('{}'.format(file))
+        #apply main crop
+
+        left, top, right, bottom = main_crop(im2)
+        im3 = im2.crop((left,top,right,bottom))
+
+        # add back padding
+        im3_size = im3.size
+        im4_size = (im3_size[0] + buffer, im3_size[1] + buffer)
+        im4 = Image.new('RGB', im4_size, (255, 255, 255))
+        im4.paste(im3, ((im4_size[0] - im3_size[0]) // 2, (im4_size[1] - im3_size[1]) // 2))
+        im4.save('{}'.format(file))
 
 
 
