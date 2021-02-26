@@ -1,14 +1,16 @@
 <div class="d-flex flex-column align-items-center">
-        <h1 class="display-1 text-secondary fw-bold">Oops!</h1>
-        <h2 class="text-primary">{{error.name}}</h2>
-        <div class="mb-3">
-            Sorry, an internal server error ocurred: {{error.message}}
-        </div>
-        <div >
-            <a href="/" class="btn btn-primary btn-lg me-1">
+    <h1 class="display-1 text-secondary fw-bold mb-3">Ruh-roh...</h1>
+    <h2 class="text-primary">500 internal server error</h2>
+    <p>The administrator has been notified.</p>
+    <div class="my-4">
+        <a href="/" class="btn btn-primary btn-lg me-1">
             <i class="fa fa-home"></i>
-                Take me somewhere safe </a>
-            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn btn-secondary btn-lg ms-1">
+            Take me somewhere safe </a>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn btn-secondary btn-lg ms-1">
             <i class="fa fa-envelope"></i> Contact Support </a>
-        </div>
+    </div>
+    
+    <div class="my-3 bg-warning font-monospace p-3 rounded pre-scrollable">
+        {{error.message}}
+    </div>
 </div>
