@@ -19,7 +19,7 @@ let sessionConfig;
 let sessionStore;
 if (env === 'production') {
     const SequelizeStore = require("connect-session-sequelize")(session.Store);
-    const sessionStore = new SequelizeStore({
+    sessionStore = new SequelizeStore({
         db: db.sequelize,
     });
     sessionConfig = {
