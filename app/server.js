@@ -2,12 +2,14 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('flash');
 const morgan = require('morgan');
+const nodemailer = require("nodemailer");
 
 const routes = require('./routes');
 const db = require('./models');
 const auth = require('./middleware/auth');
-const {errorHandler, notFoundHandler} = require('./middleware/errors');
+const { errorHandler, notFoundHandler } = require('./middleware/errors');
 const hbs = require('./middleware/handlebars');
+const mailConfig = require('./config/mail');
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 const PORT = process.env.PORT || 8080;
@@ -42,6 +44,10 @@ app.use(notFoundHandler);
 // error handlers
 app.use(errorHandler);
 
+const transporter = nodemailer.createTransport(mailConfig.config);
+
+
+
 async function main() {
     try {
         await db.sequelize.authenticate();
@@ -50,6 +56,13 @@ async function main() {
         console.error('Unable to connect to the database:', error.name);
     }
     app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: mailConfig.sender, // sender address
+        to: "bar@example.com", // list of receivers
+        subject: "Hello ✔", // Subject line
+        text: "Hello world?", // plain text body
+    });
 }
 
 main();
