@@ -18,25 +18,22 @@ Requirements:
 * a PostgreSQL database
 * a desire to embrace The Node
 
-### Deployment details
-
-If on the SRCF's webserver, perform all the commands below after switching into your group:
-
-`sudo -Hu atriposaday bash`
-
 ### Instructions
 
 1. Clone the repository and change directories
-`git clone https://github.com/matiasilva/atriposaday.git && cd atriposaday`
 
-2. Install dependencies
-`npm install`
+* `git clone https://github.com/matiasilva/atriposaday.git`
+* `cd atriposaday`
+
+2. Install dependencies: `npm install`
 
 3. Install `pm2`
+
 ATAD uses `pm2` for process management.
 `npm install pm2@latest -g`
 
 4. Change database configuration in `app/config/config.js`
+
 NB. The defaults for production are set up for `ident` auth.
 
 5. Create the web server config file (shown below for Apache) and move it to your public directory (eg. `var/www` or `public_html`)
@@ -59,14 +56,21 @@ RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
 
 6. Migrate and seed the database
 
-`NODE_ENV=production npx sequelize-cli db:migrate`
-`NODE_ENV=production pm2snpx sequelize-cli db:seed:all`
+* `NODE_ENV=production npx sequelize-cli db:migrate`
+* `NODE_ENV=production pm2snpx sequelize-cli db:seed:all`
 
 You might also have to create the table, if you haven't already.
 
 7. Ensure that the app starts on reboot by adding a `cron` entry
-`crontab -e`
-`@reboot /path/to/boot.sh`
+
+* `crontab -e`
+* `@reboot /path/to/boot.sh`
+
+### Deployment details
+
+If on the SRCF's webserver, perform all the commands below after switching into your group:
+
+`sudo -Hu atriposaday bash`
 
 ## Development
 
@@ -112,3 +116,11 @@ We create a Date object to store the hour and minute we send the email, but I ha
 All paths in the app are relative to the root folder, ie. don't start this in  `app/`.
 
 To examine Apache logs, perhaps use something like: https://goaccess.io/download
+
+Need to copy favicon.ico on SRCF to public dir
+
+Images are read in the following manner:
+
+`<question number>_<index>.png`
+
+where index, starting from 0, counts the number of graphs/assets associated with that question. The plain question should just be `<question number>.png`.
