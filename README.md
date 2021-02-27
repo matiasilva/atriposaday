@@ -14,23 +14,41 @@ ATAD should be able to run on any modern web server, like nginx or Apache.
 
 Requirements:
 
-* node >=v14
+* node >=v14 LTS
 * a PostgreSQL database
+* a desire to embrace The Node
 
+### Deployment details
+
+If on the SRCF's webserver, perform all the commands below after switching into your group:
+
+`sudo -Hu atriposaday bash`
+
+### Instructions
+
+1. Clone the repository and change directories
+`git clone https://github.com/matiasilva/atriposaday.git && cd atriposaday`
+
+2. Install dependencies
+`npm install`
+
+3. Install `pm2`
 ATAD uses `pm2` for process management.
-
 `npm install pm2@latest -g`
 
-Add a cron entry:
+4. Change database configuration in `app/config/config.js`
+NB. The defaults for production are set up for `ident` auth.
 
-`crontab -e`
-`@reboot /path/to/boot.sh`
+5. Create the web server config file (shown below for Apache) and move it to your public directory (eg. `var/www` or `public_html`)
 
 Example `.htaccess` file:
 
 ```apache
+# don't show the default listing of files
 DirectoryIndex disabled
+# turn on mod_rewrite
 RewriteEngine On
+# set a few useful request headers
 RequestHeader set Host expr=%{HTTP_HOST}
 RequestHeader set X-Forwarded-For expr=%{REMOTE_ADDR}
 RequestHeader set X-Forwarded-Proto expr=%{REQUEST_SCHEME}
@@ -39,13 +57,16 @@ RequestHeader set X-Real-IP expr=%{REMOTE_ADDR}
 RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
 ```
 
-All paths in the app are relative to the root folder, ie. don't start this in  `app/`.
+6. Migrate and seed the database
 
-To examine Apache logs, perhaps use something like: https://goaccess.io/download
+`NODE_ENV=production npx sequelize-cli db:migrate`
+`NODE_ENV=production pm2snpx sequelize-cli db:seed:all`
 
-On the SRCF:
+You might also have to create the table, if you haven't already.
 
-`sudo -Hu atriposaday bash`
+7. Ensure that the app starts on reboot by adding a `cron` entry
+`crontab -e`
+`@reboot /path/to/boot.sh`
 
 ## Development
 
@@ -62,7 +83,6 @@ Creating a new model:
 Generate a seed file:
 
 `npx sequelize-cli seed:generate --name demo-user`
-
 
 ## Credits
 
@@ -87,3 +107,8 @@ Topic has two name fields: an internal name `name` that is all caps and snake ca
 Aim to minimze redirects, as each redirect queries the DB to deserialize the user.
 
 We create a Date object to store the hour and minute we send the email, but I have to add a year, so I chose 2001, because that's when I was born :p
+
+
+All paths in the app are relative to the root folder, ie. don't start this in  `app/`.
+
+To examine Apache logs, perhaps use something like: https://goaccess.io/download
