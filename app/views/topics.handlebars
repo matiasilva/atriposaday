@@ -1,13 +1,13 @@
-<p>This is a list of all the topics you can subscribe to.</p>
-<ul class="list-group">
+<p>This is a list of all the topics you can subscribe to. To subscribe to a topic, just click on it!</p>
+<div class="list-group">
     {{#each topics as |topic|}}
-    <li class="list-group-item list-group-item-action">
+    <a href="/topics/subscribe?topic={{topic.uuid}}" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{topic.name}}</h5>
+            <h5 class="mb-1">{{topic.prettyName}}</h5>
             <small>Contains {{topic.answerableCount}} question(s)</small>
         </div>
         <p class="mb-1">{{topic.description}}</p>
         <small>{{topic.subCount}} user(s) are subscribed to this topic.</small>
-    </li>
+    </a>
     {{/each}}
-</ul>
+</div>

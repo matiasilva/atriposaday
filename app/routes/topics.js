@@ -1,16 +1,87 @@
 const express = require('express');
-const { exposeUserInView } = require('../middleware/custom');
+const { exposeUserInView, requireAuth } = require('../middleware/custom');
+const utils = require('../utils');
 const router = express.Router();
 const db = require('../models');
 
 // make user available in view
 router.use(exposeUserInView);
+// require Raven on all routes
+router.use(requireAuth);
+
+router.get('/subscribe', async (req, res) => {
+    const { topic: topicUuid } = req.query;
+
+    // get request to this route without param
+    if (!topicUuid) {
+        req.flash("danger", "Invalid unique identifier for topic.");
+        return res.redirect('/topics');
+    }
+
+    const { Topic } = db;
+    const topic = await Topic.findOne({
+        where:
+            { uuid: topicUuid },
+        raw: true
+    });
+
+    return res.render("subscribe", {
+        title: "Confirm subscription",
+        topic,
+        "allowed_times": utils.allowedTimes
+    });
+});
+
+router.post('/subscribe', async (req, res, next) => {
+    const { Topic, Subscription } = db;
+
+    const formKeys = ["subUuid", "subName", "subRepeatEvery", "subRepeatTime", "subCount"];
+    const values = utils.pick(formKeys, req.body);
+    let errors = {};
+
+    const subRepeatEvery = parseInt(values["subRepeatEvery"]);
+    const subCount = parseInt(values["subCount"]);
+
+    if (values["subName"].length > 120) errors["subName"] = true;
+    if (isNaN(subCount)) errors["subCount"] = true;
+    if (isNaN(subRepeatEvery)) errors["subRepeatEvery"] = true;
+    if (subRepeatEvery > 15) errors["subRepeatEvery"] = true;
+
+    const hourMinute = values["subRepeatTime"].split(':');
+    const repeatTime = new Date(2001, 8, 1, hourMinute[0], hourMinute[1]);
+
+    // in case uuid is invalid or user tampers
+    const topic = await Topic.findOne({
+        where:
+            { uuid: values["subUuid"] }
+    }).catch(next);
+
+    if (values["subName"] === "") values["subName"] = topic.prettyName;
+
+    const hasNoErrors = Object.keys(errors).length === 0;
+
+    if (hasNoErrors) {
+        const sub = await Subscription.create({
+            name: values["subName"],
+            topicId: topic.id,
+            repeatDayFrequency: subRepeatEvery,
+            count: subCount,
+            repeatTime,
+            userId: req.user.id
+        });
+        req.flash("success", `You have successfully subscribed to ${sub.name}`);
+        return res.redirect('/user/home');
+    }
+    else {
+        req.flash("danger", "There are problems with the information you submitted");
+        return res.render("subscribe", {
+            title: "Confirm subscription", errors
+        });
+    }
+});
 
 router.get('/', async (req, res) => {
     const { Topic, Answerable, Subscription, Sequelize } = db;
-    // hasn't gone through raven
-    if (!req.user) return res.redirect('/login');
-
     // note on the query below
     // i'm not sure entirely how it works
     // i spent a LONG time experimenting and it's weird
@@ -37,18 +108,6 @@ router.get('/', async (req, res) => {
         group: [['Topic.id', "answerables.id"], ["Topic.id"]],
         raw: true
     });
-
-    // const topic = await Topic.findOne({ where: { name: "2P1_MECHANICS" } });
-    // console.log(req.user);
-
-    // const sub = await Subscription.create({
-    //     name: "hi",
-    //     topicId: topic.id,
-    //     repeatDayFrequency: 2,
-    //     count: 2,
-    //     repeatTime: new Date(),
-    //     userId: req.user.id
-    // });
 
     return res.render("topics", { title: "All topics", topics });
 });

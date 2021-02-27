@@ -1,0 +1,44 @@
+<form action="/topics/subscribe" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="subUuid" value="{{topic.uuid}}">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <label for="subName" class="form-label">Subscription name</label>
+            <input type="text" name="subName" class="form-control {{#if errors.[subName]}}is-invalid{{/if}}" id="subName">
+            {{> forms/invalid_feedback msg= "Your name must be less than 120 characters."
+            }}
+            <div class="form-text">
+                Set a custom name for this subscription. If left empty, it will default to the name of the topic.
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="subRepeatEvery" class="form-label">Repeat every..</label>
+            <div class="input-group">
+                <input type="text" id="subRepeatEvery" class="form-control {{#if errors.[subRepeatEvery]}}is-invalid{{/if}}">
+                <span class="input-group-text">day(s)</span>
+            </div>
+            {{> forms/invalid_feedback msg= "Please enter a valid number or one less than 15." }}
+            <div class="form-text">
+                How often do you want receive questions from this subscription? The maximum is 14 days (ie. two weeks).
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="subRepeatTime" class="form-label">At what time?</label>
+            <select id="subRepeatTime" class="form-select" name="subRepeatTime">
+                {{#each allowed_times}}
+                <option value="{{.}}">{{.}}</option>
+                {{/each}}
+            </select>
+            <div class="form-text">When should we email you?</div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="subCount" class="form-label">Question count</label>
+            <input type="text" name="subCount" class="form-control {{#if errors.[subCount]}}is-invalid{{/if}}" id="subCount">
+            {{> forms/invalid_feedback msg= "Please enter a valid number."
+            }}
+            <div class="form-text">How many questions at a time?</div>
+        </div>
+        <div class="col">
+            <button type="submit" class="w-100 btn btn-primary btn-lg">Subscribe me!</button>
+        </div>
+    </div>
+</form>
