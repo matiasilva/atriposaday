@@ -33,12 +33,8 @@ router.get('/home', async (req, res) => {
 });
 
 router.get('/signup', async (req, res) => {
-    const { User } = db;
-
-    // hasn't gone through raven
+    // hasn't gone through raven at all
     if (!req.user) return res.redirect('/login');
-    // is already a valid user
-    if (req.user instanceof User) return res.redirect('/home');
 
     const url = `https://www.lookup.cam.ac.uk/api/v1/person/crsid/${req.user}`;
     const options = {
@@ -77,7 +73,7 @@ router.post('/signup', upload.none(), async (req, res) => {
             email: values["userEmail"]
         });
         req.flash("success", "You were successfully registered as a new user.");
-        res.redirect('/home');
+        res.redirect('/user/home');
     } else {
         req.flash("danger", "There are problems with the information you submitted.");
 
