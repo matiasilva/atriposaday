@@ -4,7 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Answerable extends Model {
-    static associate({ Topic, Paper, AnswerablesTopics }) {
+    static associate({ Topic, Paper, AnswerablesTopics, Asset }) {
       // Many-to-many topic <-> question
       this.belongsToMany(Topic, {
         through: AnswerablesTopics,
@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         as: 'paper'
       });
 
+      // One-to-Many answerable -> assets
+      this.hasMany(Asset, {
+        foreignKey: 'answerableId', as: 'assets'
+      });
     }
 
   }
@@ -28,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    number: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     difficulty: {
       // value from 1-5
@@ -38,10 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false
     },
   }, {
     sequelize,

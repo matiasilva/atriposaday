@@ -23,9 +23,9 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
-      image: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false
+      number: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
       },
       paperId: {
         type: Sequelize.DataTypes.INTEGER,
