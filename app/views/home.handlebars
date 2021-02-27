@@ -3,10 +3,21 @@
 <div class="alert alert-info mt-3" role="alert">
     You are subscribed to a total of {{subscriptions.length}} topic(s).
 </div>
-<ul>
-    {{#each subscriptions as |sub|}}
-    <li>Subscribed to {{sub.name}}, send {{sub.count}} question(s)every {{sub.repeatDayFrequency}} at {{sub.repeatTime}}</li>
+<ul class="list-group mb-2">
+    {{#each subscriptions}}
+    {{#with dataValues}}
+    <li class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 text-primary">{{name}}</h5>
+            <small>Last actioned at {{lastActioned}}</small>
+        </div>
+        <p class="mb-1">Subscribed to {{name}}, send {{count}} question(s)every {{repeatDayFrequency}} at {{repeatTime}}
+        </p>
+        <small>You subscribed on {{createdAt}}</small>
+    </li>
+    {{/with}}
     {{/each}}
+
 </ul>
 <p>Modify or delete your subscriptions <a href="/user/subscriptions">here</a>.</p>
 {{else}}
