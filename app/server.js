@@ -13,6 +13,28 @@ const mailConfig = require('./config/mail');
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 const PORT = process.env.PORT || 8080;
+const env = process.env.NODE_ENV || 'development';
+
+let SequelizeStore;
+let sessionConfig;
+if (env === 'production') {
+    SequelizeStore = require("connect-session-sequelize")(session.Store);
+    sessionConfig = {
+        secret: 'some secret',
+        saveUninitialized: true,
+        resave: true,
+        store: new SequelizeStore({
+            db: db.sequelize,
+        }),
+        proxy: true, // if you do SSL outside of node.
+    };
+}
+else if (env === 'development') {
+    sessionConfig = {
+        secret: 'some secret',
+        saveUninitialized: true,
+        resave: true,
+}
 
 const app = express();
 
@@ -22,11 +44,7 @@ app.set('views', 'app/views');
 
 // init middleware
 app.use(express.static("app/public/"));
-app.use(session({
-    secret: 'some secret',
-    saveUninitialized: true,
-    resave: true
-}));
+app.use(session(sessionConfig));
 app.use(flash());
 app.use(morgan('dev'));
 app.use(auth.initialize());
@@ -54,7 +72,6 @@ async function main() {
         console.error('Unable to connect to the database:', error.name);
     }
 
-    const env = process.env.NODE_ENV || 'development';
 
     if (env === 'production') {
         app.listen(`${__dirname}/${process.env.ATAD_SOCKET}`, () => console.log("ATAD deployment started"));
