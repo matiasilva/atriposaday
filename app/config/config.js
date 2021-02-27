@@ -24,5 +24,6 @@ module.exports = {
     host: 'postgres',
 //    port: process.env.PROD_DB_PORT,
     dialect: 'postgres',
+    logging: false
   }
 };
