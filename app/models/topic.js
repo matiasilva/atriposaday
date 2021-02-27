@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // One-to-Many topic -> subs
-      this.hasMany(Subscription, { foreignKey: 'topicId' });
+      this.hasMany(Subscription, { foreignKey: 'topicId', as: 'subscriptions' });
     }
   }
   Topic.init({

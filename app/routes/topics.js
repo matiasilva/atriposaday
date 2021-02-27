@@ -87,14 +87,14 @@ router.get('/', async (req, res) => {
     // note on the query below
     // i'm not sure entirely how it works
     // i spent a LONG time experimenting and it's weird
-    // especially how for GROUP BY we use the model name of Topic and table name of Answerable...
+    // especially how for GROUP BY we use the model name of Topic and table name of Answerable..., possily aliases?? ->YEs
     // and use of "Subscriptions" when model name is Subscription and table name is subscriptions
     // https://stackoverflow.com/questions/53566038/counting-relationships-in-many-to-many-table-between-joined-tables-in-sequelize
     // https://bezkoder.com/sequelize-associate-many-to-many/
 
     const topics = await Topic.findAll({
         attributes: {
-            include: [[Sequelize.fn("COUNT", Sequelize.col("answerables.id")), "answerableCount"], [Sequelize.fn("COUNT", Sequelize.col("Subscriptions.topicId")), "subCount"]]
+            include: [[Sequelize.fn("COUNT", Sequelize.col("answerables.id")), "answerableCount"], [Sequelize.fn("COUNT", Sequelize.col("subscriptions.topicId")), "subCount"]]
         },
         include: [{
             model: Answerable,
@@ -105,6 +105,7 @@ router.get('/', async (req, res) => {
             }
         }, {
             model: Subscription,
+            as: 'subscriptions',
             attributes: [],
         }],
         group: [['Topic.id', "answerables.id"], ["Topic.id"]],

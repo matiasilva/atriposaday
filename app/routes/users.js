@@ -17,10 +17,31 @@ router.get('/home', async (req, res) => {
 });
 
 router.get('/subscriptions', async (req, res) => {
-    // if user doesn't give name, set it to the topic name
-    // hasn't gone through raven
-    res.send("Hi");
+    const { Topic } = db;
+    const subscriptions = await req.user.getSubscriptions({
+        include: [{
+            model: Topic,
+            as: 'topic',
+            attributes: ['prettyName']
+        }], raw: true,
+    });
+    return res.render("subscriptions", {
+        title: "Manage subscriptions",
+        subscriptions
+    });
+});
 
+router.get('/subscriptions/delete', async (req, res, next) => {
+    const { Subscription } = db;
+    const sub = await Subscription.findOne({
+        where: {
+            uuid: req.query.uuid,
+            userId: req.user.id
+        }
+    }).catch(next);
+    await sub.destroy();
+    req.flash("success", "Subscription deleted successfully!")
+    return res.redirect('/user/subscriptions');
 });
 
 module.exports = router;

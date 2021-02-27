@@ -1,1 +1,22 @@
-<p>You can view and sign up to all topics on the <a href="/topics">topics page</a>.</p>
+{{#if subscriptions}}
+<p>You can view and sign up to topics on the topics page above. To permanently delete a subscription, just click on it!
+</p>
+<div class="list-group mb-2">
+    {{#each subscriptions}}
+    <a class="list-group-item list-group-item-action" href="/user/subscriptions/delete?uuid={{uuid}}">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 text-primary">{{name}}</h5>
+            <small>Last actioned on {{readable_date lastActioned}}</small>
+        </div>
+        <p class="mb-1">Summary: send {{count}} question(s) every {{repeatDayFrequency}} day(s) from <span
+                class="fw-bold">{{this.[topic.prettyName]}}</span> at {{readable_time repeatTime}}
+        </p>
+        <small>You subscribed on {{readable_date createdAt}}</small>
+    </a>
+    {{/each}}
+</div>
+{{else}}
+<div class="alert alert-warning mt-3" role="alert">
+    You are not subscribed to any topics. You can view and subscribe to topics <a href="/topics">here</a>.
+</div>
+{{/if}}

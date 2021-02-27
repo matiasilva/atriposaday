@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: {
           name: 'topicId',
           allowNull: false
-        }
+        },
+        as: 'topic'
       });
     }
   }
