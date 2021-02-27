@@ -75,7 +75,7 @@ async function main() {
     }
 
     if (env === 'production') {
-        SequelizeStore.sync();
+        await SequelizeStore.sync();
         app.listen(`./${process.env.ATAD_SOCKET}`, () => console.log("ATAD deployment started"));
     } else {
         app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
