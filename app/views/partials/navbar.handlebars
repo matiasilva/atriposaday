@@ -4,25 +4,34 @@
             <img src="/images/tripos_bg.png" alt="" width="32" height="32" class="d-inline-block align-top">
             <span class="ms-2">A Tripos a Day</span>
         </a>
-        <ul class="navbar-nav ms-auto">
-            {{#if user}}
-            <li class="nav-item">
-                <a class="nav-link" href="/user/subscriptions"><i class="me-1 fa fa-fw fa-list-ul"></i><span
-                        class="d-none d-md-inline">Subscriptions</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/user/profile"><i class="me-1 fa fa-fw fa-user-circle"></i><span
-                        class="d-none d-md-inline">Profile</span></a>
-            </li>
-            {{else}}
-            <li class="nav-item">
-                <a href="/login" class="btn btn-raven">
-                    <img src="/images/raven_white.svg" class="me-2" style="width: 2rem">
-                    Bird time
-                </a>
-                {{/if}}
-            </li>
-        </ul>
-
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/home"><i class="me-1 fa fa-fw fa-home"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topics"><i class="me-1 fa fa-fw fa-list-ul"></i>Topics</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/subscriptions"><i
+                            class="me-1 fa fa-fw fa-envelope-o"></i>Subscriptions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/profile"><i class="me-1 fa fa-fw fa-user-circle"></i>Profile</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a href="/login" class="btn btn-raven">
+                        <img src="/images/raven_white.svg" class="me-2" style="width: 2rem">
+                        Bird time
+                    </a>
+                    {{/if}}
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
