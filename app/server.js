@@ -15,17 +15,18 @@ const mailConfig = require('./config/mail');
 const PORT = process.env.PORT || 8080;
 const env = process.env.NODE_ENV || 'development';
 
-let SequelizeStore;
 let sessionConfig;
+let sessionStore;
 if (env === 'production') {
-    SequelizeStore = require("connect-session-sequelize")(session.Store);
+    const SequelizeStore = require("connect-session-sequelize")(session.Store);
+    const sessionStore = new SequelizeStore({
+        db: db.sequelize,
+    });
     sessionConfig = {
         secret: 'some secret',
         saveUninitialized: true,
         resave: true,
-        store: new SequelizeStore({
-            db: db.sequelize,
-        }),
+        store: sessionStore,
         proxy: true, // if you do SSL outside of node.
     };
 }
@@ -75,7 +76,7 @@ async function main() {
     }
 
     if (env === 'production') {
-        await SequelizeStore.sync();
+        await sessionStore.sync();
         app.listen(`./${process.env.ATAD_SOCKET}`, () => console.log("ATAD deployment started"));
     } else {
         app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
