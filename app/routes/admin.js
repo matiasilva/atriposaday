@@ -68,12 +68,17 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
             }
         });
 
-        const question = await Answerable.create(
-            {
-                description: values["description"],
+        // extract question number from the first file
+        const number = parseInt(req.files[0].originalname.split('_')[0]);
+
+        const [question, created] = await Answerable.findOrCreate({
+            where: {
                 paperId: paper.id,
+                number
+            }, defaults: {
+                description: values["description"],
             }
-        );
+        });
 
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
