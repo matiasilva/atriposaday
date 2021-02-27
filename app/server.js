@@ -34,6 +34,7 @@ else if (env === 'development') {
         secret: 'some secret',
         saveUninitialized: true,
         resave: true,
+    };
 }
 
 const app = express();

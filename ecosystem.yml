@@ -4,10 +4,9 @@ apps:
     watch: false
     instances: 2
     exec_mode: cluster
-    error_file: ./logs/error.log
-    out_file: ./logs/out.log
-    log_file: ./logs/production.log
     time: true
+    restart_delay: 1000
+    max_restarts: 5
     env:
       NODE_ENV: production
       ATAD_SOCKET: web.sock 
