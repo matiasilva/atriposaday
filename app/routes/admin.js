@@ -68,21 +68,21 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
             }
         });
 
-        // extract question number from the first file
-        const number = parseInt(req.files[0].originalname.split('_')[0]);
-
-        const [question, created] = await Answerable.findOrCreate({
-            where: {
-                paperId: paper.id,
-                number
-            }, defaults: {
-                description: values["description"],
-            }
-        });
-
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
-            const args = file.originalname.split('_');
+            const fileName = file.originalname.split('.')[0];
+            let args = fileName.split('_');
+            args = args.map(str => parseInt(str));
+
+            const [question, created] = await Answerable.findOrCreate({
+                where: {
+                    paperId: paper.id,
+                    number: args[0]
+                }, defaults: {
+                    description: values["description"],
+                }
+            }).catch(next);
+
             if (args.length === 1) {
                 // just the question, no further assets
                 await Asset.create({
@@ -90,7 +90,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
                     answerableId: question.id,
                     isMainAsset: true
                 });
-            } else if (args.length === 2 && !isNaN(parseInt(args[1]))) {
+            } else if (args.length === 2 && !isNaN(args[1])) {
                 // a question's supporting material: graphs, etc
                 await Asset.create({
                     path: file.path,
@@ -101,8 +101,9 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
                 return next(new Error("Invalid input image name"));
             }
 
+            const hasQuestion = await topic.hasAnswerable(question);
+            if(!hasQuestion) await topic.addAnswerable(question);
         }
-        await topic.addAnswerable(question);
 
         req.flash("success", "All questions created successfully!");
 
