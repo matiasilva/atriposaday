@@ -41,6 +41,24 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
+    // in case uuid is invalid or user tampers
+    const topic = await Topic.findOne({
+        where:
+            { uuid: values["subUuid"] }
+    }).catch(next);
+
+    const test = await Subscription.findOne({
+        where: {
+            topicId: topic.id,
+            userId: req.user.id
+        }
+    });
+
+    if(test != null){
+        req.flash("warning", "You are already subscribed to this topic!");
+        return res.redirect('/topics');
+    }
+
     const subRepeatEvery = parseInt(values["subRepeatEvery"]);
     const subCount = parseInt(values["subCount"]);
 
@@ -52,11 +70,7 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
     const hourMinute = values["subRepeatTime"].split(':');
     const repeatTime = new Date(2001, 8, 1, hourMinute[0], hourMinute[1]);
 
-    // in case uuid is invalid or user tampers
-    const topic = await Topic.findOne({
-        where:
-            { uuid: values["subUuid"] }
-    }).catch(next);
+
 
     if (topic == null) {
         return next(new Error("Invalid topic UUID"));
