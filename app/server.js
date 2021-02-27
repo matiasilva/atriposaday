@@ -46,8 +46,6 @@ app.use(errorHandler);
 
 const transporter = nodemailer.createTransport(mailConfig.config);
 
-
-
 async function main() {
     try {
         await db.sequelize.authenticate();
@@ -64,12 +62,12 @@ async function main() {
         app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
     }
     // send mail with defined transport object
-    let info = await transporter.sendMail({
-        from: mailConfig.sender, // sender address
-        to: "bar@example.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-    }, (err, info) => { if (err) console.error(err.message) });
+    // let info = await transporter.sendMail({
+    //     from: mailConfig.sender,
+    //     to: "bar@example.com",
+    //     subject: "Hello ✔", 
+    //     text: "Hello world?",
+    // }, (err, info) => { if (err) console.error(err.message) });
 }
 
 main();
