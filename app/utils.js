@@ -6,8 +6,31 @@ module.exports = {
         }
         return values;
     },
-    "matchEmail" : function(email){
+    "matchEmail": function (email) {
         const emailRe = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         return emailRe.test(email);
-    }
+    },
+    "daysOfTheWeek": [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+    ],
+    "months": [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ]
 };
