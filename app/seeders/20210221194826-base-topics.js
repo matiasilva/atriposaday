@@ -12,6 +12,7 @@ module.exports = {
       let topicsToInsert = subjectKeys.map(key => {
         return {
           name: key,
+          prettyName: SUBJECTS[part][key],
           description: `All questions in ${SUBJECTS[part][key]}`,
           uuid: uuidv4(),
           isRootLevel: true,
@@ -24,6 +25,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('topics', [{
       name: "NO_TOPIC",
+      prettyName: "No topic",
       description: "For any question that has no base topic",
       uuid: uuidv4(),
       isRootLevel: true,
