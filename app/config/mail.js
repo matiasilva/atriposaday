@@ -6,7 +6,8 @@ module.exports = {
         auth: {
             user: 'fay.quigley@ethereal.email',
             pass: 'J93T35qNc5GWSVkBtR'
-        }
+        },
+        logger: true,
     },
-    sender: '"A Tripos a Day" <atriposaday@srcf.net>'"
+    sender: '"A Tripos a Day" <atriposaday@srcf.net>'
 }

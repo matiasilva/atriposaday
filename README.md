@@ -17,6 +17,30 @@ Requirements:
 * node >=v14
 * a PostgreSQL database
 
+ATAD uses `pm2` for process management.
+
+`npm install pm2@latest -g`
+
+Add a cron entry:
+
+`crontab -e`
+`@reboot /path/to/boot.sh`
+
+Example `.htaccess` file:
+
+```apache
+DirectoryIndex disabled
+RewriteEngine On
+RequestHeader set Host expr=%{HTTP_HOST}
+RequestHeader set X-Forwarded-For expr=%{REMOTE_ADDR}
+RequestHeader set X-Forwarded-Proto expr=%{REQUEST_SCHEME}
+RequestHeader set X-Real-IP expr=%{REMOTE_ADDR}
+# RewriteCond %{HTTP_HOST} ^some.domain$
+RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
+```
+
+To examine Apache logs, perhaps use something like: https://goaccess.io/download
+
 ## Development
 
 ATAD uses express and `node.js`. Development is done with Docker to create two containers, one for the database and the other for the web app. To avoid headaches, develop on a UNIX-like OS.
@@ -32,6 +56,7 @@ Creating a new model:
 Generate a seed file:
 
 `npx sequelize-cli seed:generate --name demo-user`
+
 
 ## Credits
 

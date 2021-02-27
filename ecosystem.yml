@@ -1,0 +1,10 @@
+apps:
+  - script: ./server.js
+    name: 'atriposaday'
+    watch: false
+    instances: 2
+    exec_mode: cluster
+    out_file: ./logs/
+    env:
+      NODE_ENV: production
+      ATAD_SOCKET: web.sock 

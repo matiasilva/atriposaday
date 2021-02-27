@@ -55,14 +55,21 @@ async function main() {
     } catch (error) {
         console.error('Unable to connect to the database:', error.name);
     }
-    app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
+
+    const env = process.env.NODE_ENV || 'development';
+
+    if (env === 'production') {
+        app.listen(`${__dirname}/${process.env.ATAD_SOCKET}`, () => console.log("ATAD deployment started"));
+    } else {
+        app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
+    }
     // send mail with defined transport object
     let info = await transporter.sendMail({
         from: mailConfig.sender, // sender address
         to: "bar@example.com", // list of receivers
         subject: "Hello ✔", // Subject line
         text: "Hello world?", // plain text body
-    });
+    }, (err, info) => { if (err) console.error(err.message) });
 }
 
 main();
