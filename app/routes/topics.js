@@ -1,8 +1,10 @@
 const express = require('express');
 const { exposeUserInView, requireAuth } = require('../middleware/custom');
 const utils = require('../utils');
-const router = express.Router();
 const db = require('../models');
+const upload = require('../middleware/upload');
+
+const router = express.Router();
 
 // make user available in view
 router.use(exposeUserInView);
@@ -32,9 +34,9 @@ router.get('/subscribe', async (req, res) => {
     });
 });
 
-router.post('/subscribe', async (req, res, next) => {
+router.post('/subscribe', upload.none(), async (req, res, next) => {
     const { Topic, Subscription } = db;
-
+    
     const formKeys = ["subUuid", "subName", "subRepeatEvery", "subRepeatTime", "subCount"];
     const values = utils.pick(formKeys, req.body);
     let errors = {};

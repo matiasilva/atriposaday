@@ -13,7 +13,7 @@
         <div class="col-md-4 mb-3">
             <label for="subRepeatEvery" class="form-label">Repeat every..</label>
             <div class="input-group">
-                <input type="text" id="subRepeatEvery" class="form-control {{#if errors.[subRepeatEvery]}}is-invalid{{/if}}">
+                <input type="text" id="subRepeatEvery" name="subRepeatEvery" class="form-control {{#if errors.[subRepeatEvery]}}is-invalid{{/if}}">
                 <span class="input-group-text">day(s)</span>
             </div>
             {{> forms/invalid_feedback msg= "Please enter a valid number or one less than 15." }}
