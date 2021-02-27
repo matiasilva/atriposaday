@@ -27,9 +27,9 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.post('/create/question', upload.array('question-upload'), async (req, res) => {
+router.post('/create/question', upload.array('question-upload'), async (req, res, next) => {
 
-    const { Answerable, Paper, Topic } = db;
+    const { Answerable, Paper, Topic, Asset } = db;
     const formKeys = ["tripos-part", "description", "subject", "year"];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
@@ -68,16 +68,36 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
             }
         });
 
-        for (const file of req.files) {
-            const question = await Answerable.create(
-                {
-                    description: values["description"],
-                    image: file.path,
-                    paperId: paper.id,
-                }
-            );
-            await topic.addAnswerable(question);
+        const question = await Answerable.create(
+            {
+                description: values["description"],
+                paperId: paper.id,
+            }
+        );
+
+        for (let i = 0; i < req.files.length; i++) {
+            const file = req.files[i];
+            const args = file.originalname.split('_');
+            if (args.length === 1) {
+                // just the question, no further assets
+                await Asset.create({
+                    path: file.path,
+                    answerableId: question.id,
+                    isMainAsset: true
+                });
+            } else if (args.length === 2 && !isNaN(parseInt(args[1]))) {
+                // a question's supporting material: graphs, etc
+                await Asset.create({
+                    path: file.path,
+                    answerableId: question.id,
+                    isMainAsset: false
+                });
+            } else {
+                return next(new Error("Invalid input image name"));
+            }
+
         }
+        await topic.addAnswerable(question);
 
         req.flash("success", "All questions created successfully!");
 
