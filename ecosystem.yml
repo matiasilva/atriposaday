@@ -1,5 +1,5 @@
 apps:
-  - script: ./server.js
+  - script: ./app/server.js
     name: 'atriposaday'
     watch: false
     instances: 2

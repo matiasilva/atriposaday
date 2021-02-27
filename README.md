@@ -41,6 +41,10 @@ RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
 
 To examine Apache logs, perhaps use something like: https://goaccess.io/download
 
+On the SRCF:
+
+`sudo -Hu atriposaday bash`
+
 ## Development
 
 ATAD uses express and `node.js`. Development is done with Docker to create two containers, one for the database and the other for the web app. To avoid headaches, develop on a UNIX-like OS.
