@@ -82,7 +82,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
 
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
-            const fileName = req.originalname.split('.')[0];
+            const fileName = file.originalname.split('.')[0];
             const args = fileName.split('_');
             if (args.length === 1) {
                 // just the question, no further assets
