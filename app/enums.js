@@ -29,4 +29,4 @@ module.exports = {
         "EXAMPLES_PAPER": "Examples Paper"
     },
 
-}
+};

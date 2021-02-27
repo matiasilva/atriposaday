@@ -10,4 +10,4 @@ module.exports = {
         logger: true,
     },
     sender: '"A Tripos a Day" <atriposaday@srcf.net>'
-}
+};
