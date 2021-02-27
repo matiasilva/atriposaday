@@ -9,11 +9,11 @@
     <li class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 text-primary">{{name}}</h5>
-            <small>Last actioned at {{lastActioned}}</small>
+            <small>Last actioned at {{readable_date lastActioned}}</small>
         </div>
-        <p class="mb-1">Subscribed to {{name}}, send {{count}} question(s)every {{repeatDayFrequency}} at {{repeatTime}}
+        <p class="mb-1">Summary: send {{count}} question(s) every {{repeatDayFrequency}} on {{readable_time repeatTime}}
         </p>
-        <small>You subscribed on {{createdAt}}</small>
+        <small>You subscribed on {{readable_date createdAt}}</small>
     </li>
     {{/with}}
     {{/each}}
