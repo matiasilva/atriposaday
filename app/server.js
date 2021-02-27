@@ -3,6 +3,8 @@ const session = require('express-session');
 const flash = require('flash');
 const morgan = require('morgan');
 const nodemailer = require("nodemailer");
+const favicon = require('serve-favicon');
+const path = require('path');
 
 const routes = require('./routes');
 const db = require('./models');
@@ -45,6 +47,7 @@ app.set('view engine', 'handlebars');
 app.set('views', 'app/views');
 
 // init middleware
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static("app/public/"));
 app.use(session(sessionConfig));
 app.use(flash());
