@@ -75,7 +75,7 @@ router.post('/signup', upload.none(), async (req, res) => {
         req.flash("success", "You were successfully registered as a new user.");
         res.redirect('/user/home');
     } else {
-        req.flash("danger", "There are problems with the information you submitted.");
+        req.flash("danger", "There were problems with the information you submitted.");
 
         res.render("signup", {
             title: "Confirm your details",

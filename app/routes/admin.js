@@ -85,7 +85,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
     }
     else {
         // include sent back responses that failed
-        req.flash("danger", "There are problems with the information you submitted.");
+        req.flash("danger", "There were problems with the information you submitted.");
 
         res.render("admin", {
             title: "Administrator panel",

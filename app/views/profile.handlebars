@@ -1,0 +1,19 @@
+<p>Change the name and email used for communication.</p>
+
+{{#with user.dataValues}}
+<form method="POST" enctype="multipart/form-data" action="/user/profile">
+    <div class="mb-3">
+        <label for="userName" class="form-label">Name</label>
+        <input type="text" class="form-control {{#if ../errors.[userName]}}is-invalid{{/if}}" id="userName" name="userName" value="{{name}}">
+        {{> forms/invalid_feedback msg= "Your name must be less than 120 characters."
+        }}
+    </div>
+    <div class="mb-3">
+        <label for="userEmail" class="form-label">Email</label>
+        <input type="text" name="userEmail" class="form-control {{#if ../errors.[userEmail]}}is-invalid{{/if}}" id="userEmail" value="{{email}}">
+        {{> forms/invalid_feedback msg= "Please enter a valid email."
+        }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{{/with}}

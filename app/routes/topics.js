@@ -36,7 +36,7 @@ router.get('/subscribe', async (req, res) => {
 
 router.post('/subscribe', upload.none(), async (req, res, next) => {
     const { Topic, Subscription } = db;
-    
+
     const formKeys = ["subUuid", "subName", "subRepeatEvery", "subRepeatTime", "subCount"];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
@@ -58,6 +58,10 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
             { uuid: values["subUuid"] }
     }).catch(next);
 
+    if (topic == null) {
+        return next(new Error("Invalid topic UUID"));
+    }
+
     if (values["subName"] === "") values["subName"] = topic.prettyName;
 
     const hasNoErrors = Object.keys(errors).length === 0;
@@ -75,7 +79,7 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
         return res.redirect('/user/home');
     }
     else {
-        req.flash("danger", "There are problems with the information you submitted");
+        req.flash("danger", "There were problems with the information you submitted");
         return res.render("subscribe", {
             title: "Confirm subscription", errors
         });
