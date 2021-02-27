@@ -1,48 +1,44 @@
 from PIL import Image
-from PIL import ImageFilter
 import os
+from pathlib import PurePath
 from detect import rescale
 from detect import initial_crop
-from detect import main_crop
+from detect import apply_padding
+from detect import rename
 
-buffer = 100
+path = r'C:\Users\swan11jf\Documents\Python Projects\atriposaday\splicer\uncropped'
+newfolder = r'C:\Users\swan11jf\Documents\Python Projects\atriposaday\splicer\cropped'
 
-# open everything in testimages
-script_dir = os.path.dirname(__file__)
-inputpath = os.path.join(script_dir, 'testimages')
+for root, dirs, files in os.walk(path):
+    for name in files:
+        if name.endswith('.png'):
+            location = os.path.join(root, name)
 
-for file in os.listdir(inputpath):
-    location = os.path.join(inputpath, file)
+            p = PurePath(root)
 
-    with open(location, 'r') as f:
-        im = Image.open(location).convert('RGB')
+            # I know this looks disgusting but so what
+            savefolder = os.path.join(p.parts[0], p.parts[1], p.parts[2], p.parts[3],
+                                      p.parts[4], p.parts[5], p.parts[6], 'cropped',
+                                      p.parts[8], p.parts[9])
 
-        # im7 = im.filter(ImageFilter.MinFilter(3)).show()
+            if not os.path.exists(savefolder):
+                os.makedirs(savefolder)
 
-        # apply rescaling
+            with open(location, 'r') as f:
+                im = Image.open(location).convert('RGB')
 
-        im1 = rescale(im,basewidth=1500)
+                # apply rescaling
+                im1 = rescale(im, basewidth=1500)
 
-        # apply initial crop
-        im2 = initial_crop(im1)
+                # apply initial crop
+                im2 = initial_crop(im1)
 
-        #apply main crop
+                # apply padding
+                im3 = apply_padding(im2)
 
-        left, top, right, bottom = main_crop(im2)
-        im3 = im2.crop((left,top,right,bottom))
+                # apply name convention
+                savepath = rename(location, savefolder)
 
-        # add back padding
-        im3_size = im3.size
-        im4_size = (im3_size[0] + buffer, im3_size[1] + buffer)
-        im4 = Image.new('RGB', im4_size, (255, 255, 255))
-        im4.paste(im3, ((im4_size[0] - im3_size[0]) // 2, (im4_size[1] - im3_size[1]) // 2))
-
-        # outputpath = os.path.join(script_dir, 'testimagescropped')
-        # print(outputpath)
-        im4.save('{}'.format(file))
-
-
-
-
-
-
+                # save cropped image!
+                print('Saving: {} to {}'.format(name, savepath))
+                im2.save('{}'.format(savepath))

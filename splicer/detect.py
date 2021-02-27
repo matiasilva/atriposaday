@@ -1,5 +1,7 @@
 import numpy as np
 from PIL import Image
+import os
+from pathlib import PurePath
 
 # rescale image first and save rescaled image for debugging
 def rescale(im, basewidth=1500):
@@ -8,7 +10,7 @@ def rescale(im, basewidth=1500):
     hsize = int((float(im.size[1]) * float(wpercent)))
 
     im1 = im.resize((basewidth, hsize))
-    # im2 = im1.save('resized.png')
+    im1.save('rescale.png')
 
     return im1
 
@@ -40,7 +42,7 @@ def difference(t, margin, reverse):
             return t[a]
 
 # crop out the header and footer, and any errant pixels from left to right
-def initial_crop(im, t=20, b=20, l=10, r=10, bf=50):
+def initial_crop(im, bf=30):
 
     na = np.array(im)
 
@@ -61,24 +63,47 @@ def initial_crop(im, t=20, b=20, l=10, r=10, bf=50):
     vertical_black = list(vertical_black)
 
     # find location of header coordinate
-    top = difference(vertical_black, 65, 0)
-    bottom = difference(vertical_black, 90, 1)
+    top = difference(vertical_black, 20, 0)
+    bottom = difference(vertical_black, 20, 1)
     left = difference(horizontal_black, 20, 0)
     right = difference(horizontal_black, 20, 1)
 
     cropped = im.crop((left-bf, top-bf, right+bf, bottom+bf))
-    # cropped2 = cropped.save('cropped.png')
+    cropped.save('initial_crop.png')
 
     return cropped
 
-def main_crop(im):
-    na = np.array(im)
+# def main_crop(im):
+#     na = np.array(im)
+#
+#     # Find X,Y coordinates of all black/greyish pixels
+#     blackY, blackX = np.where(np.all(na <= [250, 250, 250], axis=2))
+#     blackY = np.sort(blackY)
+#     blackX = np.sort(blackX)
+#     top, bottom = blackY[0], blackY[-1]
+#     left, right = blackX[0], blackX[-1]
+#
+#     return left, top, right, bottom
 
-    # Find X,Y coordinates of all black/greyish pixels
-    blackY, blackX = np.where(np.all(na <= [250, 250, 250], axis=2))
-    blackY = np.sort(blackY)
-    blackX = np.sort(blackX)
-    top, bottom = blackY[0], blackY[-1]
-    left, right = blackX[0], blackX[-1]
+def apply_padding(im, buffer = 100):
+    im_size = im.size
+    im2_size = (im_size[0] + buffer, im_size[1] + buffer)
+    im2 = Image.new('RGB', im2_size, (255, 255, 255))
+    im2.paste(im2, ((im2_size[0] - im_size[0]) // 2, (im2_size[1] - im_size[1]) // 2))
+    return im2
 
-    return left, top, right, bottom
+def rename(location, savefolder):
+    p = PurePath(location)
+
+    start = p.stem[0]
+    end = p.stem[-1]
+
+    if end.isdigit() == False:
+        extra = '_{}'.format(ord(end) - 96)
+    else:
+        extra = ''
+
+    newname = '{}{}.{}'.format(start, extra, 'png')
+    savepath = os.path.join(savefolder, newname)
+
+    return savepath

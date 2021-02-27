@@ -26,3 +26,9 @@ splicer/.idea/
 # VScode
 
 .vscode/*
+
+splicer/uncropped_problematic/
+
+splicer/cropped/
+
+splicer/.raw_files/
