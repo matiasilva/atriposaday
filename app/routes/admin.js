@@ -42,7 +42,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
 
     if (values["description"].length >= 120) errors["description"] = true;
 
-    if (utils.isValidYear(values["year"])) errors["year"] = true;
+    if (!utils.isValidYear(values["year"])) errors["year"] = true;
 
     const paper = await Paper.findOne({
         where: {
