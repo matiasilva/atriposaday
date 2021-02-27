@@ -39,6 +39,8 @@ RequestHeader set X-Real-IP expr=%{REMOTE_ADDR}
 RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
 ```
 
+All paths in the app are relative to the root folder, ie. don't start this in  `app/`.
+
 To examine Apache logs, perhaps use something like: https://goaccess.io/download
 
 On the SRCF:
