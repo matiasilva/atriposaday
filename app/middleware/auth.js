@@ -5,7 +5,7 @@ const { User } = require('../models');
 passport.use(new ravenStrategy({
     desc: 'A Tripos a Day',
     msg: "It's time to use the bird!",
-    audience: process.env["FQDN"] || `http://localhost:${process.env.PORT}`,
+    audience: process.env["ATAD_FQDN"] || `http://localhost:${process.env.PORT}`,
     debug: false
 }, function (crsid, params, done) {
     if (params.isCurrent) {

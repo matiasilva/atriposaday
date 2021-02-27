@@ -9,4 +9,5 @@ apps:
     max_restarts: 5
     env:
       NODE_ENV: production
-      ATAD_SOCKET: web.sock 
+      ATAD_SOCKET: web.sock
+      ATAD_FQDN: https://atriposaday.soc.srcf.net
