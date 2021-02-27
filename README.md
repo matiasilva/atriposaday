@@ -46,3 +46,13 @@ Thanks to the [Student-Run Computing Facility](https://www.srcf.net/) for the ho
 ## Technical notes
 
 There is no if/else for topics (as there is with user subs) as there will always be root-level topics that are added in seeders.
+
+There is a small edge case where the user logs in to Raven successfully, but hasn't yet confirmed their details, so the `req.user` param is populated with the CRSid instead of the Sequelize user. For all intents and purposes, we disregard this edge case when checking if the user is logged in, since it's unlikely they'd navigate to other pages requiring auth.
+
+Solution: implement authRequired middleware that checks if req.user exists AND req.user instanceof User
+
+Topic has two name fields: an internal name `name` that is all caps and snake cased, and a user-facing `prettyName`. Use `name` internally for ease of comparison.
+
+Aim to minimze redirects, as each redirect queries the DB to deserialize the user.
+
+We create a Date object to store the hour and minute we send the email, but I have to add a year, so I chose 2001, because that's when I was born :p
