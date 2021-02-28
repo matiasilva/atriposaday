@@ -59,7 +59,7 @@ RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
 * `NODE_ENV=production npx sequelize-cli db:migrate`
 * `NODE_ENV=production pm2snpx sequelize-cli db:seed:all`
 
-You might also have to create the table, if you haven't already.
+You might also have to create the table, if you haven't already. This runs the "admin" migration, so set up your admin user details in the respective seeder file.
 
 7. Ensure that the app starts on reboot by adding a `cron` entry
 
