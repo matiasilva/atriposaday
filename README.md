@@ -66,6 +66,11 @@ You might also have to create the table, if you haven't already. This runs the "
 * `crontab -e`
 * `@reboot /path/to/boot.sh`
 
+8. Ensure that the mailer is set up by adding a `cron` entry
+
+* `crontab -e`
+* `*/15 * * * *  /path/to/mailer.sh >/dev/null 2>&1`
+
 ### Deployment details
 
 If on the SRCF's webserver, perform all the commands below after switching into your group:
