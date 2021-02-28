@@ -42,7 +42,7 @@ def difference(t, margin, reverse):
             return t[a]
 
 # crop out the header and footer, and any errant pixels from left to right
-def initial_crop(im, bf=30):
+def initial_crop(im, t, b, l, r, bf=30):
 
     na = np.array(im)
 
@@ -62,16 +62,18 @@ def initial_crop(im, bf=30):
     vertical_black = np.unique(y)
     vertical_black = list(vertical_black)
 
-    # find location of header coordinate
-    top = difference(vertical_black, 20, 0)
-    bottom = difference(vertical_black, 20, 1)
-    left = difference(horizontal_black, 20, 0)
-    right = difference(horizontal_black, 20, 1)
+    return horizontal_black, vertical_black
 
-    cropped = im.crop((left-bf, top-bf, right+bf, bottom+bf))
-    cropped.save('initial_crop.png')
-
-    return cropped
+    # # find location of header coordinate
+    # top = difference(vertical_black, t, 0)
+    # bottom = difference(vertical_black, b, 1)
+    # left = difference(horizontal_black, l, 0)
+    # right = difference(horizontal_black, r, 1)
+    #
+    # cropped = im.crop((left-bf, top-bf, right+bf, bottom+bf))
+    # cropped.save('initial_crop.png')
+    #
+    # return cropped
 
 # def main_crop(im):
 #     na = np.array(im)
@@ -99,7 +101,7 @@ def rename(location, savefolder):
     end = p.stem[-1]
 
     if end.isdigit() == False:
-        extra = '_{}'.format(ord(end) - 96)
+        extra = '_{}'.format(ord(end) - 97)
     else:
         extra = ''
 
@@ -107,3 +109,61 @@ def rename(location, savefolder):
     savepath = os.path.join(savefolder, newname)
 
     return savepath
+
+
+def extremes(t):
+    difference_binary = []
+    counter = 0
+    index = 0
+    extremes_dict = {}
+
+    difference = [j - i for i, j in zip(t[:-1], t[1:])]
+
+    for i in difference:
+        if i < 200:
+            difference_binary.append(0)
+        else:
+            difference_binary.append(1)
+
+    for i in range(len(difference_binary)):
+
+        if difference_binary[i] == 0 and counter == 0:
+            counter += 1
+            index = i
+
+        if i == len(difference_binary) - 1:
+            extremes_dict[index] = counter
+            break
+
+        elif difference_binary[i] == 0 and counter != 0:
+            counter += 1
+
+        elif difference_binary[i] == 1 and counter != 0:
+            extremes_dict[index] = counter - 1
+            counter = 0
+
+
+
+    v = list(extremes_dict.values())
+    k = list(extremes_dict.keys())
+
+    print(t)
+    print(difference)
+    print(difference_binary)
+    print(extremes_dict)
+
+    return t[k[v.index(max(v))]], t[k[v.index(max(v))] + max(v)]
+
+location = 'rescale.png'
+im = Image.open(location).convert('RGB')
+
+horizontal_black, vertical_black = initial_crop(im, 20, 20, 20, 20)
+
+# apply rescaling
+left, right = extremes(horizontal_black)
+top, bottom = extremes(vertical_black)
+
+print(left, right)
+print(top, bottom)
+
+im.crop((left, top, right, bottom)).show()
