@@ -28,17 +28,17 @@ for root, dirs, files in os.walk(path):
                 im = Image.open(location).convert('RGB')
 
                 # apply rescaling
-                im1 = rescale(im, basewidth=1500)
+                im = rescale(im, basewidth=1500)
 
                 # apply initial crop
-                im2 = initial_crop(im1)
+                # im = initial_crop(im, 2, 2, 2, 2)
 
                 # apply padding
-                im3 = apply_padding(im2)
+                im3 = apply_padding(im)
 
                 # apply name convention
                 savepath = rename(location, savefolder)
 
                 # save cropped image!
                 print('Saving: {} to {}'.format(name, savepath))
-                im2.save('{}'.format(savepath))
+                im.save('{}'.format(savepath))
