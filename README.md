@@ -16,6 +16,7 @@ Requirements:
 
 * node >=v14 LTS
 * a PostgreSQL database
+* `yq`
 * a desire to embrace The Node
 
 ### Instructions
@@ -70,6 +71,13 @@ You might also have to create the table, if you haven't already. This runs the "
 
 * `crontab -e`
 * `*/15 * * * *  /path/to/mailer.sh >/dev/null 2>&1`
+
+9. Install `yq` if not available
+
+```shell
+wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_arm -O ./yq &&\
+    chmod +x ./yq
+```
 
 ### Deployment details
 
