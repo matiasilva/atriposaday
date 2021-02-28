@@ -3,12 +3,16 @@ const { TRIPOS_PARTS, SUBJECTS } = require("../enums");
 const upload = require('../middleware/upload');
 const utils = require('../utils');
 const db = require('../models');
-const { exposeUserInView } = require('../middleware/custom');
+const { exposeUserInView, requireAdmin, requireAuth } = require('../middleware/custom');
 
 const router = express.Router();
 
 // make user available in view
 router.use(exposeUserInView);
+// auth all views
+router.use(requireAuth);
+// require isAdmin flag
+router.use(requireAdmin);
 
 router.get('/', async (req, res) => {
     const { Answerable, Topic, User, Subscription, Paper } = db;
@@ -72,7 +76,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
             const file = req.files[i];
             const fileName = file.originalname.split('.')[0];
             let args = fileName.split('_');
-            args = args.map(parseInt);
+            args = args.map(str => parseInt(str));
 
             const [question, created] = await Answerable.findOrCreate({
                 where: {
@@ -101,9 +105,8 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
                 return next(new Error("Invalid input image name"));
             }
 
-            const hasQuestion = topic.hasAnswerable(question);
+            const hasQuestion = await topic.hasAnswerable(question);
             if(!hasQuestion) await topic.addAnswerable(question);
-
         }
 
         req.flash("success", "All questions created successfully!");

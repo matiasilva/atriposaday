@@ -10,6 +10,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
                 {{#if user}}
+                {{#if user.dataValues.isAdmin}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin"><i class="me-1 fa fa-fw fa-wrench"></i>Admin</a>
+                </li>
+                {{/if}}
                 <li class="nav-item">
                     <a class="nav-link" href="/user/home"><i class="me-1 fa fa-fw fa-home"></i>Home</a>
                 </li>

@@ -34,3 +34,6 @@ splicer/cropped/
 splicer/.raw_files/
 
 splicer/testimages/
+
+# binaries
+yq

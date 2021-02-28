@@ -16,6 +16,7 @@ Requirements:
 
 * node >=v14 LTS
 * a PostgreSQL database
+* `yq`
 * a desire to embrace The Node
 
 ### Instructions
@@ -59,12 +60,24 @@ RewriteRule ^(.*)$ unix:/path/to/socket|http://my.domain/$1 [P,NE,L,QSA]
 * `NODE_ENV=production npx sequelize-cli db:migrate`
 * `NODE_ENV=production pm2snpx sequelize-cli db:seed:all`
 
-You might also have to create the table, if you haven't already.
+You might also have to create the table, if you haven't already. This runs the "admin" migration, so set up your admin user details in the respective seeder file.
 
 7. Ensure that the app starts on reboot by adding a `cron` entry
 
 * `crontab -e`
 * `@reboot /path/to/boot.sh`
+
+8. Ensure that the mailer is set up by adding a `cron` entry
+
+* `crontab -e`
+* `*/15 * * * *  /path/to/mailer.sh >/dev/null 2>&1`
+
+9. Install `yq` if not available
+
+```shell
+wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_arm -O ./yq &&\
+    chmod +x ./yq
+```
 
 ### Deployment details
 
