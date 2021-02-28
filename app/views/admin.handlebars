@@ -43,12 +43,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Year</label>
-                        <input type="text" class="form-control {{#if errors.[year]}}is-invalid{{/if}}" id="year"
-                            name="year" value="{{#if form_vals.[year]}}{{form_vals.year}}{{/if}}">
-                        {{#if errors.[year]}}
-                        {{> forms/invalid_feedback msg= "Please enter a valid year."
-                        }}
-                        {{/if}}
+                        <select id="year" class="form-select" name="year">
+                            {{#each paper_years}}
+                            <option value="{{.}}">{{.}}</option>
+                            {{/each}}
+                        </select>
                         <div class="form-text">The calendar year of the exam or question</div>
                     </div>
                     <div class="mb-3">

@@ -15,7 +15,7 @@ router.use(requireAuth);
 router.use(requireAdmin);
 
 router.get('/', async (req, res) => {
-    const { Answerable, Topic, User, Subscription, Paper } = db;
+    const { Answerable, Topic, User, Subscription, Paper, Sequelize, sequelize } = db;
     const status = {
         "questions": await Answerable.count(),
         "users": await User.count(),
@@ -23,10 +23,20 @@ router.get('/', async (req, res) => {
         "subscriptions": await Subscription.count(),
         "papers": await Paper.count(),
     };
+
+    let paperYears = await sequelize.query('SELECT DISTINCT year FROM papers', {
+        plain: false,
+        raw: true,
+        type: Sequelize.QueryTypes.SELECT
+    });
+
+    paperYears = paperYears.map(year => year.year).sort();
+
     res.render("admin", {
         title: "Administrator panel",
         "tripos_parts": Object.entries(TRIPOS_PARTS),
         "subjects": SUBJECTS,
+        "paper_years": paperYears,
         status
     });
 });
@@ -45,8 +55,6 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
     if (values["tripos-part"] === "") errors["tripos-part"] = true;
 
     if (values["description"].length >= 120) errors["description"] = true;
-
-    if (!utils.isValidYear(values["year"])) errors["year"] = true;
 
     const paper = await Paper.findOne({
         where: {
@@ -106,7 +114,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
             }
 
             const hasQuestion = await topic.hasAnswerable(question);
-            if(!hasQuestion) await topic.addAnswerable(question);
+            if (!hasQuestion) await topic.addAnswerable(question);
         }
 
         req.flash("success", "All questions created successfully!");
