@@ -7,12 +7,16 @@ module.exports = {
       name: 'Matias Silva',
       crsid: '',
       email: '',
-      isAdmin: true
+      isAdmin: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }, {
       name: 'Jeremy Feng',
       crsid: '',
       email: '',
-      isAdmin: true
+      isAdmin: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
 
   },
