@@ -3,12 +3,16 @@ const { TRIPOS_PARTS, SUBJECTS } = require("../enums");
 const upload = require('../middleware/upload');
 const utils = require('../utils');
 const db = require('../models');
-const { exposeUserInView } = require('../middleware/custom');
+const { exposeUserInView, requireAdmin, requireAuth } = require('../middleware/custom');
 
 const router = express.Router();
 
 // make user available in view
 router.use(exposeUserInView);
+// auth all views
+router.use(requireAuth);
+// require isAdmin flag
+router.use(requireAdmin);
 
 router.get('/', async (req, res) => {
     const { Answerable, Topic, User, Subscription, Paper } = db;

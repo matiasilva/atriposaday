@@ -6,13 +6,20 @@ module.exports = {
         res.locals.user = (req.user instanceof User) && req.user;
         next();
     },
-    requireAuth: function(req, res, next){
+    requireAuth: function (req, res, next) {
         // user has not logged in at all
-        if(!req.user) return res.redirect('/login');
+        if (!req.user) return res.redirect('/login');
         // user has valid crsid, BUT isn't in the DB
         // we automatically deserialize user, so req.user will hold
         // a valid user if they exist
         if (!(req.user instanceof User)) return res.redirect('/signup');
+        next();
+    },
+    requireAdmin: function (req, res, next) {
+        if (!req.user.isAdmin) {
+            req.flash("warning", "You do not have permission to access this resource.");
+            return res.redirect('/user/home');
+        }
         next();
     }
 };
