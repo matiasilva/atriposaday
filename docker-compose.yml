@@ -21,7 +21,7 @@ services:
       DEV_DB_PASSWORD: password
       NODE_ENV: development
       PORT: 8080
-      ATAD_FQDN: localhost
+      ATAD_FQDN: http://localhost
     command: npx nodemon app/server.js
     volumes:
       - ${PWD}:/opt/code
