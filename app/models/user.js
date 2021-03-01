@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       // Many-to-many user <-> question
       this.belongsToMany(User, {
         through: UserAnswerableStat,
-        as: "answerableStats",
-        foreignKey: "userId",
+        as: 'answerableStats',
+        foreignKey: 'userId',
         otherKey: 'answerableId'
       });
     }

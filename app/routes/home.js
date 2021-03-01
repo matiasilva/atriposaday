@@ -15,7 +15,7 @@ router.use(exposeUserInView);
 router.get('/', async (req, res) => {
     const { User } = db;
 
-    return res.render("index", {
+    return res.render('index', {
         userCount: await User.count()
     });
 });
@@ -48,44 +48,44 @@ router.get('/signup', async (req, res) => {
     const response = await fetch(url, options);
     const { result } = await response.json();
 
-    res.render("signup", {
-        title: "Confirm your details",
+    res.render('signup', {
+        title: 'Confirm your details',
         name: result.person.visibleName,
         email: `${req.user}@cam.ac.uk`
     });
 });
 
 router.post('/signup', upload.none(), async (req, res) => {
-    const formKeys = ["userName", "userEmail"];
+    const formKeys = ['userName', 'userEmail'];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
-    if (!utils.matchEmail(values["userEmail"])) errors["userEmail"] = true;
-    if (values["userName"] > 120) errors["userName"] = true;
+    if (!utils.matchEmail(values['userEmail'])) errors['userEmail'] = true;
+    if (values['userName'] > 120) errors['userName'] = true;
 
     const hasNoErrors = Object.keys(errors).length === 0;
 
     if (hasNoErrors) {
         const { User } = db;
         await User.create({
-            name: values["userName"],
+            name: values['userName'],
             crsid: req.user,
-            email: values["userEmail"]
+            email: values['userEmail']
         });
-        req.flash("success", "You were successfully registered as a new user.");
+        req.flash('success', 'You were successfully registered as a new user.');
         res.redirect('/user/home');
     } else {
-        req.flash("danger", "There were problems with the information you submitted.");
+        req.flash('danger', 'There were problems with the information you submitted.');
 
-        res.render("signup", {
-            title: "Confirm your details",
+        res.render('signup', {
+            title: 'Confirm your details',
             errors
         });
     }
 });
 
 router.get('/heartbeat', (req, res) => {
-    return res.send("I'm alive!");
+    return res.send('I\'m alive!');
 });
 
 router.get('/mail', async (req, res) => {
@@ -108,7 +108,7 @@ router.get('/mail', async (req, res) => {
     }
 
     console.info(`Successfully emailed ${toAction.length} people their Tripos questions!`);
-    return res.send("Done!");
+    return res.send('Done!');
 });
 
 module.exports = router;

@@ -16,15 +16,15 @@ module.exports = {
         if (!subjectKeys) continue;
         let papersToInsert = subjectKeys.map(key => {
           return {
-            type: "EXAM",
+            type: 'EXAM',
             subject: key,
             triposPart: part,
             year, 
             uuid: uuidv4(),
             createdAt: new Date(),
             updatedAt: new Date()
-          }
-        })
+          };
+        });
         await queryInterface.bulkInsert('papers', papersToInsert);
       }
     }

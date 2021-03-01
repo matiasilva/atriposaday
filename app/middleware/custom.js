@@ -17,7 +17,7 @@ module.exports = {
     },
     requireAdmin: function (req, res, next) {
         if (!req.user.isAdmin) {
-            req.flash("warning", "You do not have permission to access this resource.");
+            req.flash('warning', 'You do not have permission to access this resource.');
             return res.redirect('/user/home');
         }
         next();

@@ -18,15 +18,15 @@ module.exports = {
           isRootLevel: true,
           createdAt: new Date(),
           updatedAt: new Date()
-        }
-      })
+        };
+      });
       await queryInterface.bulkInsert('topics', topicsToInsert);
     }
 
     await queryInterface.bulkInsert('topics', [{
-      name: "NO_TOPIC",
-      prettyName: "No topic",
-      description: "For any question that has no base topic",
+      name: 'NO_TOPIC',
+      prettyName: 'No topic',
+      description: 'For any question that has no base topic',
       uuid: uuidv4(),
       isRootLevel: true,
       createdAt: new Date(),

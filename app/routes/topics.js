@@ -16,7 +16,7 @@ router.get('/subscribe', async (req, res) => {
 
     // get request to this route without param
     if (!topicUuid) {
-        req.flash("danger", "Invalid unique identifier for topic.");
+        req.flash('danger', 'Invalid unique identifier for topic.');
         return res.redirect('/topics');
     }
 
@@ -27,24 +27,24 @@ router.get('/subscribe', async (req, res) => {
         raw: true
     });
 
-    return res.render("subscribe", {
-        title: "Confirm subscription",
+    return res.render('subscribe', {
+        title: 'Confirm subscription',
         topic,
-        "allowed_times": utils.allowedTimes
+        'allowed_times': utils.allowedTimes
     });
 });
 
 router.post('/subscribe', upload.none(), async (req, res, next) => {
     const { Topic, Subscription } = db;
 
-    const formKeys = ["subUuid", "subName", "subRepeatEvery", "subRepeatTime", "subCount"];
+    const formKeys = ['subUuid', 'subName', 'subRepeatEvery', 'subRepeatTime', 'subCount'];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
     // in case uuid is invalid or user tampers
     const topic = await Topic.findOne({
         where:
-            { uuid: values["subUuid"] }
+            { uuid: values['subUuid'] }
     }).catch(next);
 
     const test = await Subscription.findOne({
@@ -55,33 +55,33 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
     });
 
     if(test != null){
-        req.flash("warning", "You are already subscribed to this topic!");
+        req.flash('warning', 'You are already subscribed to this topic!');
         return res.redirect('/topics');
     }
 
-    const subRepeatEvery = parseInt(values["subRepeatEvery"]);
-    const subCount = parseInt(values["subCount"]);
+    const subRepeatEvery = parseInt(values['subRepeatEvery']);
+    const subCount = parseInt(values['subCount']);
 
-    if (values["subName"].length > 120) errors["subName"] = true;
-    if (isNaN(subCount)) errors["subCount"] = true;
-    if (isNaN(subRepeatEvery)) errors["subRepeatEvery"] = true;
-    if (subRepeatEvery > 15) errors["subRepeatEvery"] = true;
-    if (subRepeatEvery <= 0) errors["subRepeatEvery"] = true;
+    if (values['subName'].length > 120) errors['subName'] = true;
+    if (isNaN(subCount)) errors['subCount'] = true;
+    if (isNaN(subRepeatEvery)) errors['subRepeatEvery'] = true;
+    if (subRepeatEvery > 15) errors['subRepeatEvery'] = true;
+    if (subRepeatEvery <= 0) errors['subRepeatEvery'] = true;
 
-    const hourMinute = values["subRepeatTime"].split(':');
+    const hourMinute = values['subRepeatTime'].split(':');
     const repeatTime = new Date(2001, 8, 1, hourMinute[0], hourMinute[1]);
 
     if (topic == null) {
-        return next(new Error("Invalid topic UUID"));
+        return next(new Error('Invalid topic UUID'));
     }
 
-    if (values["subName"] === "") values["subName"] = topic.prettyName;
+    if (values['subName'] === '') values['subName'] = topic.prettyName;
 
     const hasNoErrors = Object.keys(errors).length === 0;
 
     if (hasNoErrors) {
         const sub = await Subscription.create({
-            name: values["subName"],
+            name: values['subName'],
             topicId: topic.id,
             repeatDayFrequency: subRepeatEvery,
             count: subCount,
@@ -89,13 +89,13 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
             userId: req.user.id,
             nextActioned: utils.getNextTime(subRepeatEvery, repeatTime)
         });
-        req.flash("success", `You have successfully subscribed to ${sub.name}`);
+        req.flash('success', `You have successfully subscribed to ${sub.name}`);
         return res.redirect('/user/home');
     }
     else {
-        req.flash("danger", "There were problems with the information you submitted");
-        return res.render("subscribe", {
-            title: "Confirm subscription", errors
+        req.flash('danger', 'There were problems with the information you submitted');
+        return res.render('subscribe', {
+            title: 'Confirm subscription', errors
         });
     }
 });
@@ -112,11 +112,11 @@ router.get('/', async (req, res) => {
 
     const topics = await Topic.findAll({
         attributes: {
-            include: [[Sequelize.fn("COUNT", Sequelize.col("answerables.id")), "answerableCount"], [Sequelize.fn("COUNT", Sequelize.col("subscriptions.topicId")), "subCount"]]
+            include: [[Sequelize.fn('COUNT', Sequelize.col('answerables.id')), 'answerableCount'], [Sequelize.fn('COUNT', Sequelize.col('subscriptions.topicId')), 'subCount']]
         },
         include: [{
             model: Answerable,
-            as: "answerables",
+            as: 'answerables',
             attributes: [],
             through: {
                 attributes: [],
@@ -126,11 +126,11 @@ router.get('/', async (req, res) => {
             as: 'subscriptions',
             attributes: [],
         }],
-        group: [['Topic.id', "answerables.id"], ["Topic.id"]],
+        group: [['Topic.id', 'answerables.id'], ['Topic.id']],
         raw: true
     });
 
-    return res.render("topics", { title: "All topics", topics });
+    return res.render('topics', { title: 'All topics', topics });
 });
 
 module.exports = router;

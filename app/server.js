@@ -19,7 +19,7 @@ const env = process.env.NODE_ENV || 'development';
 let sessionConfig;
 let sessionStore;
 if (env === 'production') {
-    const SequelizeStore = require("connect-session-sequelize")(session.Store);
+    const SequelizeStore = require('connect-session-sequelize')(session.Store);
     sessionStore = new SequelizeStore({
         db: db.sequelize,
     });
@@ -47,7 +47,7 @@ app.set('views', 'app/views');
 
 // init middleware
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(express.static("app/public/"));
+app.use(express.static('app/public/'));
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(morgan('dev'));
@@ -77,7 +77,7 @@ async function main() {
 
     if (env === 'production') {
         await sessionStore.sync();
-        app.listen(`./${process.env.ATAD_SOCKET}`, () => console.log("ATAD deployment started"));
+        app.listen(`./${process.env.ATAD_SOCKET}`, () => console.log('ATAD deployment started'));
     } else {
         app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
     }

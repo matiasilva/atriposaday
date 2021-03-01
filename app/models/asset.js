@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'answerable'
       });
     }
-  };
+  }
   Asset.init({
     path: {
       type: DataTypes.STRING,
