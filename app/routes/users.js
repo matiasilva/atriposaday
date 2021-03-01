@@ -45,6 +45,7 @@ router.post('/profile', upload.none(), async (req, res) => {
 
 router.get('/home', async (req, res) => {
     // because of requireAuth, we will always have a valid user if we get here
+
     const subscriptions = await req.user.getSubscriptions();
     return res.render('home', {
         title: 'Home',

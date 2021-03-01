@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 const upload = require('../middleware/upload');
 const utils = require('../utils');
 const { exposeUserInView } = require('../middleware/custom');
+const mail = require('../middleware/mail');
 
 const router = express.Router();
 
@@ -102,7 +103,12 @@ router.get('/mail', async (req, res) => {
         include: 'user'
     });
 
-    for (const sub of toAction){
+    const { nodemailer, config } = mail;
+    const transporter = nodemailer.createTransport(config);
+
+    for (const sub of toAction) {
+
+        await sub.sendMail();
         sub.nextActioned = utils.getNextTime(sub.subRepeatEvery, sub.repeatTime);
         await sub.save();
     }
