@@ -98,7 +98,8 @@ router.get('/mail', async (req, res) => {
             nextActioned: {
                 [Op.lt]: now
             }
-        }
+        },
+        include: 'user'
     });
 
     for (const sub of toAction){
