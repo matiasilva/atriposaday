@@ -66,11 +66,10 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
     if (isNaN(subCount)) errors["subCount"] = true;
     if (isNaN(subRepeatEvery)) errors["subRepeatEvery"] = true;
     if (subRepeatEvery > 15) errors["subRepeatEvery"] = true;
+    if (subRepeatEvery <= 0) errors["subRepeatEvery"] = true;
 
     const hourMinute = values["subRepeatTime"].split(':');
     const repeatTime = new Date(2001, 8, 1, hourMinute[0], hourMinute[1]);
-
-
 
     if (topic == null) {
         return next(new Error("Invalid topic UUID"));
@@ -87,7 +86,8 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
             repeatDayFrequency: subRepeatEvery,
             count: subCount,
             repeatTime,
-            userId: req.user.id
+            userId: req.user.id,
+            nextActioned: utils.getNextTime(subRepeatEvery, repeatTime)
         });
         req.flash("success", `You have successfully subscribed to ${sub.name}`);
         return res.redirect('/user/home');

@@ -84,41 +84,30 @@ router.post('/signup', upload.none(), async (req, res) => {
     }
 });
 
-router.get('/random', async (req, res) => {
-    const { part, subject } = req.query;
-    const { Answerable, Paper } = db;
-    let result;
+router.get('/heartbeat', (req, res) => {
+    return res.send("I'm alive!");
+});
 
-    if (!part && !subject) {
-        result = await Answerable.findOne(
-            { order: db.sequelize.random(), include: 'paper' }
-        );
-        result = result.toJSON();
-    } else {
-        const whereObj = { ...part && { triposPart: part }, ...subject && { subject } };
-        const matchingPapers = await Paper.findAll({
-            where: whereObj
-        });
-        let questions = [];
-        for (const paper of matchingPapers) {
-            questions.concat(await Answerable.findAll({
-                where: {
-                    paperId: paper.id
-                }
-            }));
+router.get('/mail', async (req, res) => {
+    const { Subscription, Sequelize: { Op } } = db;
+
+    // get all subs that need to be actioned
+    const now = new Date();
+    const toAction = await Subscription.findAll({
+        where: {
+            nextActioned: {
+                [Op.lt]: now
+            }
         }
-        if (questions.length > 0) {
-            result = questions[Math.floor(Math.random() * questions.length)].toJSON();
-        }
-        else {
-            result = "No matching questions found.";
-        }
+    });
+
+    for (const sub of toAction){
+        sub.nextActioned = utils.getNextTime(sub.subRepeatEvery, sub.repeatTime);
+        await sub.save();
     }
-    res.json(result);
-    // res.render("random", {
-    //     "tripos_parts": Object.entries(TRIPOS_PARTS),
-    //     "subjects": SUBJECTS,
-    // });
+
+    console.info(`Successfully emailed ${toAction.length} people their Tripos questions!`);
+    return res.send("Done!");
 });
 
 module.exports = router;
