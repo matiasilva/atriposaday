@@ -2,6 +2,12 @@
 module.exports = {
   up: async (queryInterface, {DataTypes}) => {
     await queryInterface.createTable('user_answerable_stats', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
       answerableId: {
         type: DataTypes.INTEGER,
         references: {
