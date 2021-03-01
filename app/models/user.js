@@ -4,9 +4,17 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate({ Subscription }) {
+    static associate({ Subscription, UserAnswerableStat }) {
       // One-to-Many user -> subs
       this.hasMany(Subscription, { foreignKey: 'userId', as: 'user' });
+
+      // Many-to-many user <-> question
+      this.belongsToMany(User, {
+        through: UserAnswerableStat,
+        as: "answerableStats",
+        foreignKey: "userId",
+        otherKey: 'answerableId'
+      });
     }
   }
   User.init({
