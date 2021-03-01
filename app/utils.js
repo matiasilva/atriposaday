@@ -14,6 +14,12 @@ module.exports = {
         year = parseInt(year);
         return !isNaN(new Date(year).getFullYear());
     },
+    "getNextTime": function(freq, time){
+        // push back current time by freq
+        const newDate = new Date(Date.now() + (1000*60*60*24*freq));        
+        newDate.setHours(time.getHours(), time.getMinutes());
+        return newDate;
+    },
     "daysOfTheWeek": [
         'Sun',
         'Mon',
