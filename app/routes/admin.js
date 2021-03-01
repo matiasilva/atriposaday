@@ -83,10 +83,9 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
             const fileNameMatch = utils.matchFileName(file.originalname);
-            
-            if(!fileNameMatch) return next(new Error('Submission included invalid file names'));
+            if (!fileNameMatch) return next(new Error('Submission included invalid file names'));
 
-            const args = fileNameMatch.slice(1).map(str => parseInt(str));
+            const args = fileNameMatch.slice(1, 3).filter(str => str).map(str => parseInt(str));
 
             const [question, created] = await Answerable.findOrCreate({
                 where: {
@@ -112,9 +111,11 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
                     isMainAsset: false
                 });
             } else {
+                if (created) {
+                    await question.destroy();
+                }
                 return next(new Error('Invalid input image name'));
             }
-
             const hasQuestion = await topic.hasAnswerable(question);
             if (!hasQuestion) await topic.addAnswerable(question);
         }

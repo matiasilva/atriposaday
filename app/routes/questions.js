@@ -18,11 +18,12 @@ router.get('/', async (req, res, next) => {
     const answerable = await Answerable.findOne({
         where: {
             uuid
-        }
+        },
+        include: ['assets', 'paper'],
     });
 
     return res.render('question', {
-        answerable
+        answerable: answerable.toJSON()
     });
 });
 

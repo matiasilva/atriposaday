@@ -46,7 +46,9 @@ app.set('views', 'app/views');
 
 // init middleware
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(express.static('app/public/'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/static/uploads', express.static(path.join(__dirname, '/../static/uploads')));
+
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(morgan('dev'));

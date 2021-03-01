@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         through: UserAnswerableStat,
         as: 'userStats',
         foreignKey: 'answerableId',
-        otherKey:'userId'
+        otherKey: 'userId'
       });
 
       // One-to-Many paper -> questions

@@ -1,7 +1,33 @@
 <section class="row">
-    <article class="col-md-8">
-
+    <article class="col-md-8 rounded-3 p-3 question">
+        {{log answerable}}
+        {{#with answerable}}
+        <div id="questionCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="false">
+            <div class="carousel-indicators">
+                {{#each assets}}
+                <button type="button" data-bs-target="#questionCarousel" data-bs-slide-to="{{@key}}" {{#ifeq @key
+                    0}}class="active" {{/ifeq}}></button>
+                {{/each}}
+            </div>
+            <div class="carousel-inner">
+                {{#each assets}}
+                <div class="carousel-item {{#ifeq @key
+                    0}}active{{/ifeq}}">
+                    <img src="{{path}}" class="d-block w-100 question-responsive" alt="question {{../number}} of {{../paper.subject}} {{../paper.year}}">
+                </div>
+                {{/each}}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#questionCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#questionCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
     </article>
+    {{/with}}
     <article class="col-md-4">
 
     </article>
