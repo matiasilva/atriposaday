@@ -2,7 +2,6 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('flash');
 const morgan = require('morgan');
-const nodemailer = require("nodemailer");
 const favicon = require('serve-favicon');
 const path = require('path');
 
@@ -11,7 +10,7 @@ const db = require('./models');
 const auth = require('./middleware/auth');
 const { errorHandler, notFoundHandler } = require('./middleware/errors');
 const hbs = require('./middleware/handlebars');
-const mailConfig = require('./config/mail');
+const mail = require('./middleware/mail');
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 const PORT = process.env.PORT || 8080;
@@ -67,8 +66,6 @@ app.use(notFoundHandler);
 // error handlers
 app.use(errorHandler);
 
-const transporter = nodemailer.createTransport(mailConfig.config);
-
 async function main() {
     try {
         await db.sequelize.authenticate();
@@ -84,13 +81,6 @@ async function main() {
     } else {
         app.listen(PORT, () => console.log(`We're live on ${PORT}!`));
     }
-    // send mail with defined transport object
-    // let info = await transporter.sendMail({
-    //     from: mailConfig.sender,
-    //     to: "bar@example.com",
-    //     subject: "Hello ✔", 
-    //     text: "Hello world?",
-    // }, (err, info) => { if (err) console.error(err.message) });
 }
 
 main();
