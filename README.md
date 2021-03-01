@@ -142,3 +142,6 @@ note nest:true
 
 
 UserAnswerableStat stores all the information tying a user and a question. It is put into the DB as a junction table with additional information on whether a user has completed, bookmarked and the user's difficulty response. A row is only created once the user has submitted any of the above, otherwise assume all properties are false.
+
+
+Note the difference between question and answerable. answerable is the generic type, while question is used in user-facing scenarios.

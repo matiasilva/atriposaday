@@ -10,7 +10,6 @@ const db = require('./models');
 const auth = require('./middleware/auth');
 const { errorHandler, notFoundHandler } = require('./middleware/errors');
 const hbs = require('./middleware/handlebars');
-const mail = require('./middleware/mail');
 // nb. db oject contains all models, the "sequelize" obj as the db conn, and Sequelize as tools
 
 const PORT = process.env.PORT || 8080;
@@ -55,10 +54,11 @@ app.use(auth.initialize());
 app.use(auth.session());
 
 // init all routes
-const { admin, topics, home, users } = routes;
+const { admin, topics, home, users, questions } = routes;
 app.use('/topics', topics);
 app.use('/admin', admin);
 app.use('/user', users);
+app.use('/question', questions);
 app.use('/', home);
 
 // 404s
