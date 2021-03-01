@@ -82,9 +82,11 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
 
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
-            const fileName = file.originalname.split('.')[0];
-            let args = fileName.split('_');
-            args = args.map(str => parseInt(str));
+            const fileNameMatch = utils.matchFileName(file.originalname);
+            
+            if(!fileNameMatch) return next(new Error('Submission included invalid file names'));
+
+            const args = fileNameMatch.slice(1).map(str => parseInt(str));
 
             const [question, created] = await Answerable.findOrCreate({
                 where: {

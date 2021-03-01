@@ -10,6 +10,10 @@ module.exports = {
         const emailRe = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         return emailRe.test(email);
     },
+    'matchFileName': function(name) {
+        const fileNameRe = /^(\d+)_?(\d*)\.\w+$/;
+        return name.match(fileNameRe);
+    },
     'isValidYear': function(year){
         year = parseInt(year);
         return !isNaN(new Date(year).getFullYear());
