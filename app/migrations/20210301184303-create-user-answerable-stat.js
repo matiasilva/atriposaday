@@ -14,6 +14,7 @@ module.exports = {
           model: 'answerables',
           key: 'id'
         },
+        // this doesn't really do anything
         unique: 'compositeIndex'
       },
       userId: {
@@ -36,6 +37,11 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: true
       }
+    });
+
+    await queryInterface.addConstraint('user_answerable_stats',  ['answerableId', 'userId'], {
+      type: 'unique',
+      name: 'user_answerable_id_constraint'
     });
   },
   down: async (queryInterface, Sequelize) => {

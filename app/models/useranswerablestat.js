@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+    
   }
   UserAnswerableStat.init({
     answerableId: {
@@ -44,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
+    timestamps: false,
     modelName: 'UserAnswerableStat',
     tableName: 'user_answerable_stats'
   });
