@@ -89,16 +89,20 @@ router.get('/heartbeat', (req, res) => {
     return res.send('I\'m alive!');
 });
 
-router.get('/random', async (req, res) => {
+router.get('/random', async (req, res, next) => {
     const { Answerable, sequelize } = db;
 
-    const {uuid} = await Answerable.findOne({
+    const answerable = await Answerable.findOne({
         order: sequelize.random(),
         attributes: ['uuid'],
         raw: true
     });
 
-    return res.redirect(`/question?uuid=${uuid}`);
+    if(answerable == null) {
+        next(new Error('No question was found (usually because the DB is empty)'));
+    }
+
+    return res.redirect(`/question?uuid=${answerable.uuid}`);
 });
 
 router.get('/mail', async (req, res) => {
