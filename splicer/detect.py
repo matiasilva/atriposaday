@@ -14,35 +14,7 @@ def rescale(im, basewidth=1500):
 
     return im1
 
-def difference(t, margin, reverse):
-
-    extreme = []
-    difference = [j-i for i, j in zip(t[:-1], t[1:])]
-
-    if reverse == 0:
-
-        for k in difference:
-            if k > margin:
-                extreme.append(difference.index(k))
-
-        if len(extreme) == 0:
-            return t[0]
-        else:
-            a = extreme[0]
-            return t[a+1]
-    else:
-        for k in reversed(difference):
-            if k > margin:
-                extreme.append(difference.index(k))
-
-        if len(extreme) == 0:
-            return t[-1]
-        else:
-            a = extreme[0]
-            return t[a]
-
-# crop out the header and footer, and any errant pixels from left to right
-def initial_crop(im, t, b, l, r, bf=30):
+def listreturn(im):
 
     na = np.array(im)
 
@@ -56,62 +28,12 @@ def initial_crop(im, t, b, l, r, bf=30):
     y = np.sort(y)
 
     #order and make unique set from list
-    horizontal_black = np.unique(x)
-    horizontal_black = list(horizontal_black)
-
-    vertical_black = np.unique(y)
-    vertical_black = list(vertical_black)
+    horizontal_black = list(np.unique(x))
+    vertical_black = list(np.unique(y))
 
     return horizontal_black, vertical_black
 
-    # # find location of header coordinate
-    # top = difference(vertical_black, t, 0)
-    # bottom = difference(vertical_black, b, 1)
-    # left = difference(horizontal_black, l, 0)
-    # right = difference(horizontal_black, r, 1)
-    #
-    # cropped = im.crop((left-bf, top-bf, right+bf, bottom+bf))
-    # cropped.save('initial_crop.png')
-    #
-    # return cropped
-
-# def main_crop(im):
-#     na = np.array(im)
-#
-#     # Find X,Y coordinates of all black/greyish pixels
-#     blackY, blackX = np.where(np.all(na <= [250, 250, 250], axis=2))
-#     blackY = np.sort(blackY)
-#     blackX = np.sort(blackX)
-#     top, bottom = blackY[0], blackY[-1]
-#     left, right = blackX[0], blackX[-1]
-#
-#     return left, top, right, bottom
-
-def apply_padding(im, buffer = 100):
-    im_size = im.size
-    im2_size = (im_size[0] + buffer, im_size[1] + buffer)
-    im2 = Image.new('RGB', im2_size, (255, 255, 255))
-    im2.paste(im2, ((im2_size[0] - im_size[0]) // 2, (im2_size[1] - im_size[1]) // 2))
-    return im2
-
-def rename(location, savefolder):
-    p = PurePath(location)
-
-    start = p.stem[0]
-    end = p.stem[-1]
-
-    if end.isdigit() == False:
-        extra = '_{}'.format(ord(end) - 97)
-    else:
-        extra = ''
-
-    newname = '{}{}.{}'.format(start, extra, 'png')
-    savepath = os.path.join(savefolder, newname)
-
-    return savepath
-
-
-def extremes(t):
+def extremes(t, buffer):
     difference_binary = []
     counter = 0
     index = 0
@@ -120,7 +42,7 @@ def extremes(t):
     difference = [j - i for i, j in zip(t[:-1], t[1:])]
 
     for i in difference:
-        if i < 200:
+        if i < buffer:
             difference_binary.append(0)
         else:
             difference_binary.append(1)
@@ -142,28 +64,49 @@ def extremes(t):
             extremes_dict[index] = counter - 1
             counter = 0
 
-
-
     v = list(extremes_dict.values())
     k = list(extremes_dict.keys())
 
-    print(t)
-    print(difference)
-    print(difference_binary)
-    print(extremes_dict)
+    # print(t)
+    # print(difference)
+    # print(difference_binary)
+    # print(extremes_dict)
 
     return t[k[v.index(max(v))]], t[k[v.index(max(v))] + max(v)]
 
-location = 'rescale.png'
-im = Image.open(location).convert('RGB')
+def apply_padding(im, buffer = 100):
+    im_size = im.size
+    im2_size = (im_size[0] + buffer, im_size[1] + buffer)
+    im2 = Image.new('RGB', im2_size, (255, 255, 255))
+    im2.paste(im, ((im2_size[0] - im_size[0]) // 2, (im2_size[1] - im_size[1]) // 2))
+    return im2
 
-horizontal_black, vertical_black = initial_crop(im, 20, 20, 20, 20)
+def rename(location, savefolder):
+    p = PurePath(location)
 
-# apply rescaling
-left, right = extremes(horizontal_black)
-top, bottom = extremes(vertical_black)
+    start = p.stem[0]
+    end = p.stem[-1]
 
-print(left, right)
-print(top, bottom)
+    if end.isdigit() == False:
+        extra = '_{}'.format(ord(end) - 97)
+    else:
+        extra = ''
 
-im.crop((left, top, right, bottom)).show()
+    newname = '{}{}.{}'.format(start, extra, 'png')
+    savepath = os.path.join(savefolder, newname)
+
+    return savepath
+
+# location = 'rescale.png'
+# im = Image.open(location).convert('RGB')
+#
+# horizontal_black, vertical_black = initial_crop(im, 20, 20, 20, 20)
+#
+# # apply rescaling
+# left, right = extremes(horizontal_black)
+# top, bottom = extremes(vertical_black)
+#
+# print(left, right)
+# print(top, bottom)
+#
+# im.crop((left, top, right, bottom)).show()

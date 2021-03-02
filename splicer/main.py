@@ -1,8 +1,10 @@
 from PIL import Image
 import os
 from pathlib import PurePath
+
 from detect import rescale
-from detect import initial_crop
+from detect import listreturn
+from detect import extremes
 from detect import apply_padding
 from detect import rename
 
@@ -30,11 +32,21 @@ for root, dirs, files in os.walk(path):
                 # apply rescaling
                 im = rescale(im, basewidth=1500)
 
-                # apply initial crop
-                # im = initial_crop(im, 2, 2, 2, 2)
+                horizontal, vertical = listreturn(im)
+
+                # # regular parameters
+                # left, right = extremes(horizontal, 125)
+                # top, bottom = extremes(vertical, 200)
+
+                # use for overcropped images
+                left, right = extremes(horizontal, 150)
+                top, bottom = extremes(vertical, 200)
+
+                im = im.crop((left, top, right, bottom))
+                im.save('rescale.png')
 
                 # apply padding
-                im3 = apply_padding(im)
+                im = apply_padding(im)
 
                 # apply name convention
                 savepath = rename(location, savefolder)
