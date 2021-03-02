@@ -89,6 +89,18 @@ router.get('/heartbeat', (req, res) => {
     return res.send('I\'m alive!');
 });
 
+router.get('/random', async (req, res) => {
+    const { Answerable, sequelize } = db;
+
+    const {uuid} = await Answerable.findOne({
+        order: sequelize.random(),
+        attributes: ['uuid'],
+        raw: true
+    });
+
+    return res.redirect(`/question?uuid=${uuid}`);
+});
+
 router.get('/mail', async (req, res) => {
     const { Subscription, Sequelize: { Op } } = db;
 

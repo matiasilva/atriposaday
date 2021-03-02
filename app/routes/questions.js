@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
     if (!uuid) return next(new Error('No question to display selected!'));
 
     const { Answerable, User, UserAnswerableStat } = db;
-
+    
     const answerable = await Answerable.findOne({
         where: {
             uuid
