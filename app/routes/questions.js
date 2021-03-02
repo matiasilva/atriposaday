@@ -13,13 +13,29 @@ router.get('/', async (req, res, next) => {
     const { uuid } = req.query;
     if (!uuid) return next(new Error('No question to display selected!'));
 
-    const { Answerable } = db;
+    const { Answerable, User, UserAnswerableStat } = db;
 
     const answerable = await Answerable.findOne({
         where: {
             uuid
         },
-        include: ['assets', 'paper'],
+        include: ['assets', 'paper', {
+            model: User,
+            as: 'userStats',
+            through: {
+                as: 'stats',
+                attributes: ['hasAnswered']
+            },
+            where: {
+                id: req.user.id
+            }
+        }],
+    });
+
+    await UserAnswerableStat.create({
+        userId: req.user.id,
+        answerableId: answerable.id,
+        hasAnswered: false
     });
 
     return res.render('question', {

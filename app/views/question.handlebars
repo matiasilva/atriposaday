@@ -1,19 +1,22 @@
 <section class="row">
-    <article class="col-md-8 rounded-3 p-3 question">
-        {{log answerable}}
+    <article class="col-lg-9 rounded-3 question mb-3">
         {{#with answerable}}
-        <div id="questionCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="false">
-            <div class="carousel-indicators">
+        <div id="questionCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel"
+            data-bs-interval="false">
+            {{!-- <div class="carousel-indicators">
                 {{#each assets}}
                 <button type="button" data-bs-target="#questionCarousel" data-bs-slide-to="{{@key}}" {{#ifeq @key
                     0}}class="active" {{/ifeq}}></button>
                 {{/each}}
-            </div>
-            <div class="carousel-inner">
+            </div> --}}
+            <div class="carousel-inner ">
                 {{#each assets}}
                 <div class="carousel-item {{#ifeq @key
                     0}}active{{/ifeq}}">
-                    <img src="{{path}}" class="d-block w-100 question-responsive" alt="question {{../number}} of {{../paper.subject}} {{../paper.year}}">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{path}}" class="img-fluid" style="max-height: calc(85vh - 100px);"
+                            alt="question {{../number}} of {{../paper.subject}} {{../paper.year}}">
+                    </div>
                 </div>
                 {{/each}}
             </div>
@@ -27,8 +30,38 @@
             </button>
         </div>
     </article>
-    {{/with}}
-    <article class="col-md-4">
+    {{log userStats.[0]}}
+    <article class="col-lg-3 sidebar">
+        <div class="card mb-3">
+            <div class="card-header">
+                Your information
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">This question has <span
+                        class="badge rounded-pill bg-primary">{{assets.length}}</span> parts</li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">
+                Question information
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">This question has <span
+                        class="badge rounded-pill bg-primary">{{assets.length}}</span> part(s)</li>
+                <li class="list-group-item"> <span class="fw-bold">Difficulty: </span>
+                    {{#if difficulty}}{{difficulty}}/5{{else}}not available{{/if}}
+                </li>
+                <li class="list-group-item"><span class="fw-bold">Subject: </span>{{readable_subject paper.triposPart
+                    paper.subject}}</li>
+                <li class="list-group-item"><span class="fw-bold">Year: </span>{{paper.year}}</li>
+                <li class="list-group-item"><span class="fw-bold">Tripos Part: </span> {{paper.triposPart}}</li>
+            </ul>
+        </div>
+        <button type="button" class="btn btn-success">Success</button>
 
     </article>
+    {{/with}}
+
 </section>
