@@ -30,18 +30,51 @@
             </button>
         </div>
     </article>
-    {{log userStats.[0]}}
     <article class="col-lg-3 sidebar">
         <div class="card mb-3">
             <div class="card-header">
                 Your information
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">This question has <span
-                        class="badge rounded-pill bg-primary">{{assets.length}}</span> parts</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Vestibulum at eros</li>
+                <li class="list-group-item">
+                    <i class="fa fa-fw fa-check"></i>
+                    <span class="fw-bold">Attempted? </span>
+                    {{#with userStats.[0]}}
+                    {{#if hasAnswered}}
+                    yes
+                    {{else}}
+                    no
+                    {{/if}}
+                    {{else}}
+                    no
+                    {{/with}}
+                </li>
+                <li class="list-group-item">
+                    <i class="fa fa-fw fa-bookmark"></i>
+                    <span class="fw-bold">Bookmarked? </span>
+                    {{#with userStats.[0]}}
+                    {{#if hasBookmarked}}
+                    yes
+                    {{else}}
+                    no
+                    {{/if}}
+                    {{else}}
+                    no
+                    {{/with}}
+                </li>
+                <li class="list-group-item">
+                    <i class="fa fa-fw fa-star"></i>
+                    <span class="fw-bold">Rate difficulty </span>
+                    <div class="mt-1 d-flex flex-row justify-content-between">
+                        <label for="rateDifficulty" class="form-label text-success">Easy</label>
+                        <label for="rateDifficulty" class="form-label text-danger">Hard</label>
+                    </div>
+                    <input type="range" class="form-range" min="0" max="4" step="1" id="rateDifficulty">
+                </li>
             </ul>
+              <div class="card-footer">
+        <button type="button" class="btn btn-success w-100">Update</button>
+  </div>
         </div>
         <div class="card mb-3">
             <div class="card-header">
@@ -57,10 +90,9 @@
                     paper.subject}}</li>
                 <li class="list-group-item"><span class="fw-bold">Year: </span>{{paper.year}}</li>
                 <li class="list-group-item"><span class="fw-bold">Tripos Part: </span> {{paper.triposPart}}</li>
+                <li class="list-group-item"><span class="fw-bold">Source: </span> {{readable_qtype paper.type}}</li>
             </ul>
         </div>
-        <button type="button" class="btn btn-success">Success</button>
-
     </article>
     {{/with}}
 

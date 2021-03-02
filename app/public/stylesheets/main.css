@@ -31,6 +31,7 @@ h1 {
 .sidebar {
   border-left: 2px solid rgb(152, 166, 104);
 }
+
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (max-width: 959px) {
   .sidebar {

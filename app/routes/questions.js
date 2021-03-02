@@ -28,15 +28,24 @@ router.get('/', async (req, res, next) => {
             },
             where: {
                 id: req.user.id
-            }
+            },
+            required: false
         }],
     });
 
-    await UserAnswerableStat.create({
-        userId: req.user.id,
-        answerableId: answerable.id,
-        hasAnswered: false
-    });
+    if(answerable== null || answerable.isHidden ){
+        return next();
+    }
+
+    // await UserAnswerableStat.findOrCreate({
+    //     where: {
+    //         userId: req.user.id,
+    //         answerableId: answerable.id,
+    //     },
+    //     defaults: {
+    //         hasAnswered: false
+    //     }
+    // }).catch(next);
 
     return res.render('question', {
         answerable: answerable.toJSON()

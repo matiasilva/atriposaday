@@ -1,6 +1,6 @@
 const exphbs = require('express-handlebars');
 const { daysOfTheWeek, months } = require('../utils');
-const { SUBJECTS } = require('../enums');
+const { SUBJECTS, PAPER_TYPES } = require('../enums');
 
 const hbs = exphbs.create({
     helpers: {
@@ -32,6 +32,9 @@ const hbs = exphbs.create({
         },
         'readable_subject': function(part, subject){
             return SUBJECTS[part][subject];
+        },
+        'readable_qtype': function(type){
+            return PAPER_TYPES[type];
         }
     }
 });
