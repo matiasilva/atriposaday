@@ -1,6 +1,8 @@
+const nodemailer = require('nodemailer');
+
 module.exports = {
     config: {
-        host: "smtp.ethereal.email",
+        host: 'smtp.ethereal.email',
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
@@ -9,5 +11,6 @@ module.exports = {
         },
         logger: true,
     },
-    sender: '"A Tripos a Day" <atriposaday@srcf.net>'
+    sender: '"A Tripos a Day" <atriposaday@srcf.net>',
+    nodemailer
 };

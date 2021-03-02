@@ -27,10 +27,9 @@ module.exports = {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,
       },
-      lastActioned: {
+      nextActioned: {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW
       },
       // how many questions?
       count: {

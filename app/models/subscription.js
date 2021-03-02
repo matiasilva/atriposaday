@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: {
           name: 'userId',
           allowNull: true
-        }
+        },
+        as: 'subscriptions'
       });
 
       // One-to-Many topic -> subs
@@ -21,6 +22,16 @@ module.exports = (sequelize, DataTypes) => {
         },
         as: 'topic'
       });
+    }
+
+    async sendMail(transporter) {
+        await transporter.sendMail({
+            from: '"A Tripos a Day" <atriposaday@srcf.net>',
+            to: this.user.email,
+            subject: `A Tripos a Day: ${this.name} question`,
+            text: 'Hello world?',
+        }, (err, info) => { if (err) console.error(err.message); });
+    
     }
   }
   Subscription.init({
@@ -43,10 +54,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    lastActioned: {
+    nextActioned: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW
     },
     // how many questions?
     count: {

@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 const upload = require('../middleware/upload');
 const utils = require('../utils');
 const { exposeUserInView } = require('../middleware/custom');
+const mail = require('../middleware/mail');
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.use(exposeUserInView);
 router.get('/', async (req, res) => {
     const { User } = db;
 
-    return res.render("index", {
+    return res.render('index', {
         userCount: await User.count()
     });
 });
@@ -48,77 +49,88 @@ router.get('/signup', async (req, res) => {
     const response = await fetch(url, options);
     const { result } = await response.json();
 
-    res.render("signup", {
-        title: "Confirm your details",
+    res.render('signup', {
+        title: 'Confirm your details',
         name: result.person.visibleName,
         email: `${req.user}@cam.ac.uk`
     });
 });
 
 router.post('/signup', upload.none(), async (req, res) => {
-    const formKeys = ["userName", "userEmail"];
+    const formKeys = ['userName', 'userEmail'];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
-    if (!utils.matchEmail(values["userEmail"])) errors["userEmail"] = true;
-    if (values["userName"] > 120) errors["userName"] = true;
+    if (!utils.matchEmail(values['userEmail'])) errors['userEmail'] = true;
+    if (values['userName'] > 120) errors['userName'] = true;
 
     const hasNoErrors = Object.keys(errors).length === 0;
 
     if (hasNoErrors) {
         const { User } = db;
         await User.create({
-            name: values["userName"],
+            name: values['userName'],
             crsid: req.user,
-            email: values["userEmail"]
+            email: values['userEmail']
         });
-        req.flash("success", "You were successfully registered as a new user.");
+        req.flash('success', 'You were successfully registered as a new user.');
         res.redirect('/user/home');
     } else {
-        req.flash("danger", "There were problems with the information you submitted.");
+        req.flash('danger', 'There were problems with the information you submitted.');
 
-        res.render("signup", {
-            title: "Confirm your details",
+        res.render('signup', {
+            title: 'Confirm your details',
             errors
         });
     }
 });
 
-router.get('/random', async (req, res) => {
-    const { part, subject } = req.query;
-    const { Answerable, Paper } = db;
-    let result;
+router.get('/heartbeat', (req, res) => {
+    return res.send('I\'m alive!');
+});
 
-    if (!part && !subject) {
-        result = await Answerable.findOne(
-            { order: db.sequelize.random(), include: 'paper' }
-        );
-        result = result.toJSON();
-    } else {
-        const whereObj = { ...part && { triposPart: part }, ...subject && { subject } };
-        const matchingPapers = await Paper.findAll({
-            where: whereObj
-        });
-        let questions = [];
-        for (const paper of matchingPapers) {
-            questions.concat(await Answerable.findAll({
-                where: {
-                    paperId: paper.id
-                }
-            }));
-        }
-        if (questions.length > 0) {
-            result = questions[Math.floor(Math.random() * questions.length)].toJSON();
-        }
-        else {
-            result = "No matching questions found.";
-        }
+router.get('/random', async (req, res, next) => {
+    const { Answerable, sequelize } = db;
+
+    const answerable = await Answerable.findOne({
+        order: sequelize.random(),
+        attributes: ['uuid'],
+        raw: true
+    });
+
+    if(answerable == null) {
+        next(new Error('No question was found (usually because the DB is empty)'));
     }
-    res.json(result);
-    // res.render("random", {
-    //     "tripos_parts": Object.entries(TRIPOS_PARTS),
-    //     "subjects": SUBJECTS,
-    // });
+
+    return res.redirect(`/question?uuid=${answerable.uuid}`);
+});
+
+router.get('/mail', async (req, res) => {
+    const { Subscription, Sequelize: { Op } } = db;
+
+    // get all subs that need to be actioned
+    const now = new Date();
+    const toAction = await Subscription.findAll({
+        where: {
+            nextActioned: {
+                [Op.lt]: now
+            }
+        },
+        include: 'user'
+    });
+
+    const { nodemailer, config } = mail;
+    const transporter = nodemailer.createTransport(config);
+
+    for (const sub of toAction) {
+
+        await sub.sendMail();
+        sub.nextActioned = utils.getNextTime(sub.subRepeatEvery, sub.repeatTime);
+        await sub.save();
+    }
+
+    console.info(`Successfully emailed ${toAction.length} people their Tripos questions!`);
+    return res.send('Done!');
 });
 
 module.exports = router;

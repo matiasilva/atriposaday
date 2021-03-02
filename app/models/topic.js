@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       // Many-to-many topic <-> question
       this.belongsToMany(Answerable, {
         through: AnswerablesTopics,
-        as: "answerables",
-        foreignKey: "topicId"
+        as: 'answerables',
+        foreignKey: 'topicId'
       });
 
       // One-to-Many topic -> subs

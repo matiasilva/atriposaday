@@ -4,8 +4,8 @@ const { User } = require('../models');
 
 passport.use(new ravenStrategy({
     desc: 'A Tripos a Day',
-    msg: "It's time to use the bird!",
-    audience: process.env["ATAD_FQDN"] || `http://localhost:${process.env.PORT}`,
+    msg: 'It\'s time to use the bird!',
+    audience: process.env.PORT ? `${process.env['ATAD_FQDN']}:${process.env.PORT}` : `${process.env['ATAD_FQDN']}`,
     debug: false
 }, function (crsid, params, done) {
     if (params.isCurrent) {
@@ -25,7 +25,7 @@ passport.deserializeUser(function (id, done) {
             crsid: id
         }
     }).then((user) => {
-        if(user == null){
+        if (user == null) {
             done(null, id);
         }
         else {

@@ -11,14 +11,14 @@ module.exports = {
       answerableId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
-          model: "answerables",
+          model: 'answerables',
           key: 'id'
         }
       },
       topicId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
-          model: "topics",
+          model: 'topics',
           key: 'id'
         }
       },
@@ -30,6 +30,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    });
+
+    await queryInterface.addConstraint('answerables_topics', {
+      type: 'unique',
+      fields: ['answerableId', 'topicId'],
+      name: 'user_topic_id_constraint'
     });
   },
   down: async (queryInterface, Sequelize) => {
