@@ -32,8 +32,9 @@ module.exports = {
       }
     });
 
-    await queryInterface.addConstraint('answerables_topics',  ['answerableId', 'topicId'], {
+    await queryInterface.addConstraint('answerables_topics', {
       type: 'unique',
+      fields: ['answerableId', 'topicId'],
       name: 'user_topic_id_constraint'
     });
   },

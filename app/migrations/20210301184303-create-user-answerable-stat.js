@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, {DataTypes}) => {
+  up: async (queryInterface, { DataTypes }) => {
     await queryInterface.createTable('user_answerable_stats', {
       id: {
         allowNull: false,
@@ -39,8 +39,9 @@ module.exports = {
       }
     });
 
-    await queryInterface.addConstraint('user_answerable_stats',  ['answerableId', 'userId'], {
+    await queryInterface.addConstraint('user_answerable_stats', {
       type: 'unique',
+      fields: ['answerableId', 'userId'],
       name: 'user_answerable_id_constraint'
     });
   },
