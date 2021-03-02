@@ -13,13 +13,12 @@
                 {{#each assets}}
                 <div class="carousel-item {{#ifeq @key
                     0}}active{{/ifeq}}">
-                    <div class="d-flex justify-content-center">
-                        <img src="{{path}}" class="img-fluid" style="max-height: calc(85vh - 100px);"
-                            alt="question {{../number}} of {{../paper.subject}} {{../paper.year}}">
-                    </div>
+                    <img src="{{path}}" class="d-block w-100"
+                        alt="question {{../number}} of {{../paper.subject}} {{../paper.year}}">
                 </div>
                 {{/each}}
             </div>
+            {{#unlesseq assets.length 0}}
             <button class="carousel-control-prev" type="button" data-bs-target="#questionCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -28,6 +27,7 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
+            {{/unlesseq}}
         </div>
     </article>
     <article class="col-lg-3 sidebar">
@@ -72,9 +72,9 @@
                     <input type="range" class="form-range" min="0" max="4" step="1" id="rateDifficulty">
                 </li>
             </ul>
-              <div class="card-footer">
-        <button type="button" class="btn btn-success w-100">Update</button>
-  </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-success w-100">Update</button>
+            </div>
         </div>
         <div class="card mb-3">
             <div class="card-header">
