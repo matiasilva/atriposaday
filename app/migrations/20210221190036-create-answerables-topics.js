@@ -31,6 +31,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addConstraint('answerables_topics',  ['answerableId', 'topicId'], {
+      type: 'unique',
+      name: 'user_topic_id_constraint'
+    });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('answerables_topics');
