@@ -1,8 +1,10 @@
-<p align="center"><a href="https://atriposaday.lt0.org.uk" target="_blank" rel="noopener noreferrer"><img width="100" alt="tripos_bg" src="https://user-images.githubusercontent.com/23108156/109943464-22dd4b00-7ccd-11eb-8613-706c415109eb.png"></a></p>
-
-# A Tripos A Day
+<h1 align="center"><a href="https://atriposaday.lt0.org.uk" target="_blank" rel="noopener noreferrer"><img width="100" alt="tripos_bg" src="https://user-images.githubusercontent.com/23108156/109943464-22dd4b00-7ccd-11eb-8613-706c415109eb.png"></a></h1>
 
 > A Tripos a Day keeps the DoS away...!
+
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://atriposaday.lt0.org.uk) [![](https://img.shields.io/badge/unicorn-approved-ff69b4.svg)](https://atriposaday.lt0.org.uk)
+
+# A Tripos A Day
 
 _A Tripos a Day_ helps you become a better engineer.
 
