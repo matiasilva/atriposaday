@@ -127,6 +127,7 @@ router.get('/', async (req, res) => {
             attributes: [],
         }],
         group: [['Topic.id', 'answerables.id'], ['Topic.id']],
+        order: [['prettyName', 'ASC']],
         raw: true
     });
 
