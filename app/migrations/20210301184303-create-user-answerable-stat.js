@@ -15,7 +15,8 @@ module.exports = {
           key: 'id'
         },
         // this doesn't really do anything
-        unique: 'compositeIndex'
+        unique: 'compositeIndex',
+        onDelete: 'CASCADE'
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -23,7 +24,8 @@ module.exports = {
           model: 'users',
           key: 'id'
         },
-        unique: 'compositeIndex'
+        unique: 'compositeIndex',
+        onDelete: 'CASCADE'
       },
       hasAnswered: {
         type: DataTypes.BOOLEAN,

@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         model: 'answerables',
         key: 'id'
       },
-      unique: 'compositeIndex'
+      unique: 'compositeIndex',
+      onDelete: 'CASCADE'
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -29,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
         model: 'users',
         key: 'id'
       },
-      unique: 'compositeIndex'
+      unique: 'compositeIndex',
+      onDelete: 'CASCADE'
     },
     hasAnswered: {
       type: DataTypes.BOOLEAN,

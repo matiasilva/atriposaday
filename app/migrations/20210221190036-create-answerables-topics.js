@@ -13,14 +13,16 @@ module.exports = {
         references: {
           model: 'answerables',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       topicId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
           model: 'topics',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

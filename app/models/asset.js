@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     answerableId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      onDelete: 'CASCADE'
     },
   }, {
     sequelize,

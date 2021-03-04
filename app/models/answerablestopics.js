@@ -15,14 +15,16 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'answerables',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE'
     },
     topicId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'topics',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE'
     },
   }, {
     sequelize,
