@@ -56,20 +56,17 @@ router.get('/delete', requireAdmin, async (req, res, next) => {
     const { uuid } = req.query;
     if (!uuid) return next(new Error('No question to delete provided!'));
 
-    const { Answerable, Topic, User, Paper } = db;
+    const { Answerable } = db;
 
     const answerable = await Answerable.findOne({
         where: {
             uuid
         },
-        include: ['topics', 'paper', 'userStats']
     });
 
     if (answerable == null) return next(new Error('Invalid question to delete provided'));
 
-    try {   
-        await answerable.removeTopics(answerable.topics);
-        await answerable.removeUserStats(answerable.userStats);
+    try {
         await answerable.destroy();
     }
     catch (err) {
