@@ -1,3 +1,5 @@
+<p align="center"><a href="https://atriposaday.lt0.org.uk" target="_blank" rel="noopener noreferrer"><img width="100" alt="tripos_bg" src="https://user-images.githubusercontent.com/23108156/109943464-22dd4b00-7ccd-11eb-8613-706c415109eb.png"></a></p>
+
 # A Tripos A Day
 
 > A Tripos a Day keeps the DoS away...!
