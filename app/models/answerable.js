@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsToMany(Topic, {
         through: AnswerablesTopics,
         as: 'topics',
-        foreignKey: 'answerableId'
+        foreignKey: 'answerableId',
+        onDelete: 'CASCADE'
       });
 
       // Many-to-many user <-> question
@@ -26,12 +27,12 @@ module.exports = (sequelize, DataTypes) => {
           name: 'paperId',
           allowNull: false,
         },
-        as: 'paper'
+        as: 'paper',
       });
 
       // One-to-Many answerable -> assets
       this.hasMany(Asset, {
-        foreignKey: 'answerableId', as: 'assets'
+        foreignKey: 'answerableId', as: 'assets', onDelete: 'CASCADE'
       });
     }
 
@@ -58,6 +59,10 @@ module.exports = (sequelize, DataTypes) => {
     uuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
+    },
+    paperId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
   }, {
     sequelize,

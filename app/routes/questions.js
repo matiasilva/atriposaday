@@ -1,5 +1,5 @@
 const express = require('express');
-const { exposeUserInView, requireAuth } = require('../middleware/custom');
+const { exposeUserInView, requireAuth, requireAdmin } = require('../middleware/custom');
 const db = require('../models');
 
 const router = express.Router();
@@ -13,8 +13,8 @@ router.get('/', async (req, res, next) => {
     const { uuid } = req.query;
     if (!uuid) return next(new Error('No question to display selected!'));
 
-    const { Answerable, User, UserAnswerableStat } = db;
-    
+    const { Answerable, User } = db;
+
     const answerable = await Answerable.findOne({
         where: {
             uuid
@@ -33,7 +33,7 @@ router.get('/', async (req, res, next) => {
         }],
     });
 
-    if(answerable== null || answerable.isHidden ){
+    if (answerable == null || answerable.isHidden) {
         return next();
     }
 
@@ -50,6 +50,34 @@ router.get('/', async (req, res, next) => {
     return res.render('question', {
         answerable: answerable.toJSON()
     });
+});
+
+router.get('/delete', requireAdmin, async (req, res, next) => {
+    const { uuid } = req.query;
+    if (!uuid) return next(new Error('No question to delete provided!'));
+
+    const { Answerable, Topic, User, Paper } = db;
+
+    const answerable = await Answerable.findOne({
+        where: {
+            uuid
+        },
+        include: ['topics', 'paper', 'userStats']
+    });
+
+    if (answerable == null) return next(new Error('Invalid question to delete provided'));
+
+    try {   
+        await answerable.removeTopics(answerable.topics);
+        await answerable.removeUserStats(answerable.userStats);
+        await answerable.destroy();
+    }
+    catch (err) {
+        return next(err);
+    }
+
+    req.flash('success', 'Question deleted successfully.');
+    return res.redirect('/user/home');
 });
 
 module.exports = router;

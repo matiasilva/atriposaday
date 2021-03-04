@@ -1,7 +1,7 @@
 <section class="row">
     <article class="col-lg-9 rounded-3 question mb-3">
         {{#with answerable}}
-        <div id="questionCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel"
+        <div id="questionCarousel" class="carousel carousel-dark slide p-2" data-bs-ride="carousel"
             data-bs-interval="false">
             {{!-- <div class="carousel-indicators">
                 {{#each assets}}
@@ -31,6 +31,18 @@
         </div>
     </article>
     <article class="col-lg-3 sidebar">
+        {{#if ../user.dataValues.isAdmin}}
+        <div class="card mb-3">
+            <div class="card-header">
+                Administrator
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <a href="/question/delete?uuid={{uuid}}" class="btn btn-danger w-100">Delete</a>
+                </li>
+            </ul>
+        </div>
+        {{/if}}
         <div class="card mb-3">
             <div class="card-header">
                 Your information
