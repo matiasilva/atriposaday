@@ -1,16 +1,33 @@
 <p>This is a list of all the topics you can subscribe to. To subscribe to a topic, just click on it!</p>
-<div class="list-group">
+<ul class="list-group">
     {{#each topics as |topic|}}
-    <a href="/topics/subscribe?topic={{topic.uuid}}" class="list-group-item list-group-item-action">
+    <li class="list-group-item">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{topic.prettyName}}</h5>
             <small>Contains {{topic.answerableCount}} question(s)</small>
         </div>
-        <p class="mb-1">{{topic.description}}</p>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+            <p class="mb-1">{{topic.description}}</p>
+            {{#ifeq topic.answerableCount "0"}}
+            <a class="btn btn-primary" href="/topics/subscribe?topic={{topic.uuid}}">
+                Subscribe
+            </a>
+            {{else}}
+            <div class="btn-group">
+                <a class="btn btn-primary" href="/topics/subscribe?topic={{topic.uuid}}">
+                    Subscribe
+                </a>
+                <a class="btn btn-secondary" href="/question/all?topic={{topic.uuid}}">
+                    View questions
+                </a>
+            </div>
+            {{/ifeq}}
+        </div>
         <small>{{topic.subCount}} user(s) are subscribed to this topic.</small>
-    </a>
+    </li>
     {{/each}}
-</div>
+</ul>
 <div class="alert alert-info mt-3" role="alert">
-    Note: subscriptions are only actioned once the next subscription trigger time <em>after</em> you subscribe is reached.
+    Note: subscriptions are only actioned once the next subscription trigger time <em>after</em> you subscribe is
+    reached.
 </div>

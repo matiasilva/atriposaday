@@ -1,0 +1,28 @@
+<table class="mt-4 table table-info table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Question #</th>
+            <th scope="col">Parts to question</th>
+            <th scope="col">Paper subject</th>
+            <th scope="col">Paper year</th>
+            <th scope="col">Paper Tripos part</th>
+            <th scope="col">Paper type</th>
+            <th scope="col">Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each questions as |question|}}
+        <tr>
+            <td>{{question.number}}</td>
+            <td>{{question.assets.length}}</td>
+            {{#with question.paper}}
+            <td>{{readable_subject triposPart subject}}</td>
+            <td>{{year}}</td>
+            <td>{{triposPart}}</td>
+            <td>{{readable_qtype type}}</td>
+            {{/with}}
+            <td><a href="/question?uuid={{question.uuid}}">click me</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -52,6 +52,26 @@ router.get('/', async (req, res, next) => {
     });
 });
 
+router.get('/all', async (req, res, next )=>{
+    const { topic: topicUuid } = req.query;
+    if (!topicUuid) return next(new Error('No topic to list provided!'));
+
+    const { Topic } = db;
+
+    const topic = await Topic.findOne({
+        where: {
+            uuid: topicUuid
+        },
+    });
+
+    const questions = await topic.getAnswerables({include: ['paper', 'assets']});
+
+    res.render('questions_list', {
+        title: `All questions in ${topic.prettyName}`,
+        questions: questions.map(q => q.toJSON())
+    });
+});
+
 router.get('/delete', requireAdmin, async (req, res, next) => {
     const { uuid } = req.query;
     if (!uuid) return next(new Error('No question to delete provided!'));

@@ -39,6 +39,14 @@ h1 {
 
 */
 
+.atad-btn-green {
+  background-color: rgb(152, 166, 104);
+}
+
+.atad-btn-beige {
+  background-color: rgb(191, 179, 143);
+}
+
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (max-width: 959px) {
   .sidebar {
