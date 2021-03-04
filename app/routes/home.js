@@ -49,7 +49,7 @@ router.get('/signup', async (req, res) => {
     const response = await fetch(url, options);
     const { result } = await response.json();
 
-    res.render('signup', {
+    return res.render('signup', {
         title: 'Confirm your details',
         name: result.person.visibleName,
         email: `${req.user}@cam.ac.uk`
@@ -78,7 +78,7 @@ router.post('/signup', upload.none(), async (req, res) => {
     } else {
         req.flash('danger', 'There were problems with the information you submitted.');
 
-        res.render('signup', {
+        return res.render('signup', {
             title: 'Confirm your details',
             errors
         });
@@ -99,7 +99,7 @@ router.get('/random', async (req, res, next) => {
     });
 
     if(answerable == null) {
-        next(new Error('No question was found (usually because the DB is empty)'));
+        return next(new Error('No question was found (usually because the DB is empty)'));
     }
 
     return res.redirect(`/question?uuid=${answerable.uuid}`);

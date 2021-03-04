@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 
     paperYears = paperYears.map(year => year.year).sort();
 
-    res.render('admin', {
+    return res.render('admin', {
         title: 'Administrator panel',
         'tripos_parts': Object.entries(TRIPOS_PARTS),
         'subjects': SUBJECTS,
@@ -128,7 +128,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
         // include sent back responses that failed
         req.flash('danger', 'There were problems with the information you submitted.');
 
-        res.render('admin', {
+        return res.render('admin', {
             title: 'Administrator panel',
             'subjects': SUBJECTS,
             'tripos_parts': Object.entries(TRIPOS_PARTS),
