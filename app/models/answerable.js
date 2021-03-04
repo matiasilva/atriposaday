@@ -62,7 +62,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     paperId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'papers',
+        key: 'id'
+      },
     },
   }, {
     sequelize,

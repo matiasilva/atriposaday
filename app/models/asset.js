@@ -33,7 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     answerableId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+      references: {
+        model: 'answerables',
+        key: 'id'
+      },
     },
   }, {
     sequelize,

@@ -29,7 +29,11 @@ module.exports = {
       },
       paperId: {
         type: Sequelize.DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'papers',
+          key: 'id'
+        },
       },
       uuid: {
         type: Sequelize.DataTypes.UUID,

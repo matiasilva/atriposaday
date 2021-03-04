@@ -19,7 +19,11 @@ module.exports = {
       answerableId: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        references: {
+          model: 'answerables',
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,

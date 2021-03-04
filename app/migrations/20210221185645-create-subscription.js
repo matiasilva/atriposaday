@@ -38,11 +38,19 @@ module.exports = {
       },
       userId: {
         type: Sequelize.DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id'
+        },
       },
       topicId: {
         type: Sequelize.DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'topics',
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,
