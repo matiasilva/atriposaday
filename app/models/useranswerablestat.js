@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-    
+
   }
   UserAnswerableStat.init({
     answerableId: {
@@ -35,10 +35,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     hasAnswered: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    dateAnswered: {
+      type: DataTypes.DATE,
       allowNull: true
     },
     hasBookmarked: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    dateBookmarked: {
+      type: DataTypes.DATE,
       allowNull: true
     },
     difficulty: {
@@ -49,7 +59,17 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     timestamps: false,
     modelName: 'UserAnswerableStat',
-    tableName: 'user_answerable_stats'
+    tableName: 'user_answerable_stats',
+    hooks: {
+      beforeUpdate: (stat, options) => {
+        console.log(stat.previous());
+        const hasBookmarkedChanged = stat.previous('hasBookmarked') === stat.getDataValue('hasBookmarked');
+        if(hasBookmarkedChanged) stat.dateBookmarked = Date.now();
+
+        const hasAnsweredChanged = stat.previous('hasAnswered') === stat.getDataValue('hasAnswered');
+        if(hasAnsweredChanged) stat.dateAnswered = Date.now();
+      }
+    },
   });
   return UserAnswerableStat;
 };

@@ -29,11 +29,21 @@ module.exports = {
       },
       hasAnswered: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+      },
+      dateAnswered: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
+      dateBookmarked: {
+        type: DataTypes.DATE,
         allowNull: true
       },
       hasBookmarked: {
         type: DataTypes.BOOLEAN,
-        allowNull: true
+        defaultValue: false,
+        allowNull: false
       },
       difficulty: {
         type: DataTypes.INTEGER,
