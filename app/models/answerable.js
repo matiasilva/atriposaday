@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE'
       });
 
+      this.hasMany(UserAnswerableStat, {
+        foreignKey: 'answerableId',
+        as: 'stats'
+      });
+
       // Many-to-many user <-> question
       this.belongsToMany(User, {
         through: UserAnswerableStat,

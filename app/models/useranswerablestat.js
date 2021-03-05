@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate({ Answerable }) {
+      this.belongsTo(Answerable, { foreignKey: 'answerableId'});
     }
 
   }
@@ -64,10 +64,10 @@ module.exports = (sequelize, DataTypes) => {
       beforeUpdate: (stat, options) => {
         console.log(stat.previous());
         const hasBookmarkedChanged = stat.previous('hasBookmarked') === stat.getDataValue('hasBookmarked');
-        if(hasBookmarkedChanged) stat.dateBookmarked = Date.now();
+        if (hasBookmarkedChanged) stat.dateBookmarked = Date.now();
 
         const hasAnsweredChanged = stat.previous('hasAnswered') === stat.getDataValue('hasAnswered');
-        if(hasAnsweredChanged) stat.dateAnswered = Date.now();
+        if (hasAnsweredChanged) stat.dateAnswered = Date.now();
       }
     },
   });
