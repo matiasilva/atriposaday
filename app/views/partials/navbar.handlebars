@@ -21,9 +21,20 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/topics"><i class="me-1 fa fa-fw fa-list-ul"></i>Topics</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/user/subscriptions"><i
-                            class="me-1 fa fa-fw fa-envelope-o"></i>Subscriptions</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">
+                        <i class="me-1 fa fa-fw fa-inbox"></i>Your inbox
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/user/subscriptions"><i
+                                    class="me-1 fa fa-fw fa-envelope-o"></i>Subscriptions</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/user/answered"><i
+                                    class="me-1 fa fa-fw fa-check"></i>Answered</a></li>
+                        <li><a class="dropdown-item" href="/user/bookmarked"><i
+                                    class="me-1 fa fa-fw fa-bookmark-o"></i>Bookmarked</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/profile"><i class="me-1 fa fa-fw fa-user-circle"></i>Profile</a>
