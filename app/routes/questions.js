@@ -43,10 +43,6 @@ router.get('/', async (req, res, next) => {
         where: {
             userId: req.user.id,
             answerableId: answerable.id,
-        },
-        defaults: {
-            hasAnswered: false,
-            hasBookmarked: false,
         }
     }).catch(next);
 
@@ -78,6 +74,7 @@ router.post('/update', upload.none(), async (req, res, next) => {
             answerableId: answerable.id,
             userId: req.user.id
         },
+        individualHooks: true
     });
 
     req.flash('success', 'Successfully updated your question preferences');
@@ -99,7 +96,7 @@ router.get('/all', async (req, res, next) => {
     const questions = await topic.getAnswerables({ include: ['paper', 'assets'] });
 
     res.render('questions_list', {
-        title: `All questions in ${topic.prettyName}`,
+        subject: topic.prettyName,
         questions: questions.map(q => q.toJSON())
     });
 });
