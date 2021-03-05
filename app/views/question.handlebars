@@ -1,3 +1,9 @@
+{{#if answerable.hasAnswered}}
+<div class="alert alert-success" role="alert">
+    Hooray! You've completed this question already!
+</div>
+{{/if}}
+
 <section class="row">
     <article class="col-lg-9 rounded-3 question mb-3">
         {{#with answerable}}
@@ -47,46 +53,50 @@
             <div class="card-header">
                 Your information
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <i class="fa fa-fw fa-check"></i>
-                    <span class="fw-bold">Attempted? </span>
-                    {{#with userStats.[0]}}
-                    {{#if hasAnswered}}
-                    yes
-                    {{else}}
-                    no
-                    {{/if}}
-                    {{else}}
-                    no
-                    {{/with}}
-                </li>
-                <li class="list-group-item">
-                    <i class="fa fa-fw fa-bookmark"></i>
-                    <span class="fw-bold">Bookmarked? </span>
-                    {{#with userStats.[0]}}
-                    {{#if hasBookmarked}}
-                    yes
-                    {{else}}
-                    no
-                    {{/if}}
-                    {{else}}
-                    no
-                    {{/with}}
-                </li>
-                <li class="list-group-item">
-                    <i class="fa fa-fw fa-star"></i>
-                    <span class="fw-bold">Rate difficulty </span>
-                    <div class="mt-1 d-flex flex-row justify-content-between">
-                        <label for="rateDifficulty" class="form-label text-success">Easy</label>
-                        <label for="rateDifficulty" class="form-label text-danger">Hard</label>
-                    </div>
-                    <input type="range" class="form-range" min="0" max="4" step="1" id="rateDifficulty">
-                </li>
-            </ul>
-            <div class="card-footer">
-                <button type="button" class="btn btn-success w-100">Update</button>
-            </div>
+            <form enctype="multipart/form-data" method="POST" action="/question/update?uuid={{uuid}}">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="fa fa-fw fa-check"></i>
+                        <span class="fw-bold">Attempted? </span>
+                        {{#with userStats.[0].[stats]}}
+                        {{> forms/checkbox name="questionHasAnswered" label=false checked=hasAnswered
+                        }}
+                        {{else}}
+                        {{> forms/checkbox name="questionHasAnswered" label=false checked=false
+                        }}
+                        {{/with}}
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-fw fa-bookmark"></i>
+                        <span class="fw-bold">Bookmarked? </span>
+                        {{#with userStats.[0].[stats]}}
+                        {{> forms/checkbox name="questionHasBookmarked" label=false checked=hasBookmarked
+                        }}
+                        {{else}}
+                        {{> forms/checkbox name="questionHasBookmarked" label=false checked=false
+                        }}
+                        {{/with}}
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-fw fa-star"></i>
+                        <span class="fw-bold">Rate difficulty </span>
+                        <div class="mt-1 d-flex flex-row justify-content-between">
+                            <label for="rateDifficulty" class="form-label text-success">Easy</label>
+                            <label for="rateDifficulty" class="form-label text-danger">Hard</label>
+                        </div>
+                        {{#with userStats.[0].[stats]}}
+                        <input type="range" class="form-range" min="0" max="4" step="1" id="rateDifficulty"
+                            name="rateDifficulty" value="{{difficulty}}">
+                        {{else}}
+                        <input type="range" class="form-range" min="0" max="4" step="1" id="rateDifficulty"
+                            name="rateDifficulty">
+                        {{/with}}
+                    </li>
+                </ul>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success w-100">Update</button>
+                </div>
+            </form>
         </div>
         <div class="card mb-3">
             <div class="card-header">
