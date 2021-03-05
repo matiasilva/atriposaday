@@ -86,4 +86,53 @@ router.get('/subscriptions/delete', async (req, res, next) => {
     return res.redirect('/user/subscriptions');
 });
 
+router.get('/answered', async (req, res, next) => {
+
+    const { UserAnswerableStat, Sequelize } = db;
+
+    const questions = await req.user.getAnswerableStats({
+        through: {
+            where: {
+                hasAnswered: true
+            },
+        },
+        joinTableAttributes: [],
+        //order: [[Sequelize.col('answerableStats.dateAnswered'), 'DESC']],
+    }).catch(next);
+
+    res.render('answered', { title: 'Your answered questions', questions: questions.map(q => q.toJSON()) });
+});
+
+router.get('/bookmarked', async (req, res, next) => {
+
+    const { Answerable, UserAnswerableStat, Paper } = db;
+
+
+    const { count, rows } = await Answerable.findAndCountAll({
+        include: [
+            {
+                model: UserAnswerableStat,
+                where: {
+                    userId: req.user.id,
+                    hasBookmarked: true
+                },
+                as: 'stats',
+                attributes: ['dateBookmarked']
+            }, {
+                model: Paper,
+                as: 'paper',
+                attributes: ['year', 'triposPart', 'subject']
+            }
+        ]
+        //order: [[Sequelize.col('answerableStats.dateAnswered'), 'DESC']],
+    }).catch(next);
+
+    res.render('bookmarked', {
+        title: 'Your bookmarks',
+        count,
+        questions: rows.map(q => q.toJSON())
+    });
+});
+
+
 module.exports = router;
