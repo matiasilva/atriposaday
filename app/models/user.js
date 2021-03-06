@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         otherKey: 'answerableId'
       });
+
+      this.hasMany(UserAnswerableStat, {
+        foreignKey: 'userId',
+        as: 'stats',
+        onDelete: 'CASCADE'
+      });
     }
   }
   User.init({
