@@ -56,22 +56,23 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
 
     if (values['description'].length >= 120) errors['description'] = true;
 
-    const paper = await Paper.findOne({
-        where: {
-            year: parseInt(values['year']),
-            subject: values['subject'],
-            triposPart: values['tripos-part']
-        }
-    });
-
-    if (paper == null) {
-        req.flash('danger', 'Failed to find a valid paper with these parameters');
-        res.redirect('/admin');
-    }
-
     const hasNoErrors = Object.keys(errors).length === 0;
 
     if (hasNoErrors) {
+
+        const paper = await Paper.findOne({
+            where: {
+                year: parseInt(values['year']),
+                subject: values['subject'],
+                triposPart: values['tripos-part']
+            }
+        });
+
+        if (paper == null) {
+            req.flash('danger', 'Failed to find a valid paper with these parameters');
+            return res.redirect('/admin');
+        }
+        
         // add question
         const topic = await Topic.findOne({
             where: {

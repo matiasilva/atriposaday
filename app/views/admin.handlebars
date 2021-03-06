@@ -1,5 +1,6 @@
 <p>Make changes to the overall functioning of this <em>A Tripos a Day</em> deployment.</p>
 
+{{#with status}}
 <section class="row mb-3">
     <article class="col">
         <div class="card text-white bg-secondary">
@@ -8,18 +9,17 @@
             </div>
             <div class="card-body">
                 <ul class="card-text">
-                    {{#with status}}
                     <li>There are {{questions}} question(s)</li>
                     <li>There are {{topics}} topic(s)</li>
                     <li>There are {{papers}} paper(s)</li>
                     <li>There are {{users}} user(s)</li>
                     <li>There are {{subscriptions}} subscription(s)</li>
-                    {{/with}}
                 </ul>
             </div>
         </div>
     </article>
 </section>
+{{/with}}
 
 <section class="row">
     <div class="col">
