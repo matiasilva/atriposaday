@@ -4,7 +4,6 @@ import csv
 parent = '2P1 Mechanics'
 
 topic_var = []
-topic_dict = {}
 # topics_list = []
 topic_name = []
 topic_prettyName = []
@@ -28,7 +27,7 @@ for row in csv_f:
 
     elif csv_f.line_num != 1:
         topic_var.append(row[0])
-        topic_name.append(row[1])
+        topic_prettyName.append(row[1])
         topic_description.append(row[2])
 
 
@@ -39,14 +38,18 @@ for i in range(len(year)):
 # print(topic_name)
 # print(topic_description)
 
+for name in topic_prettyName:
+    name = name.upper().replace(' ', '_').replace(',', ' ')
+    topic_name.append(name)
+
 for i in range(len(topic_var)):
     # print(topic_name[i])
     # print(topic_description[i])
-    topics_list = []
-    topics_list.append(topic_name[i])
-    topics_list.append(topic_description[i])
-    topics[topic_var[i]] = topics_list
-
+    topic_dict = {}
+    topic_dict['name'] = topic_name[i]
+    topic_dict['prettyName'] = topic_prettyName[i]
+    topic_dict['description'] = topic_description[i]
+    topics[topic_var[i]] = topic_dict
 
 print(topics)
 
@@ -59,8 +62,4 @@ print(output)
 with open('test.json', 'w') as json_file:
     json.dump(output, json_file)
 
-print(topic_name)
-
-for name in topic_name:
-    name = name.upper().replace(' ', '_').replace(',', ' ')
-
+print(topic_prettyName)
