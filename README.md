@@ -93,7 +93,7 @@ ATAD should be able to run on any modern web server, like nginx or Apache. The o
 8. Ensure that the mailer is set up by adding a `cron` entry
 
    - `crontab -e`
-   - `*/15 * * * * /path/to/mailer.sh >/dev/null 2>&1`
+   - `*/15 * * * * /path/to/mailer.sh > /your/log/file.log 2>&1`
 
 9. Install `yq` if not available
 
