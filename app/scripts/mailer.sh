@@ -9,4 +9,4 @@ while read -r line; do
 done < <(./yq e '.apps[0].env' ecosystem.yml)
 
 query="${ATAD_FQDN}:${PORT}/mail"
-curl ${query}
+curl --silent ${query}
