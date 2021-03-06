@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+
+
 module.exports = (sequelize, DataTypes) => {
   class Subscription extends Model {
     static associate({ User, Topic }) {
@@ -24,15 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    async sendMail(transporter) {
-        await transporter.sendMail({
-            from: '"A Tripos a Day" <atriposaday@srcf.net>',
-            to: this.user.email,
-            subject: `A Tripos a Day: ${this.name} question`,
-            text: 'Hello world?',
-        }, (err, info) => { if (err) console.error(err.message); });
-    
-    }
+    static getNextTime (freq, time){
+      // push back current time by freq
+      const newDate = new Date(Date.now() + (1000*60*60*24*freq));        
+      newDate.setHours(time.getHours(), time.getMinutes());
+      return newDate;
+  }
   }
   Subscription.init({
     // unique id

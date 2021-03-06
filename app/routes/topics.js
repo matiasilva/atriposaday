@@ -37,15 +37,20 @@ router.get('/subscribe', async (req, res) => {
 router.post('/subscribe', upload.none(), async (req, res, next) => {
     const { Topic, Subscription } = db;
 
-    const formKeys = ['subUuid', 'subName', 'subRepeatEvery', 'subRepeatTime', 'subCount'];
+    const formKeys = ['topicUuid', 'subName', 'subRepeatEvery', 'subRepeatTime', 'subCount'];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
     // in case uuid is invalid or user tampers
     const topic = await Topic.findOne({
         where:
-            { uuid: values['subUuid'] }
+            { uuid: values['topicUuid'] },
+        raw: true
     }).catch(next);
+
+    if (topic == null) {
+        return next(new Error('Invalid topic UUID'));
+    }
 
     const test = await Subscription.findOne({
         where: {
@@ -54,7 +59,7 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
         }
     });
 
-    if(test != null){
+    if (test != null) {
         req.flash('warning', 'You are already subscribed to this topic!');
         return res.redirect('/topics');
     }
@@ -68,18 +73,35 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
     if (subRepeatEvery > 15) errors['subRepeatEvery'] = true;
     if (subRepeatEvery <= 0) errors['subRepeatEvery'] = true;
 
+    function errorOut() {
+        req.flash('danger', 'There were problems with the information you submitted');
+        return res.render('subscribe', {
+            title: 'Confirm subscription',
+            errors,
+            topic,
+            'allowed_times': utils.allowedTimes
+        });
+    }
+
+    let hasNoErrors = Object.keys(errors).length === 0;
+
+    // before further validating data, check if current data is malformed
+    if (!hasNoErrors) return errorOut();
+
     const hourMinute = values['subRepeatTime'].split(':');
     const repeatTime = new Date(2001, 8, 1, hourMinute[0], hourMinute[1]);
 
-    if (topic == null) {
-        return next(new Error('Invalid topic UUID'));
-    }
+    // catch case where user sets a valid time for later that day
+    const now = new Date();
+    const nextTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hourMinute[0], hourMinute[1]);
+    // user sets time for earlier that day
+    if (now > nextTime) errors['subRepeatTime'] = true;
 
-    if (values['subName'] === '') values['subName'] = topic.prettyName;
-
-    const hasNoErrors = Object.keys(errors).length === 0;
+    hasNoErrors = Object.keys(errors).length === 0;
 
     if (hasNoErrors) {
+        if (values['subName'] === '') values['subName'] = topic.prettyName;
+
         const sub = await Subscription.create({
             name: values['subName'],
             topicId: topic.id,
@@ -87,16 +109,13 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
             count: subCount,
             repeatTime,
             userId: req.user.id,
-            nextActioned: utils.getNextTime(subRepeatEvery, repeatTime)
+            nextActioned: nextTime || Subscription.getNextTime(subRepeatEvery, repeatTime)
         });
-        req.flash('success', `You have successfully subscribed to ${sub.name}`);
+        req.flash('success', `You have successfully subscribed to ${sub.name}. Next action on ${sub.nextActioned.toLocaleString()}.`);
         return res.redirect('/user/home');
     }
     else {
-        req.flash('danger', 'There were problems with the information you submitted');
-        return res.render('subscribe', {
-            title: 'Confirm subscription', errors
-        });
+        return errorOut();
     }
 });
 

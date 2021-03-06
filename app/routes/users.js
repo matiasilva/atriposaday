@@ -50,7 +50,7 @@ router.get('/home', async (req, res) => {
     const subscriptions = await req.user.getSubscriptions();
     return res.render('home', {
         title: 'Home',
-        subscriptions
+        subscriptions: subscriptions.map(s => s.toJSON())
     });
 });
 
