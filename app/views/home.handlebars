@@ -4,18 +4,17 @@
     You are subscribed to a total of {{subscriptions.length}} topic(s).
 </div>
 <ul class="list-group mb-2">
+
     {{#each subscriptions}}
-    {{#with dataValues}}
     <li class="list-group-item">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 text-primary">{{name}}</h5>
-            <small>Last actioned on {{readable_date lastActioned}}</small>
+            <small>Next action on {{readable_date nextActioned}}</small>
         </div>
         <p class="mb-1">Summary: send {{count}} question(s) every {{repeatDayFrequency}} day(s) at {{readable_time repeatTime}}
         </p>
         <small>You subscribed on {{readable_date createdAt}}</small>
     </li>
-    {{/with}}
     {{/each}}
 
 </ul>

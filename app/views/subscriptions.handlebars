@@ -6,7 +6,7 @@
     <a class="list-group-item list-group-item-action" href="/user/subscriptions/delete?uuid={{uuid}}">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 text-primary">{{name}}</h5>
-            <small>Last actioned on {{readable_date lastActioned}}</small>
+            <small>Next action on {{readable_date nextActioned}}</small>
         </div>
         <p class="mb-1">Summary: send {{count}} question(s) every {{repeatDayFrequency}} day(s) from <span
                 class="fw-bold">{{this.[topic.prettyName]}}</span> at {{readable_time repeatTime}}
