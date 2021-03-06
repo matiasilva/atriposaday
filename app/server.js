@@ -68,6 +68,9 @@ app.use(notFoundHandler);
 // error handlers
 app.use(errorHandler);
 
+// FQDN
+app.set('FQDN', process.env.ATAD_FQDN);
+
 async function main() {
     try {
         await db.sequelize.authenticate();
