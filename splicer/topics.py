@@ -1,12 +1,13 @@
 import json
 import csv
 
-parent = '2P3'
+parent = '2P1 Mechanics'
 
 topic_var = []
-topics_list_list = []
+topic_dict = {}
 # topics_list = []
 topic_name = []
+topic_prettyName = []
 topic_description = []
 topics = {}
 
@@ -16,7 +17,7 @@ questions_dict = {}
 
 output = {}
 
-f = open('2p3.csv')
+f = open('2p1.csv')
 csv_f = csv.reader(f)
 
 for row in csv_f:
@@ -57,3 +58,9 @@ print(output)
 
 with open('test.json', 'w') as json_file:
     json.dump(output, json_file)
+
+print(topic_name)
+
+for name in topic_name:
+    name = name.upper().replace(' ', '_').replace(',', ' ')
+
