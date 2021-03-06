@@ -1,0 +1,28 @@
+1,2,3,4,5,6,
+2019,a,b,b,a,c,c
+2018,b,a,b,c,c,c
+2017,b,a,b,c,c,c
+2016,b,b,c,b,c,a
+2015,a,b,c,b,c,a
+2014,a,b,b,c,c,c
+2013,a,b,a,c,c,c
+2012,a,b,a,c,c,c
+2011,b,b,a,c,c,c
+2010,b,b,a,c,c,c
+2009,a,b,a,c,c,c
+2008,b,a,b,c,c,c
+2007,b,a,b,c,c,c
+2006,b,b,a,a,c,c
+2005,b,b,a,c,c,a
+2004,b,b,a,c,c,c
+2003,b,a,b,a,c,c
+2002,b,a,b,c,c,a
+2001,a,c,c,b,a,b
+2000,a,a,c,c,b,b
+1999,a,a,c,b,b,c
+1998,a,a,c,c,b,b
+1997,a,a,c,c,b,b
+1996,a,a,c,c,b,b
+a,"Thin-walled structures, Analysis of Stresses, Yield Criteria","A list of questions on thin-walled structures, analysis of stresses, yield criteria."
+b,Elastic Structural Analysis,A list of questions on elastic structural analysis.
+c,Plastic Theory,A list of questions on plastic analysis.

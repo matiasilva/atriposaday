@@ -1,0 +1,33 @@
+1,2,3,4,5,6,7
+2019,a,b,c,d,e,f,g
+2018,a,b,c,d,d,g,f
+2017,a,b,c,d,d,g,f
+2016,b,a,c,d,e,g,f
+2015,b,b,c,d,e,g,f
+2014,a,b,d,d,e,f,g
+2013,a,b,c,d,e,f,g
+2012,b,a,d,d,e,g,f
+2011,b,b,d,c,e,g,f
+2010,a,b,c,d,e,f,g
+2009,a,b,c,d,e,f,g
+2008,a,b,d,c,e,g,f
+2007,b,a,d,c,e,g,f
+2006,a,b,c,d,e,f,g
+2005,a,b,d,e,c,f,g
+2004,a,b,c,d,e,f,g
+2003,a,b,c,d,e,f,g
+2002,a,b,c,d,e,f,g
+2001,a,b,c,d,e,f,g
+2000,b,a,c,d,e,f,g
+1999,a,b,c,d,e,f,g
+1998,a,b,c,d,e,f,g
+1997,a,b,c,d,e,f,g
+1996,a,b,c,d,e,f,g
+a,"BJT, Small Signal Analysis","A list of topics on BJT, SSA"
+b,"Op amp circuits; Large Signals, Oscillators",A list of topics on Op Amp circuits
+c,Three-phase circuits,A list of topics on three - phase circuits
+d,"Synchronous Machines, Per Unit Calculations",A list of topics on synchronous machines
+e,Induction Motors,A list of topics on induction motors
+f,Transmission Lines,A list of topics on transmission lines
+g,Electromagnetic Waves,A list of topics on electromagnetic waves
+n,not on Syllabus,Questions not on syllabus.

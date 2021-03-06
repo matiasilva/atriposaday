@@ -1,0 +1,29 @@
+1,2,3,4,5,6
+2019,b,c,c,a,a,a
+2018,c,c,b,a,a,a
+2017,c,c,b,a,a,a
+2016,b,c,c,a,a,a
+2015,b,c,c,a,a,a
+2014,c,c,b,a,a,a
+2013,b,c,c,a,a,a
+2012,b,c,c,a,a,a
+2011,c,c,b,a,a,a
+2010,b,c,c,a,a,a
+2009,b,c,c,a,a,a
+2008,b,c,c,a,a,a
+2007,b,c,c,a,a,a
+2006,c,c,c,a,a,a
+2005,b,c,c,a,a,a
+2004,c,c,b,a,a,a
+2003,c,c,c,a,a,a
+2002,c,b,c,a,a,a
+2001,c,b,c,a,a,a
+2000,a,a,a,n,b,c
+1999,a,a,a,a,b,b
+1998,a,a,a,a,b,c
+1997,a,a,a,a,c,b
+1996,a,a,a,a,b,b
+a,Fluid Mechanics,A list of topics on fluid mechanics
+b,Heat Transfer,A list of topics on heat transfer
+c,Thermodynamics,A list of topics on thermodynamics
+n,not on Syllabus,Questions not on syllabus.
