@@ -102,6 +102,21 @@ ATAD should be able to run on any modern web server, like nginx or Apache. The o
        chmod +x ./yq
    ```
 
+10. Set mail config
+
+   Example config for `ppsw`
+
+   ```json
+       config: {
+        host: 'ppsw.cam.ac.uk',
+        port: 25,
+        secure: false,
+        logger: true,
+        debug: false,
+        pool: true
+    },
+   ```
+
 ### Further details
 
 If on the SRCF's webserver, perform all the commands below after switching into your group:

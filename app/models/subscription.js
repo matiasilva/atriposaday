@@ -26,12 +26,19 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static getNextTime (freq, time){
+    static getNextTime(freq, time) {
       // push back current time by freq
-      const newDate = new Date(Date.now() + (1000*60*60*24*freq));        
+      const newDate = new Date(Date.now() + (1000 * 60 * 60 * 24 * freq));
       newDate.setHours(time.getHours(), time.getMinutes());
       return newDate;
-  }
+    }
+
+    getNextTime() {
+      // instance method when the instance is fully formed
+      // push back current time by freq
+      const nextTime = Subscription.getNextTime(this.repeatDayFrequency, this.repeatTime);
+      return nextTime;
+    }
   }
   Subscription.init({
     // unique id

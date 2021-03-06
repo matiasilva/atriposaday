@@ -98,7 +98,7 @@ router.get('/random', async (req, res, next) => {
         raw: true
     });
 
-    if(answerable == null) {
+    if (answerable == null) {
         return next(new Error('No question was found (usually because the DB is empty)'));
     }
 
@@ -106,7 +106,7 @@ router.get('/random', async (req, res, next) => {
 });
 
 router.get('/mail', async (req, res) => {
-    const { Subscription, Sequelize: { Op } } = db;
+    const { Subscription, Sequelize: { Op }, Answerable, UserAnswerableStat, sequelize, Topic, User, Paper } = db;
 
     // get all subs that need to be actioned
     const now = new Date();
@@ -116,21 +116,82 @@ router.get('/mail', async (req, res) => {
                 [Op.lt]: now
             }
         },
-        include: 'user'
+        attributes: ['count', 'repeatTime', 'repeatDayFrequency', 'id', 'name'],
+        include: [{
+            model: User,
+            as: 'user',
+            attributes: ['id', 'email']
+        }, {
+            model: Topic,
+            as: 'topic',
+            attributes: ['id']
+        }]
     });
 
-    const { nodemailer, config } = mail;
+    const { nodemailer, config, template } = mail;
     const transporter = nodemailer.createTransport(config);
 
     for (const sub of toAction) {
+        // const questions = await Answerable.findAll({
+        //     include: [
+        //         {
+        //             model: UserAnswerableStat,
+        //             as: 'stats',
+        //             where: {
+        //                 userId: sub.user.id,
+        //                 hasAnswered: false
+        //             },
+        //             attributes: ['id']
+        //         }
+        //     ],
+        //     where:{
+        //         topicId
+        //     }
+        //     order: sequelize.random(),
+        //     attributes: ['uuid'],
+        //     limit: sub.count
+        // });
 
-        await sub.sendMail();
-        sub.nextActioned = utils.getNextTime(sub.subRepeatEvery, sub.repeatTime);
+        const questions = await sub.topic.getAnswerables({
+            order: sequelize.random(),
+            attributes: ['uuid'],
+            limit: sub.count,
+            joinTableAttributes: [],
+            include: [{
+                model: Paper,
+                as: 'paper',
+                attributes: ['triposPart', 'year', 'type', 'subject']
+            }]
+        });
+
+        // update the sub's nextActioned
+        // even if the email fails to send
+        const nextTime = sub.getNextTime();
+        sub.nextActioned = nextTime;
         await sub.save();
+
+        const locals = {
+            FQDN: process.env.ATAD_FQDN,
+            questions: questions.map(q => q.toJSON()),
+            sub: sub.toJSON(),
+            nextTime
+        };
+
+        const text = template(locals);
+
+        const {err, info} = await transporter.sendMail({
+          from: '"A Tripos a Day" <atriposaday@srcf.net>',
+          to: sub.user.email,
+          subject: `[A Tripos a Day] ${sub.name} question`,
+          text,
+        });
+
+        if(err) console.error(err);
     }
 
-    console.info(`Successfully emailed ${toAction.length} people their Tripos questions!`);
-    return res.send('Done!');
+    transporter.close();
+
+    return res.send(`Successfully emailed ${toAction.length} people their Tripos questions!`);
 });
 
 module.exports = router;

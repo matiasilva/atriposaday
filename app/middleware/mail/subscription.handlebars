@@ -1,0 +1,15 @@
+Hello,
+
+
+Your {{sub.count}} Tripos question(s) for this subscription are:
+
+{{#each questions}}
+    * {{../FQDN}}/question?uuid={{uuid}} ({{to_lower (readable_qtype paper.type)}} question from {{readable_subject paper.triposPart paper.subject}} {{paper.year}}) 
+{{/each}}
+
+
+The next action will be on {{readable_locale_time nextTime}}.
+
+We hope this helps to keep your DoS away!
+
+- A Tripos a Day
