@@ -111,7 +111,6 @@ router.get('/mail', async (req, res) => {
     // get all subs that need to be actioned
     const now = new Date();
     const toAction = await Subscription.findAll({
-        benchmark: true,
         where: {
             nextActioned: {
                 [Op.lt]: now
@@ -135,7 +134,6 @@ router.get('/mail', async (req, res) => {
 
         for (const sub of toAction) {
             let questions = await sub.topic.getAnswerables({
-                benchmark: true,
                 order: sequelize.random(),
                 attributes: ['uuid'],
                 limit: sub.count,
