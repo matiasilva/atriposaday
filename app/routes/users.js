@@ -3,6 +3,7 @@ const { exposeUserInView, requireAuth } = require('../middleware/custom');
 const upload = require('../middleware/upload');
 const db = require('../models');
 const utils = require('../utils');
+const { SUBJECTS, TRIPOS_PARTS } = require('../enums');
 const router = express.Router();
 
 // make user available in view
@@ -88,19 +89,62 @@ router.get('/subscriptions/delete', async (req, res, next) => {
 
 router.get('/answered', async (req, res, next) => {
 
-    const { UserAnswerableStat, Sequelize } = db;
+    const { Answerable, UserAnswerableStat, Paper } = db;
 
-    const questions = await req.user.getAnswerableStats({
-        through: {
-            where: {
-                hasAnswered: true
-            },
-        },
-        joinTableAttributes: [],
+    const { count, rows } = await Answerable.findAndCountAll({
+        include: [
+            {
+                model: UserAnswerableStat,
+                where: {
+                    userId: req.user.id,
+                    hasAnswered: true
+                },
+                as: 'stats',
+                attributes: ['dateAnswered']
+            }, {
+                model: Paper,
+                as: 'paper',
+                attributes: ['year', 'triposPart', 'subject']
+            }
+        ]
         //order: [[Sequelize.col('answerableStats.dateAnswered'), 'DESC']],
     }).catch(next);
 
-    res.render('answered', { title: 'Your answered questions', questions: questions.map(q => q.toJSON()) });
+    let papers = {};
+    
+    for (const part of Object.keys(TRIPOS_PARTS)) {
+        let preprocessed = await Paper.findAll({
+            attributes: ['year', 'subject'],
+            where: {
+                triposPart: part
+            },
+            include: [{
+                model: Answerable,
+                as: 'answerables',
+                attributes: ['uuid']
+            }]
+        });
+        preprocessed = preprocessed.map(p => p.toJSON());
+
+        // need to define sub dictionaries
+        if(!papers[part]) papers[part] =  {};
+        // if no subjects have been added for a tripos part, IIA, IIB
+        if(!SUBJECTS[part]) continue;
+
+        const subjects = Object.keys(SUBJECTS[part]);
+        for(const subject of subjects){
+            papers[part][subject] = preprocessed.filter(p => p.subject === subject);
+        }
+    }
+
+    res.render('answered', {
+        title: 'Your answered questions',
+        count,
+        'subjects': SUBJECTS,
+        'tripos_parts': Object.keys(TRIPOS_PARTS),
+        'papers': papers,
+        questions: rows.map(q => q.toJSON())
+    });
 });
 
 router.get('/bookmarked', async (req, res, next) => {

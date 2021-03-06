@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Answerable }) {
       // One-to-Many paper -> questions
       this.hasMany(Answerable, {
-        foreignKey: 'paperId'
+        foreignKey: 'paperId',
+        as: 'answerables'
       });
     }
   }
