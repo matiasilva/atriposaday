@@ -65,6 +65,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
+    isInSyllabus: {
+      type: DataTypes.BOOLEAN,
+      // by default in syllabus, unless we flag it later
+      defaultValue: true,
+      allowNull: false
+    },
     paperId: {
       type: DataTypes.INTEGER,
       allowNull: false,

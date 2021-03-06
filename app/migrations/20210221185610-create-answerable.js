@@ -39,6 +39,10 @@ module.exports = {
         type: Sequelize.DataTypes.UUID,
         defaultValue: Sequelize.DataTypes.UUIDV4
       },
+      isInSyllabus: {
+        type: Sequelize.DataTypes.BOOLEAN,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
