@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
           name: 'userId',
           allowNull: true
         },
-        as: 'subscriptions'
+        as: 'user'
       });
 
       // One-to-Many topic -> subs
