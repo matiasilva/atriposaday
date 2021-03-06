@@ -21,6 +21,10 @@ const hbs = exphbs.create({
             if (a === b) return opts.fn(this);
             return opts.inverse(this);
         },
+        'ifeq2': function (a, b, c, d, opts) {
+            if (a === b && c === d) return opts.fn(this);
+            return opts.inverse(this);
+        },
         'unlesseq': function (a, b, opts) {
             if (!a || !(a === b)) return opts.fn(this);
         },

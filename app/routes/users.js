@@ -110,30 +110,18 @@ router.get('/answered', async (req, res, next) => {
         //order: [[Sequelize.col('answerableStats.dateAnswered'), 'DESC']],
     }).catch(next);
 
-    let papers = {};
-    
-    for (const part of Object.keys(TRIPOS_PARTS)) {
-        let preprocessed = await Paper.findAll({
-            attributes: ['year', 'subject'],
-            where: {
-                triposPart: part
-            },
-            include: [{
-                model: Answerable,
-                as: 'answerables',
-                attributes: ['uuid']
-            }]
-        });
-        preprocessed = preprocessed.map(p => p.toJSON());
+    let questions = {};
+    const preprocessed =  rows.map(p => p.toJSON());
 
+    for (const part of Object.keys(TRIPOS_PARTS)) {
         // need to define sub dictionaries
-        if(!papers[part]) papers[part] =  {};
-        // if no subjects have been added for a tripos part, IIA, IIB
+        if(!questions[part]) questions[part] =  {};
+        // if no subjects have been added for a tripos part, eg. IIA, IIB
         if(!SUBJECTS[part]) continue;
 
         const subjects = Object.keys(SUBJECTS[part]);
         for(const subject of subjects){
-            papers[part][subject] = preprocessed.filter(p => p.subject === subject);
+            questions[part][subject] = preprocessed.filter(q => (q.paper.subject === subject && q.paper.triposPart === part));
         }
     }
 
@@ -142,8 +130,7 @@ router.get('/answered', async (req, res, next) => {
         count,
         'subjects': SUBJECTS,
         'tripos_parts': Object.keys(TRIPOS_PARTS),
-        'papers': papers,
-        questions: rows.map(q => q.toJSON())
+        questions
     });
 });
 

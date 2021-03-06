@@ -64,17 +64,25 @@ router.post('/update', upload.none(), async (req, res, next) => {
         where: {
             uuid: questionUuid
         },
+        include: [
+            {
+                model: UserAnswerableStat,
+                where: {
+                    userId: req.user.id,
+                },
+                as: 'stats',
+                limit: 1
+            }
+        ]
     }).catch(next);
 
-    await UserAnswerableStat.update({
+    // retrieve the stats obj from the query
+    // but since it's many-to-many an array is returned
+    // we have to select the first (and only) item
+    await answerable.stats[0].update({
         hasAnswered: values['questionHasAnswered'] === 'true',
-        hasBookmarked: values['questionHasBookmarked'] === 'true', difficulty: values['rateDifficulty']
-    }, {
-        where: {
-            answerableId: answerable.id,
-            userId: req.user.id
-        },
-        individualHooks: true
+        hasBookmarked: values['questionHasBookmarked'] === 'true',
+        difficulty: parseInt(values['rateDifficulty'])
     });
 
     req.flash('success', 'Successfully updated your question preferences');

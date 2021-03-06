@@ -62,11 +62,10 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'user_answerable_stats',
     hooks: {
       beforeUpdate: (stat, options) => {
-        console.log(stat.previous());
-        const hasBookmarkedChanged = stat.previous('hasBookmarked') === stat.getDataValue('hasBookmarked');
+        const hasBookmarkedChanged = stat.previous('hasBookmarked') !== stat.getDataValue('hasBookmarked');
         if (hasBookmarkedChanged) stat.dateBookmarked = Date.now();
 
-        const hasAnsweredChanged = stat.previous('hasAnswered') === stat.getDataValue('hasAnswered');
+        const hasAnsweredChanged = stat.previous('hasAnswered') !== stat.getDataValue('hasAnswered');
         if (hasAnsweredChanged) stat.dateAnswered = Date.now();
       }
     },

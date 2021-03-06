@@ -1,7 +1,6 @@
 <div class="alert alert-info mt-3" role="alert">
     You have answered {{count}} question(s).
 </div>
-
 <div class="accordion mt-4" id="answeredAccordion">
     {{#each tripos_parts as |part|}}
     {{#each (lookup ../subjects part) as |subjectName|}}
@@ -16,18 +15,20 @@
             data-bs-parent="#answeredAccordion">
             <div class="accordion-body">
                 <ul class="list-group">
-                    {{#each (lookup (lookup @root.papers part) @key) as |paper|}}
-                    {{#each paper as |question|}}
-                    <li class="list-group-item {{ifeq question.uuid}} {{/ifeq}}">
+                    {{#each (lookup (lookup @root.questions part) @key) as |question|}}
+                    {{#ifeq2 question.paper.subject @../key question.paper.triposPart part}}
+                    <li class="list-group-item list-group-item-success">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">#{{question.number}} on {{subjectName}} {{paper.year}}</h5>
-                            <small>Bookmarked {{readable_date question.stats.[0].dateBookmarked}}</small>
+                            <p class="mb-1">#{{question.number}} from {{subjectName}} {{question.paper.year}}</p>
+                            <small>Answered on {{readable_date question.stats.[0].dateAnswered}}</small>
                         </div>
-                        <a href="/question?uuid={{uuid}}">View question</a>
+                        <a href="/question?uuid={{question.uuid}}">View question</a>
                     </li>
-                    <li class="list-group-item">A simple default list group item</li>
-                    <li class="list-group-item list-group-item-success">A simple success list group item</li>
-                    {{/each}}
+                    {{/ifeq2}}
+                    {{else}}
+                    <li class="list-group-item list-group-item-warning">
+                        You have not answered any questions from this paper.
+                    </li>
                     {{/each}}
                 </ul>
             </div>
