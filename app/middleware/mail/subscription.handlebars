@@ -5,6 +5,8 @@ Your {{sub.count}} Tripos question(s) for this subscription are:
 
 {{#each questions}}
     * {{../FQDN}}/question?uuid={{uuid}} ({{to_lower (readable_qtype paper.type)}} question from {{readable_subject paper.triposPart paper.subject}} {{paper.year}}) 
+{{else}}
+    OH NO! There are no remaining (or existing) Tripos questions to send you from your subscribed topic.
 {{/each}}
 
 

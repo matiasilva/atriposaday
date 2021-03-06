@@ -81,7 +81,7 @@ ATAD should be able to run on any modern web server, like nginx or Apache. The o
 6. Migrate and seed the database
 
    - `NODE_ENV=production npx sequelize-cli db:migrate`
-   - `NODE_ENV=production pm2snpx sequelize-cli db:seed:all`
+   - `NODE_ENV=production npx sequelize-cli db:seed:all`
 
    You might also have to create the table, if you haven't already. This runs the "admin" migration, so set up your admin user details in the respective seeder file.
 
@@ -106,7 +106,7 @@ ATAD should be able to run on any modern web server, like nginx or Apache. The o
 
    Example config for `ppsw`
 
-   ```json
+   ```js
        config: {
         host: 'ppsw.cam.ac.uk',
         port: 25,
@@ -114,7 +114,7 @@ ATAD should be able to run on any modern web server, like nginx or Apache. The o
         logger: true,
         debug: false,
         pool: true
-    },
+    }
    ```
 
 ### Further details

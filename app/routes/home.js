@@ -106,11 +106,12 @@ router.get('/random', async (req, res, next) => {
 });
 
 router.get('/mail', async (req, res) => {
-    const { Subscription, Sequelize: { Op }, Answerable, UserAnswerableStat, sequelize, Topic, User, Paper } = db;
+    const { Subscription, Sequelize: { Op }, sequelize, Topic, User, Paper, UserAnswerableStat } = db;
 
     // get all subs that need to be actioned
     const now = new Date();
     const toAction = await Subscription.findAll({
+        benchmark: true,
         where: {
             nextActioned: {
                 [Op.lt]: now
@@ -133,27 +134,8 @@ router.get('/mail', async (req, res) => {
         const transporter = nodemailer.createTransport(config);
 
         for (const sub of toAction) {
-            // const questions = await Answerable.findAll({
-            //     include: [
-            //         {
-            //             model: UserAnswerableStat,
-            //             as: 'stats',
-            //             where: {
-            //                 userId: sub.user.id,
-            //                 hasAnswered: false
-            //             },
-            //             attributes: ['id']
-            //         }
-            //     ],
-            //     where:{
-            //         topicId
-            //     }
-            //     order: sequelize.random(),
-            //     attributes: ['uuid'],
-            //     limit: sub.count
-            // });
-
-            const questions = await sub.topic.getAnswerables({
+            let questions = await sub.topic.getAnswerables({
+                benchmark: true,
                 order: sequelize.random(),
                 attributes: ['uuid'],
                 limit: sub.count,
@@ -162,8 +144,19 @@ router.get('/mail', async (req, res) => {
                     model: Paper,
                     as: 'paper',
                     attributes: ['triposPart', 'year', 'type', 'subject']
+                },
+                {
+                    model: UserAnswerableStat,
+                    as: 'stats',
+                    attributes: ['hasAnswered'],
+                    required: false
                 }]
             });
+
+            // all questions in the topic
+            // if hasAnswered exists, then ensure it is false
+            // if it doesn't exist then just include the question
+            questions = questions.filter(q => !q.stats || !q.stats[0].hasAnswered);
 
             // update the sub's nextActioned
             // even if the email fails to send

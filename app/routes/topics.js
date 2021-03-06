@@ -35,28 +35,31 @@ router.get('/subscribe', async (req, res) => {
 });
 
 router.post('/subscribe', upload.none(), async (req, res, next) => {
-    const { Topic, Subscription } = db;
+    const { Topic, Subscription, Answerable, UserAnswerableStat } = db;
 
     const formKeys = ['topicUuid', 'subName', 'subRepeatEvery', 'subRepeatTime', 'subCount'];
     const values = utils.pick(formKeys, req.body);
     let errors = {};
 
     // in case uuid is invalid or user tampers
-    const topic = await Topic.findOne({
+    let topic = await Topic.findOne({
         where:
             { uuid: values['topicUuid'] },
-        raw: true
+        attributes: ['uuid', 'id', 'prettyName']
     }).catch(next);
 
     if (topic == null) {
         return next(new Error('Invalid topic UUID'));
     }
 
+    topic = topic.toJSON();
+
     const test = await Subscription.findOne({
         where: {
             topicId: topic.id,
             userId: req.user.id
-        }
+        },
+        attributes: ['id']
     });
 
     if (test != null) {
@@ -93,9 +96,9 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
 
     // catch case where user sets a valid time for later that day
     const now = new Date();
-    const nextTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hourMinute[0], hourMinute[1]);
-    // user sets time for earlier that day
-    if (now > nextTime) errors['subRepeatTime'] = true;
+    let nextTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hourMinute[0], hourMinute[1]);
+    // user sets time for earlier that day, roll over to next day
+    if (now > nextTime) nextTime = false;
 
     hasNoErrors = Object.keys(errors).length === 0;
 
@@ -111,7 +114,9 @@ router.post('/subscribe', upload.none(), async (req, res, next) => {
             userId: req.user.id,
             nextActioned: nextTime || Subscription.getNextTime(subRepeatEvery, repeatTime)
         });
+
         req.flash('success', `You have successfully subscribed to ${sub.name}. Next action on ${sub.nextActioned.toLocaleString()}.`);
+
         return res.redirect('/user/home');
     }
     else {
