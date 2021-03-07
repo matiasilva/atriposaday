@@ -136,7 +136,7 @@ router.get('/mail', async (req, res) => {
             let questions = await sub.topic.getAnswerables({
                 order: sequelize.random(),
                 attributes: ['uuid'],
-                limit: sub.count,
+                //limit: sub.count,
                 joinTableAttributes: [],
                 include: [{
                     model: Paper,
@@ -146,7 +146,12 @@ router.get('/mail', async (req, res) => {
                 {
                     model: UserAnswerableStat,
                     as: 'stats',
+                    // where: {
+                    //     hasAnswered: false
+                    // },
                     attributes: ['hasAnswered'],
+                    //or: true,
+                    //right: true
                     required: false
                 }]
             });
@@ -154,8 +159,8 @@ router.get('/mail', async (req, res) => {
             // all questions in the topic
             // if hasAnswered exists, then ensure it is false
             // if it doesn't exist then just include the question
-            questions = questions.filter(q => !q.stats || !q.stats[0].hasAnswered);
-
+            // TODO: filter all questions, not just the sub.count selected
+            questions = questions.filter(q => !q.stats || !q.stats[0].hasAnswered).slice(2);
             // update the sub's nextActioned
             // even if the email fails to send
             const nextTime = sub.getNextTime();
