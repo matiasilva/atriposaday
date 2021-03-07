@@ -156,11 +156,12 @@ router.get('/', async (req, res) => {
             attributes: ['id'],
             required: false
         }],
-        group: [['Topic.id', 'answerables.id'], ['Topic.id']],
+        group: [['Topic.id', 'answerables.id'], ['Topic.id'], ['parent.id']],
         order: [['prettyName', 'ASC']],
     });
 
-    const parents = topics.filter(t => t.parent).map(t => t.toJSON());
+    let parents = topics.filter(t => !t.parent).map(t => t.toJSON());
+    parents.forEach(p => p.children = topics.filter(t => t.parent && t.parent.id === p.id).map(t => t.toJSON()));
 
     return res.render('topics', {
         title: 'All topics',

@@ -43,8 +43,7 @@
         <div id="collapse-{{@index}}" class="accordion-collapse collapse" data-bs-parent="#subTopicAccordion">
             <div class="accordion-body">
                 <ul class="list-group">
-                    {{#each ../topics as |topic|}}
-                    {{#ifeq topic.parent.id module.id}}
+                    {{#each module.children as |topic|}}
                     <li class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{topic.prettyName}}</h5>
@@ -68,7 +67,6 @@
                             {{/ifeq}}
                         </div>
                     </li>
-                    {{/ifeq}}
                     {{else}}
                     <li class="list-group-item list-group-item-warning">
                         This topic does not have any questions!

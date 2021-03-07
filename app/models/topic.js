@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // One-to-Many topic -> subs
       this.hasMany(Subscription, { foreignKey: 'topicId', as: 'subscriptions' });
 
-      this.hasOne(Topic, { foreignKey: 'parentId', as: 'parent' });
+      this.belongsTo(Topic, { foreignKey: 'parentId', as: 'parent' });
     }
   }
   Topic.init({
