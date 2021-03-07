@@ -76,7 +76,7 @@ router.post('/create/question', upload.array('question-upload'), async (req, res
         // add question
         const topic = await Topic.findOne({
             where: {
-                isRootLevel: true,
+                parentId: null,
                 name: values['subject']
             }
         });
