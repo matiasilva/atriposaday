@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const utils = require('../utils');
 const { nanoid } = require("nanoid");
+const { v4: uuidv4 } = require('uuid');
 const Answerable = require('../models/answerable');
 const AnswerablesTopics = require('../models/answerablestopics');
 
@@ -63,7 +64,8 @@ module.exports = {
                         paperId,
                         number: args[0],
                         createdAt: new Date(),
-                        updatedAt: new Date()
+                        updatedAt: new Date(),
+                        uuid: uuidv4(),
                     }]);
 
                     const answerableId = await queryInterface.rawSelect('answerables', {
