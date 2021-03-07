@@ -2,6 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -28,6 +30,7 @@ module.exports = {
         t.parentId = parentTopic;
         t.createdAt = new Date();
         t.updatedAt = new Date();
+        t.uuid = uuidv4();
       }
       );
       await queryInterface.bulkInsert('topics', arr, {});
