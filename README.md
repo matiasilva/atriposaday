@@ -158,3 +158,4 @@ Thanks to the [Student-Run Computing Facility](https://www.srcf.net/) for the ho
   - where index, starting from 0, counts the number of graphs/assets associated with that question. The plain question should just be `<question number>.png`.
 - UserAnswerableStat stores all the information tying a user and a question. It is put into the DB as a junction table with additional information on whether a user has completed, bookmarked and the user's difficulty response. A row is only created once the user has submitted any of the above, otherwise assume all properties are false.
 - Note the difference between question and answerable. answerable is the generic type, while question is used in user-facing scenarios.
+- I need to find a better way of sending users questions they've answered. At present we pick two at random from the topic's pool and then filter. The reverse needs to happen.
