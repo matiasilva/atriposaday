@@ -74,8 +74,6 @@ module.exports = {
                         }
                     }, ['id']);
 
-                    console.log("hi");
-
                     // array for list of assets to add
                     const assetRecords = [];
 
@@ -104,8 +102,6 @@ module.exports = {
                         // }
                         throw new Error('Invalid input image name');
                     }
-
-                    console.log(assetRecords);
 
                     await queryInterface.bulkInsert('answerables_topics', [{
                         topicId: rootTopic,
