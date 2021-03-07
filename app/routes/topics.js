@@ -149,13 +149,24 @@ router.get('/', async (req, res) => {
             model: Subscription,
             as: 'subscriptions',
             attributes: [],
+        },
+        {
+            model: Topic,
+            as: 'parent',
+            attributes: ['id'],
+            required: false
         }],
         group: [['Topic.id', 'answerables.id'], ['Topic.id']],
         order: [['prettyName', 'ASC']],
-        raw: true
     });
 
-    return res.render('topics', { title: 'All topics', topics });
+    const parents = topics.filter(t => t.parent).map(t => t.toJSON());
+
+    return res.render('topics', {
+        title: 'All topics',
+        parents,
+        topics: topics.map(t => t.toJSON())
+    });
 });
 
 module.exports = router;

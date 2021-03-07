@@ -1,35 +1,85 @@
 <p>This is a list of all the topics you can subscribe to. To subscribe to a topic, press the 'subscribe' button!</p>
 <h2 class="mb-3">Modules</h2>
 <ul class="list-group">
-    {{#each topics as |topic|}}
+    {{#each parents as |module|}}
     <li class="list-group-item">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{topic.prettyName}}</h5>
-            <small>Contains {{topic.answerableCount}} question(s)</small>
+            <h5 class="mb-1">{{module.prettyName}}</h5>
+            <small>Contains {{module.answerableCount}} question(s)</small>
         </div>
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-            <p class="mb-1">{{topic.description}}</p>
-            {{#ifeq topic.answerableCount "0"}}
-            <a class="btn btn-primary" href="/topics/subscribe?topic={{topic.uuid}}">
+            <p class="mb-1">{{module.description}}</p>
+            {{#ifeq module.answerableCount "0"}}
+            <a class="btn btn-primary" href="/topics/subscribe?topic={{module.uuid}}">
                 Subscribe
             </a>
             {{else}}
             <div class="btn-group">
-                <a class="btn btn-primary" href="/topics/subscribe?topic={{topic.uuid}}">
+                <a class="btn btn-primary" href="/topics/subscribe?topic={{module.uuid}}">
                     Subscribe
                 </a>
-                <a class="btn btn-secondary" href="/question/all?topic={{topic.uuid}}">
+                <a class="btn btn-secondary" href="/question/all?topic={{module.uuid}}">
                     View questions
                 </a>
             </div>
             {{/ifeq}}
         </div>
-        <small>{{topic.subCount}} user(s) are subscribed to this topic.</small>
+        <small>{{module.subCount}} user(s) are subscribed to this topic.</small>
     </li>
     {{/each}}
 </ul>
 
 <h2 class="mt-3 mb-3">Sub-topics</h2>
+
+<div class="accordion mt-4" id="subTopicAccordion">
+    {{#each parents as |module|}}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse-{{@index}}">
+                {{module.prettyName}}
+            </button>
+        </h2>
+        <div id="collapse-{{@index}}" class="accordion-collapse collapse" data-bs-parent="#subTopicAccordion">
+            <div class="accordion-body">
+                <ul class="list-group">
+                    {{#each ../topics as |topic|}}
+                    {{#ifeq topic.parent.id module.id}}
+                    <li class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{topic.prettyName}}</h5>
+                            <small>Contains {{topic.answerableCount}} question(s)</small>
+                        </div>
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                            <p class="mb-1">{{topic.description}}</p>
+                            {{#ifeq topic.answerableCount "0"}}
+                            <a class="btn btn-primary" href="/topics/subscribe?topic={{topic.uuid}}">
+                                Subscribe
+                            </a>
+                            {{else}}
+                            <div class="btn-group">
+                                <a class="btn btn-primary" href="/topics/subscribe?topic={{topic.uuid}}">
+                                    Subscribe
+                                </a>
+                                <a class="btn btn-secondary" href="/question/all?topic={{topic.uuid}}">
+                                    View questions
+                                </a>
+                            </div>
+                            {{/ifeq}}
+                        </div>
+                    </li>
+                    {{/ifeq}}
+                    {{else}}
+                    <li class="list-group-item list-group-item-warning">
+                        This topic does not have any questions!
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
 
 <div class="alert alert-info mt-3" role="alert">
     Note: subscriptions are only actioned once the next subscription trigger time <em>after</em> you subscribe is
