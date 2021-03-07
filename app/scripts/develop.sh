@@ -20,6 +20,15 @@ stop_() {
   stop >/dev/null 2>&1
 }
 
+clear(){
+  docker exec -i development_web_1 npx sequelize-cli db:migrate:undo:all
+}
+
+migrate(){
+  docker exec -i development_web_1 npx sequelize-cli db:migrate
+  docker exec -i development_web_1 npx sequelize-cli db:seed:all
+}
+
 start() {
   docker-compose -p development -f docker-compose.yml up -d
 }
@@ -76,6 +85,8 @@ for verb in "$@"; do
     rebuild) stop_; scrap; build;;
     up) stop_; scrap; build; tail;;
     down) scrap;;
+    clear) clear;;
+    migrate) migrate;;
     help) help "$0"; exit;;
     *) 
       echo "Unrecognised verb: $verb" >&2

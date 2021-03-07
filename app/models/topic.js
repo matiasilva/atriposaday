@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   Topic.init({
     name: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: 'topicCompositeIndex',
       allowNull: false
     },
     prettyName: {
@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     parentId: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      unique: 'topicCompositeIndex',
       references: {
         model: 'topics',
         key: 'id'

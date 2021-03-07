@@ -14,7 +14,8 @@ module.exports = {
           model: 'answerables',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        allowNull: false,
       },
       topicId: {
         type: Sequelize.DataTypes.INTEGER,
@@ -22,7 +23,8 @@ module.exports = {
           model: 'topics',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

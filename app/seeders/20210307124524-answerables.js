@@ -3,7 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const utils = require('../utils');
-const {nanoid} = require("nanoid");
+const { nanoid } = require("nanoid");
+const Answerable = require('../models/answerable');
+const AnswerablesTopics = require('../models/answerablestopics');
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
@@ -32,7 +34,7 @@ module.exports = {
                 const files = fs.readdirSync(path.join(rootFolderPath, subject, year));
 
                 // find the paper belonging to this year and subject combo
-                const paper = await queryInterface.rawSelect('papers', {
+                const paperId = await queryInterface.rawSelect('papers', {
                     where:
                     {
                         year,
@@ -40,11 +42,8 @@ module.exports = {
                     }
                 }, ['id']);
 
-                // array for list of assets to add
-                const assetRecords = [];
-
                 // now for each file in the year folder
-                for(const fileName of files){
+                for (const fileName of files) {
                     // capture groups from file name
                     const fileNameMatch = utils.matchFileName(fileName);
                     // just in case
@@ -60,24 +59,43 @@ module.exports = {
                     const args = fileNameMatch.slice(1, 3).filter(str => str).map(str => parseInt(str));
 
                     // create answerable model with the question and paper number
-                    const answerable = await queryInterface.upsert('answerables', {
-                        paperId: paper.id,
-                        number: args[0]
-                    });
+                    const answerable = await queryInterface.bulkInsert('answerables', [{
+                        paperId,
+                        number: args[0],
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    }]);
+
+                    const answerableId = await queryInterface.rawSelect('answerables', {
+                        where:
+                        {
+                            paperId,
+                            number: args[0]
+                        }
+                    }, ['id']);
+
+                    console.log("hi");
+
+                    // array for list of assets to add
+                    const assetRecords = [];
 
                     if (args.length === 1) {
                         // just the question, no further assets
                         assetRecords.push({
                             path: `/static/uploads/${questionImageName}`,
-                            answerableId: answerable[1],
-                            isMainAsset: true
+                            answerableId,
+                            isMainAsset: true,
+                            createdAt: new Date(),
+                            updatedAt: new Date()
                         });
                     } else if (args.length === 2 && !isNaN(args[1])) {
                         // a question's supporting material: graphs, etc
                         assetRecords.push({
                             path: `/static/uploads/${questionImageName}`,
-                            answerableId: answerable[1],
-                            isMainAsset: false
+                            answerableId,
+                            isMainAsset: false,
+                            createdAt: new Date(),
+                            updatedAt: new Date()
                         });
                     } else {
                         // should implement this part
@@ -87,13 +105,18 @@ module.exports = {
                         throw new Error('Invalid input image name');
                     }
 
-                    await queryInterface.upsert('answerables_topics', {
-                        topicId: rootTopic.id,
-                        answerableId: answerable[1]
-                    });
+                    console.log(assetRecords);
 
+                    await queryInterface.bulkInsert('answerables_topics', [{
+                        topicId: rootTopic,
+                        answerableId,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    }]);
+
+                    await queryInterface.bulkInsert('assets', assetRecords);
                 }
-                await queryInterface.bulkInsert('assets', assetRecords);
+
             }
         }
     },

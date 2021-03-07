@@ -41,6 +41,7 @@ module.exports = {
       },
       isInSyllabus: {
         type: Sequelize.DataTypes.BOOLEAN,
+        defaultValue: true,
         allowNull: false
       },
       createdAt: {

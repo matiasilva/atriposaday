@@ -14,7 +14,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.DataTypes.STRING,
-        unique: true,
+        unique: 'topicCompositeIndex',
         allowNull: false
       },
       prettyName: {
@@ -32,6 +32,7 @@ module.exports = {
           model: 'topics',
           key: 'id'
         },
+        unique: 'topicCompositeIndex',
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +42,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    });
+
+    await queryInterface.addConstraint('topics', {
+      type: 'unique',
+      fields: ['name', 'parentId'],
+      name: 'topic_name_parent_constraint'
     });
   },
   down: async (queryInterface, Sequelize) => {
