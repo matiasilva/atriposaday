@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         model: 'answerables',
         key: 'id'
       },
-      allowNull: false,
       onDelete: 'CASCADE'
     },
     topicId: {
@@ -25,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         model: 'topics',
         key: 'id'
       },
-      allowNull: false,
       onDelete: 'CASCADE'
     },
   }, {

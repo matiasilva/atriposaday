@@ -103,6 +103,8 @@ module.exports = {
                         throw new Error('Invalid input image name');
                     }
 
+                    console.log(answerableId);
+
                     await queryInterface.bulkInsert('answerables_topics', [{
                         topicId: rootTopic,
                         answerableId,

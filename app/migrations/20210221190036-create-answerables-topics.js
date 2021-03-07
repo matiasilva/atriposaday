@@ -15,7 +15,6 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        allowNull: false,
       },
       topicId: {
         type: Sequelize.DataTypes.INTEGER,
@@ -24,7 +23,6 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -36,11 +34,11 @@ module.exports = {
       }
     });
 
-    await queryInterface.addConstraint('answerables_topics', {
-      type: 'unique',
-      fields: ['answerableId', 'topicId'],
-      name: 'user_topic_id_constraint'
-    });
+    // await queryInterface.addConstraint('answerables_topics', {
+    //   type: 'unique',
+    //   fields: ['answerableId', 'topicId'],
+    //   name: 'user_topic_id_constraint'
+    // });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('answerables_topics');
