@@ -15,7 +15,7 @@ module.exports = {
           prettyName: SUBJECTS[part][key],
           description: `All questions in ${SUBJECTS[part][key]}`,
           uuid: uuidv4(),
-          isRootLevel: true,
+          parentId: null,
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -28,7 +28,7 @@ module.exports = {
       prettyName: 'No topic',
       description: 'For any question that has no base topic',
       uuid: uuidv4(),
-      isRootLevel: true,
+      parentId: null,
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

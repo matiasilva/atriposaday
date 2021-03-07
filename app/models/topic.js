@@ -4,7 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Topic extends Model {
-    static associate({ AnswerablesTopics, Answerable, Subscription }) {
+    static associate({ AnswerablesTopics, Answerable, Subscription, Topic }) {
       // Many-to-many topic <-> question
       this.belongsToMany(Answerable, {
         through: AnswerablesTopics,
@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
 
       // One-to-Many topic -> subs
       this.hasMany(Subscription, { foreignKey: 'topicId', as: 'subscriptions' });
+
+      this.hasOne(Topic, { foreignKey: 'parentId', as: 'parent' });
     }
   }
   Topic.init({
@@ -33,10 +35,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4
     },
-    isRootLevel: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'topics',
+        key: 'id'
+      },
     },
   }, {
     sequelize,

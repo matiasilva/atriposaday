@@ -24,10 +24,13 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         allowNull: true
       },
-      isRootLevel: {
-        type: Sequelize.DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
+      parentId: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'topics',
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,
