@@ -24,6 +24,7 @@ module.exports = {
 
       const arr = Object.values(json["topics"]);
       arr.forEach(t => {
+        // should be parentTopic.id
         t.parentId = parentTopic;
         t.createdAt = new Date();
         t.updatedAt = new Date();

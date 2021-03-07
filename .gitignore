@@ -11,6 +11,7 @@ lerna-debug.log*
 
 # images
 static/uploads/*
+cropped/*
 
 # python
 __pycache__

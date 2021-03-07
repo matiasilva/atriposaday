@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   Topic.init({
     name: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false
     },
     prettyName: {

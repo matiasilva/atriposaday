@@ -11,7 +11,7 @@ module.exports = {
         return emailRe.test(email);
     },
     'matchFileName': function(name) {
-        const fileNameRe = /^(\d+)_?(\d*)\.\w+$/;
+        const fileNameRe = /^(\d+)_?(\d*)\.(\w+)$/;
         return name.match(fileNameRe);
     },
     'isValidYear': function(year){
