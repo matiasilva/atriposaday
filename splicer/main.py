@@ -34,13 +34,13 @@ for root, dirs, files in os.walk(path):
 
                 horizontal, vertical = listreturn(im)
 
-                # # regular parameters
-                # left, right = extremes(horizontal, 125)
-                # top, bottom = extremes(vertical, 200)
-
-                # use for overcropped images
-                left, right = extremes(horizontal, 150)
+                # regular parameters
+                left, right = extremes(horizontal, 125)
                 top, bottom = extremes(vertical, 200)
+
+                # # use for overcropped images
+                # left, right = extremes(horizontal, 150)
+                # top, bottom = extremes(vertical, 200)
 
                 im = im.crop((left, top, right, bottom))
                 im.save('rescale.png')

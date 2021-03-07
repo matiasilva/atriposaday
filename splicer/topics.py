@@ -1,10 +1,19 @@
 import json
 import csv
 
-parent = '2P1 Mechanics'
+'''
+'2P1_MECHANICS'
+'2P2_STRUCTURES'
+'2P3_MATERIALS'
+'2P4_THERMOFLUID_MECHANICS'
+'2P5_ELECTRICAL_ENGINEERING'
+'2P6_INFORMATION_ENGINEERING'
+'2P7_MATHEMATICAL_METHODS'
+'''
+
+parent = '2P7_MATHEMATICAL_METHODS'
 
 topic_var = []
-# topics_list = []
 topic_name = []
 topic_prettyName = []
 topic_description = []
@@ -16,7 +25,7 @@ questions_dict = {}
 
 output = {}
 
-f = open('2p1.csv')
+f = open('2p7.csv')
 csv_f = csv.reader(f)
 
 for row in csv_f:
@@ -30,13 +39,8 @@ for row in csv_f:
         topic_prettyName.append(row[1])
         topic_description.append(row[2])
 
-
 for i in range(len(year)):
     questions_dict[year[i]] = questions_list[i]
-
-# print(topic_var)
-# print(topic_name)
-# print(topic_description)
 
 for name in topic_prettyName:
     name = name.upper().replace(' ', '_').replace(',', ' ')
@@ -51,15 +55,9 @@ for i in range(len(topic_var)):
     topic_dict['description'] = topic_description[i]
     topics[topic_var[i]] = topic_dict
 
-print(topics)
-
-output['Parent'] = parent
-output['Topics'] = topics
-output['Questions'] = questions_dict
-
-print(output)
+output['parent'] = parent
+output['topics'] = topics
+output['questions'] = questions_dict
 
 with open('test.json', 'w') as json_file:
     json.dump(output, json_file)
-
-print(topic_prettyName)
