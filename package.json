@@ -20,7 +20,7 @@
   "dependencies": {
     "connect-session-sequelize": "^7.1.1",
     "express": "^4.17.1",
-    "express-handlebars": "^5.2.1",
+    "express-handlebars": "^6.0.6",
     "express-session": "^1.17.1",
     "flash": "^1.1.0",
     "mime-types": "^2.1.29",
