@@ -6,7 +6,7 @@
 
 # A Tripos A Day
 
-_A Tripos a Day_ helps you become a better engineer.
+_A Tripos a Day_ helps you become a better engineer. This was an official submission by Matias and Jeremy for the Engineering on a Shoestring Hackathon. 
 
 ## Features
 
